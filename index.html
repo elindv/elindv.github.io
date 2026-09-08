@@ -7,6 +7,7 @@
     <title>Lilium - Plan je dag</title>
 
     <style>
+
         * {
             box-sizing: border-box;
             margin: 0;
@@ -19,13 +20,17 @@
             color: #5a3025;
         }
 
-        /* NAVIGATIE */
+
+        /* =========================
+           NAVIGATIE
+        ========================= */
+
         nav {
             height: 80px;
             margin: 25px 5%;
             padding: 0 35px;
 
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.95);
             border-radius: 25px;
 
             display: flex;
@@ -56,20 +61,44 @@
             text-decoration: none;
             color: #633526;
             font-size: 16px;
+            transition: 0.2s;
         }
 
         .menu a:hover {
             color: #e66d8e;
         }
 
+
+        /* =========================
+           MUNTJES
+        ========================= */
+
         .coins {
             background: #fff3d5;
-            padding: 10px 18px;
+            padding: 8px 18px;
             border-radius: 30px;
+
+            display: flex;
+            align-items: center;
+            gap: 9px;
+
             font-weight: bold;
+            font-size: 16px;
         }
 
-        /* HERO */
+        .coin-image {
+            width: 32px;
+            height: 32px;
+
+            object-fit: contain;
+            border-radius: 50%;
+        }
+
+
+        /* =========================
+           HERO
+        ========================= */
+
         .hero {
             min-height: 650px;
             padding: 80px 11%;
@@ -77,6 +106,7 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
+
             gap: 70px;
         }
 
@@ -86,6 +116,7 @@
 
         .label {
             display: inline-block;
+
             background: #ffe2e8;
             color: #d85d7d;
 
@@ -110,7 +141,9 @@
         .hero-text p {
             font-size: 19px;
             line-height: 1.7;
+
             color: #76564d;
+
             margin-bottom: 30px;
         }
 
@@ -123,27 +156,38 @@
             text-decoration: none;
 
             padding: 17px 28px;
+
             border-radius: 17px;
 
             font-weight: bold;
             font-size: 16px;
 
             box-shadow: 0 8px 20px rgba(232, 111, 145, 0.25);
+
+            transition: 0.2s;
         }
 
         .button:hover {
             background: #d95e80;
+            transform: translateY(-2px);
         }
 
-        /* DAG PLANNER */
+
+        /* =========================
+           PLANNER
+        ========================= */
+
         .planner {
             width: 480px;
+
             background: white;
 
             border-radius: 35px;
+
             padding: 35px;
 
-            box-shadow: 0 15px 40px rgba(100, 60, 40, 0.1);
+            box-shadow:
+                0 15px 40px rgba(100, 60, 40, 0.1);
 
             position: relative;
         }
@@ -161,20 +205,50 @@
             font-size: 31px;
         }
 
+
+        /* HET BLOEMETJE UIT JE DESIGN */
+
         .flower {
-            font-size: 55px;
+            position: absolute;
+
+            right: 25px;
+            top: 20px;
+
+            width: 65px;
+            height: 65px;
+
+            background-image:
+                url("roze-bloem-voorjaarsseizoen_24877-83916.jpg");
+
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
         }
+
+
+        /* =========================
+           TAKEN
+        ========================= */
 
         .task {
             display: flex;
             align-items: center;
+
             gap: 15px;
 
             padding: 16px;
+
             margin: 10px 0;
 
             border-radius: 16px;
+
             background: #fff4f0;
+
+            transition: 0.2s;
+        }
+
+        .task:hover {
+            transform: translateX(3px);
         }
 
         .task:nth-child(3) {
@@ -185,102 +259,239 @@
             background: #f1f1df;
         }
 
+        .task:nth-child(6) {
+            background: #f1f1df;
+        }
+
+
+        /* CHECKBOX */
+
         .checkbox {
             width: 23px;
             height: 23px;
 
             border: 2px solid #e4b6b0;
+
             border-radius: 6px;
+
+            flex-shrink: 0;
         }
 
         .checked {
             background: #e86f91;
             border-color: #e86f91;
+
             position: relative;
         }
 
         .checked::after {
             content: "✓";
+
             color: white;
+
             position: absolute;
+
             left: 4px;
             top: -2px;
+
+            font-size: 18px;
         }
 
-        /* FEATURES */
+
+        /* =========================
+           FEATURES
+        ========================= */
+
         .features {
             padding: 70px 10%;
+
             text-align: center;
+
             background: #fff3ef;
+
             border-radius: 70px 70px 0 0;
         }
 
         .features h2 {
             font-family: Georgia, serif;
+
             font-size: 38px;
+
             margin-bottom: 40px;
         }
 
         .feature-container {
             display: flex;
+
             justify-content: center;
+
             gap: 25px;
         }
 
         .feature {
             width: 280px;
+
             padding: 35px 25px;
 
             border-radius: 30px;
+
             background: white;
 
-            box-shadow: 0 8px 25px rgba(100, 60, 40, 0.06);
+            box-shadow:
+                0 8px 25px rgba(100, 60, 40, 0.06);
         }
+
+
+        /* =========================
+           LILIUM AI ICON
+        ========================= */
+
+        .ai-icon {
+            width: 70px;
+            height: 70px;
+
+            margin: 0 auto 15px;
+
+            border-radius: 25px;
+
+            background: #fff0f4;
+
+            position: relative;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            border: 2px solid #f5b8c8;
+        }
+
+        .ai-face {
+            width: 45px;
+            height: 38px;
+
+            background: white;
+
+            border: 2px solid #e982a1;
+
+            border-radius: 15px 15px 18px 18px;
+
+            position: relative;
+        }
+
+        .ai-face::before {
+            content: "•  •";
+
+            position: absolute;
+
+            left: 9px;
+            top: 8px;
+
+            color: #633526;
+
+            font-size: 13px;
+
+            letter-spacing: 5px;
+        }
+
+        .ai-face::after {
+            content: "⌣";
+
+            position: absolute;
+
+            left: 17px;
+            bottom: 2px;
+
+            color: #e86f91;
+
+            font-size: 17px;
+        }
+
+        /* kleine bloemetjes boven Lilium */
+
+        .ai-flower {
+            position: absolute;
+
+            top: -11px;
+            left: 7px;
+
+            font-size: 22px;
+        }
+
+
+        /* =========================
+           FEATURE ICONS
+        ========================= */
 
         .feature-icon {
             font-size: 45px;
+
             margin-bottom: 15px;
         }
 
         .feature h3 {
             margin-bottom: 12px;
+
             font-size: 20px;
         }
 
         .feature p {
             color: #80645c;
+
             line-height: 1.6;
         }
 
-        /* ONDERSTE SECTIE */
+
+        /* =========================
+           ONDERSTE SECTIE
+        ========================= */
+
         .bottom {
             padding: 70px 10%;
+
             text-align: center;
         }
 
         .bottom h2 {
             font-family: Georgia, serif;
+
             font-size: 35px;
+
             margin-bottom: 20px;
         }
 
         .bottom p {
             color: #80645c;
+
             font-size: 17px;
+
             margin-bottom: 30px;
         }
 
+
+        /* =========================
+           FOOTER
+        ========================= */
+
         footer {
             padding: 30px;
+
             text-align: center;
+
             color: #9b7770;
+
             background: #fffaf5;
         }
+
+
+        /* =========================
+           MOBIEL
+        ========================= */
 
         @media (max-width: 900px) {
 
             .hero {
                 flex-direction: column;
+
                 padding: 50px 7%;
             }
 
@@ -290,6 +501,7 @@
 
             .feature-container {
                 flex-direction: column;
+
                 align-items: center;
             }
 
@@ -301,12 +513,17 @@
                 font-size: 45px;
             }
         }
+
     </style>
 </head>
 
+
 <body>
 
-    <!-- NAVIGATIE -->
+
+    <!-- =========================
+         NAVIGATIE
+    ========================= -->
 
     <nav>
 
@@ -314,26 +531,61 @@
             Lilium <span>🌸</span>
         </div>
 
+
         <div class="menu">
-            <a href="#">Planner</a>
-            <a href="#">AI Assistant</a>
-            <a href="#">Shop</a>
-            <a href="#">Mijn Tuin</a>
-            <a href="#">Profiel</a>
+
+            <a href="#">
+                Planner
+            </a>
+
+            <a href="#">
+                AI Assistant
+            </a>
+
+            <a href="#">
+                Shop
+            </a>
+
+            <a href="#">
+                Mijn Tuin
+            </a>
+
+            <a href="#">
+                Profiel
+            </a>
+
         </div>
 
+
+        <!-- START OP 50 MUNTJES -->
+
         <div class="coins">
-            🪙 250
+
+            <img
+                class="coin-image"
+                src="gouden-munt-cartoon-gratis-vector.jpg"
+                alt="Lilium muntje"
+            >
+
+            <span>50</span>
+
         </div>
 
     </nav>
 
 
-    <!-- HOMEPAGE -->
+
+    <!-- =========================
+         HOMEPAGE
+    ========================= -->
 
     <main>
 
+
         <section class="hero">
+
+
+            <!-- TEKST -->
 
             <div class="hero-text">
 
@@ -341,40 +593,66 @@
                     JOUW DAG, JOUW TEMPO
                 </div>
 
+
                 <h1>
+
                     Plan je dag.<br>
-                    <span>Bloei op jouw manier.</span>
+
+                    <span>
+                        Bloei op jouw manier.
+                    </span>
+
                 </h1>
 
+
                 <p>
-                    Lilium helpt je om je taken op een rustige en
-                    overzichtelijke manier te plannen. Krijg slimme
-                    suggesties, neem pauzes wanneer jij ze nodig hebt
-                    en verdien muntjes terwijl je groeit.
+
+                    Lilium helpt je om je taken op een rustige
+                    en overzichtelijke manier te plannen.
+                    Krijg slimme suggesties, neem pauzes wanneer
+                    jij ze nodig hebt en verdien muntjes terwijl
+                    je groeit.
+
                 </p>
 
+
                 <a href="#" class="button">
+
                     🌸 Plan je eerste dag
+
                 </a>
 
             </div>
 
 
-            <!-- VOORBEELD VAN DE DAGPLANNER -->
+
+            <!-- =========================
+                 DAGPLANNER
+            ========================= -->
 
             <div class="planner">
 
+
                 <div class="planner-header">
 
-                    <h2>Jouw dag</h2>
+                    <h2>
+                        Jouw dag
+                    </h2>
 
-                    <span>Vandaag ▾</span>
-
-                    <div class="flower">
-                        🌸
-                    </div>
+                    <span>
+                        Vandaag ▾
+                    </span>
 
                 </div>
+
+
+                <!-- BLOEM -->
+
+                <div class="flower"></div>
+
+
+
+                <!-- TAKEN -->
 
                 <div class="task">
 
@@ -386,6 +664,7 @@
 
                 </div>
 
+
                 <div class="task">
 
                     <div class="checkbox"></div>
@@ -395,6 +674,7 @@
                     </span>
 
                 </div>
+
 
                 <div class="task">
 
@@ -406,6 +686,7 @@
 
                 </div>
 
+
                 <div class="task">
 
                     <div class="checkbox"></div>
@@ -415,6 +696,7 @@
                     </span>
 
                 </div>
+
 
                 <div class="task">
 
@@ -426,6 +708,7 @@
 
                 </div>
 
+
                 <div class="task">
 
                     <div class="checkbox"></div>
@@ -435,6 +718,7 @@
                     </span>
 
                 </div>
+
 
                 <div class="task">
 
@@ -451,15 +735,24 @@
         </section>
 
 
-        <!-- DRIE BELANGRIJKE ONDERDELEN -->
+
+        <!-- =========================
+             FEATURES
+        ========================= -->
 
         <section class="features">
+
 
             <h2>
                 Alles wat je nodig hebt
             </h2>
 
+
             <div class="feature-container">
+
+
+
+                <!-- SLIM PLANNEN -->
 
                 <div class="feature">
 
@@ -472,73 +765,110 @@
                     </h3>
 
                     <p>
+
                         Laat Lilium je helpen om je taken
                         overzichtelijk over je dag te verdelen.
+
                     </p>
 
                 </div>
 
 
+
+                <!-- LILIUM AI -->
+
                 <div class="feature">
 
-                    <div class="feature-icon">
-                        🤖
+                    <div class="ai-icon">
+
+                        <div class="ai-flower">
+                            🌸
+                        </div>
+
+                        <div class="ai-face"></div>
+
                     </div>
+
 
                     <h3>
                         Lieve AI-hulp
                     </h3>
 
                     <p>
-                        Lilium denkt met je mee en geeft rustige,
-                        persoonlijke suggesties die bij jou passen.
+
+                        Lilium denkt met je mee en geeft
+                        rustige, persoonlijke suggesties
+                        die bij jou passen.
+
                     </p>
 
                 </div>
 
 
+
+                <!-- MUNTJES -->
+
                 <div class="feature">
 
-                    <div class="feature-icon">
-                        🪙
-                    </div>
+                    <img
+                        class="coin-image"
+                        src="gouden-munt-cartoon-gratis-vector.jpg"
+                        alt="Lilium muntje"
+                        style="width:70px;height:70px;margin-bottom:15px;"
+                    >
 
                     <h3>
                         Verdien muntjes
                     </h3>
 
                     <p>
+
                         Vink je taken af en verdien muntjes.
-                        Gebruik ze later om je eigen tuin te vullen.
+                        Gebruik ze later om je eigen tuin
+                        te vullen.
+
                     </p>
 
                 </div>
+
 
             </div>
 
         </section>
 
 
-        <!-- EXTRA UITLEG -->
+
+        <!-- =========================
+             ONDERAAN
+        ========================= -->
 
         <section class="bottom">
+
 
             <h2>
                 Een planner die met je meegroeit 🌱
             </h2>
 
+
             <p>
+
                 Van je eerste taak tot je eigen bloeiende tuin.
                 Lilium helpt je stap voor stap.
+
             </p>
 
+
             <a href="#" class="button">
+
                 Begin met plannen
+
             </a>
+
 
         </section>
 
     </main>
+
 
 
     <footer>
@@ -546,6 +876,7 @@
         © 2026 Lilium · Plan rustig. Groei op jouw manier. 🌸
 
     </footer>
+
 
 </body>
 </html>
