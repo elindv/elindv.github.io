@@ -140,6 +140,17 @@ nav {
     font-style: normal;
 }
 
+/* NIEUW: logo-afbeelding */
+
+.logo-image {
+    width: 120px;
+    height: 52px;
+
+    object-fit: contain;
+
+    display: block;
+}
+
 
 /* MENU */
 
@@ -247,6 +258,7 @@ nav {
 }
 
 /* Hoofd */
+
 .profile-picture::before {
     content: "";
     position: absolute;
@@ -263,6 +275,7 @@ nav {
 }
 
 /* Schouders / lichaam */
+
 .profile-picture::after {
     content: "";
     position: absolute;
@@ -962,6 +975,18 @@ h1 span {
 }
 
 
+/* NIEUW: afbeeldingen bij de 4 iconen */
+
+.everything-icon-image {
+    width: 43px;
+    height: 43px;
+
+    object-fit: contain;
+
+    display: block;
+}
+
+
 /* =====================================================
    FOOTER
 ===================================================== */
@@ -1114,11 +1139,11 @@ footer {
 
     <div class="logo">
 
-        Lilium
-
-        <span class="logo-flower">
-            🌸
-        </span>
+        <img
+            src="Screenshot 2026-09-09 17.48.27.png"
+            class="logo-image"
+            alt="Lilium"
+        >
 
     </div>
 
@@ -1439,8 +1464,8 @@ footer {
     <div class="feature-card">
 
         <div class="lilium-character">
-    <img src="Lillium.png" alt="Lilium">
-</div>
+            <img src="Lillium.png" alt="Lilium">
+        </div>
 
 
         <h3>
@@ -1563,7 +1588,13 @@ footer {
             <div class="everything-item">
 
                 <div class="everything-icon pink">
-                    📅
+
+                    <img
+                        src="Screenshot 2026-09-09 17.47.42.png"
+                        class="everything-icon-image"
+                        alt="Slimme dagplanning"
+                    >
+
                 </div>
 
                 <span>
@@ -1578,7 +1609,13 @@ footer {
             <div class="everything-item">
 
                 <div class="everything-icon">
-                    ☕
+
+                    <img
+                        src="Screenshot 2026-09-09 17.47.52.png"
+                        class="everything-icon-image"
+                        alt="Pauzes op jouw manier"
+                    >
+
                 </div>
 
                 <span>
@@ -1593,7 +1630,13 @@ footer {
             <div class="everything-item">
 
                 <div class="everything-icon pink">
-                    ✨
+
+                    <img
+                        src="Screenshot 2026-09-09 17.48.02.png"
+                        class="everything-icon-image"
+                        alt="AI suggesties"
+                    >
+
                 </div>
 
                 <span>
@@ -1623,7 +1666,13 @@ footer {
             <div class="everything-item">
 
                 <div class="everything-icon">
-                    🌷
+
+                    <img
+                        src="Screenshot 2026-09-09 17.48.13.png"
+                        class="everything-icon-image"
+                        alt="Jouw eigen tuin"
+                    >
+
                 </div>
 
                 <span>
