@@ -18,7 +18,7 @@
 
 body {
     margin: 0;
-    background: #fdf8f9;
+    background: #fffcfa;
     color: #5b3024;
     font-family: Arial, Helvetica, sans-serif;
 }
@@ -725,125 +725,44 @@ h1 span {
 
 .corner-flower {
     position: absolute;
-
     pointer-events: none;
+    z-index: 1;
 }
-
-
-/* links */
 
 .left-plant {
-    left: -5px;
-    bottom: -10px;
-
-    width: 125px;
-    height: 245px;
+    left: -10px;
+    bottom: -5px;
+    width: 150px;
 }
-
-.left-stem {
-    position: absolute;
-
-    width: 8px;
-    height: 190px;
-
-    background: #b7b985;
-
-    bottom: 0;
-    left: 56px;
-
-    border-radius: 10px;
-
-    transform: rotate(-4deg);
-}
-
-.left-leaf {
-    position: absolute;
-
-    width: 45px;
-    height: 25px;
-
-    background: #c5c99a;
-
-    border-radius: 70% 30% 70% 30%;
-}
-
-.left-leaf.one {
-    left: 18px;
-    bottom: 65px;
-    transform: rotate(25deg);
-}
-
-.left-leaf.two {
-    left: 57px;
-    bottom: 100px;
-    transform: rotate(-35deg);
-}
-
-.left-leaf.three {
-    left: 17px;
-    bottom: 135px;
-    transform: rotate(25deg);
-}
-
-.left-flower {
-    position: absolute;
-
-    left: 17px;
-    bottom: 150px;
-
-    font-size: 65px;
-
-    transform: rotate(-5deg);
-}
-
-
-/* rechts */
 
 .right-plant {
-    right: -5px;
-    bottom: -8px;
-
+    right: -10px;
+    bottom: -5px;
     width: 180px;
-    height: 280px;
 }
 
-.right-flower {
-    position: absolute;
-
-    right: 35px;
-    top: 8px;
-
-    font-size: 105px;
+.corner-flower img {
+    display: block;
+    width: 100%;
+    height: auto;
 }
 
-.right-leaf {
-    position: absolute;
 
-    width: 65px;
-    height: 35px;
+/* LINKER BLOEM */
 
-    background: #c6c99b;
+<div class="corner-flower left-plant">
 
-    border-radius: 70% 30% 70% 30%;
-}
+    <img src="Bloem2.png" alt="Bloem">
 
-.right-leaf.one {
-    right: 105px;
-    top: 110px;
-    transform: rotate(-25deg);
-}
+</div>
 
-.right-leaf.two {
-    right: 30px;
-    top: 135px;
-    transform: rotate(30deg);
-}
+/* RECHTER BLOEM */
 
-.right-leaf.three {
-    right: 90px;
-    top: 170px;
-    transform: rotate(-25deg);
-}
+<div class="corner-flower right-plant">
+
+    <img src="Bloem1.png" alt="Bloem">
+
+</div>
 
 
 /* =====================================================
