@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lilium — Mijn tuin</title>
+
+<style>
+
+* { box-sizing: border-box; }
+body { margin: 0; background: #fffcfa; color: #5b3024; font-family: Arial, Helvetica, sans-serif; }
+a { text-decoration: none; color: inherit; }
+button { font-family: inherit; cursor: pointer; border: none; }
+
+/* ============ NAV (zelfde als overal) ============ */
+
+nav {
+    position: relative; z-index: 30; height: 76px; margin: 24px 5.5% 0; padding: 0 28px 0 36px;
+    background: rgba(255,255,255,0.93); border-radius: 24px;
+    display: flex; align-items: center; justify-content: space-between;
+    box-shadow: 0 5px 25px rgba(90,50,35,0.07);
+}
+.logo { display: flex; align-items: center; gap: 8px; white-space: nowrap; }
+.logo-image { width: 120px; height: 52px; object-fit: contain; display: block; }
+.menu { display: flex; align-items: center; gap: 32px; margin-left: 60px; }
+.menu a { font-size: 16px; color: #57372e; transition: 0.2s; }
+.menu a:hover, .menu a.active { color: #df6989; }
+.ai-nav { display: flex; align-items: center; gap: 9px; }
+.lilium-badge { background: #ffe0e8; color: #df6687; padding: 7px 13px; border-radius: 20px; font-size: 13px; }
+.right-nav { display: flex; align-items: center; gap: 15px; }
+.coin-counter { display: flex; align-items: center; gap: 9px; background: #fff4dc; padding: 6px 17px 6px 7px; border-radius: 30px; font-size: 16px; font-weight: bold; color: #a9781f; }
+.coin-counter img.coin { width: 24px; height: 24px; object-fit: contain; border-radius: 50%; flex-shrink: 0; }
+.profile { position: relative; display: flex; align-items: center; gap: 8px; cursor: pointer; }
+.profile-picture { width: 40px; height: 40px; border-radius: 50%; background: #f5b0c3; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+.profile-picture::before { content: ""; position: absolute; width: 11px; height: 11px; border-radius: 50%; background: #fff7f8; top: 8px; left: 50%; transform: translateX(-50%); }
+.profile-picture::after { content: ""; position: absolute; width: 25px; height: 14px; border-radius: 15px 15px 0 0; background: #fff7f8; bottom: 6px; left: 50%; transform: translateX(-50%); }
+.profile-arrow { font-size: 15px; color: #6b4038; position: relative; top: 1px; }
+.profile-dropdown { display: none; flex-direction: column; position: absolute; top: calc(100% + 14px); right: 0; min-width: 190px; background: white; border-radius: 18px; padding: 10px; box-shadow: 0 14px 34px rgba(90,50,35,0.18); z-index: 50; }
+.profile-dropdown.open { display: flex; }
+.profile-dropdown a { padding: 10px 12px; border-radius: 12px; font-size: 14px; color: #5b3024; display: flex; align-items: center; gap: 8px; }
+.profile-dropdown a:hover { background: #fff1ed; color: #df6989; }
+.profile-dropdown .divider { height: 1px; background: #f1ded9; margin: 6px 4px; }
+
+
+/* ============ PAGE LAYOUT ============ */
+
+.tuin-wrap { max-width: 1500px; margin: 0 auto; padding: 28px 3% 70px; display: grid; grid-template-columns: 330px 1fr; gap: 20px; align-items: start; }
+
+/* ============ INVENTORY SIDEBAR ============ */
+
+.inventory-panel {
+    background: rgba(255,255,255,0.92); border-radius: 26px; padding: 22px 20px;
+    box-shadow: 0 12px 30px rgba(90,50,35,0.08);
+    position: sticky; top: 20px;
+    transition: 0.25s ease;
+    overflow: hidden;
+}
+.inventory-panel.collapsed { max-height: 68px; padding-bottom: 20px; }
+
+.inventory-header { display: flex; align-items: center; gap: 12px; cursor: pointer; }
+.inventory-header img { width: 34px; height: 34px; object-fit: contain; flex-shrink: 0; }
+.inventory-header h2 { margin: 0; font-family: Georgia, "Times New Roman", serif; font-size: 19px; color: #5b3024; }
+.inventory-header p { margin: 3px 0 0; font-size: 12px; color: #8a685e; line-height: 1.4; }
+.inventory-toggle-arrow { margin-left: auto; font-size: 16px; color: #a9781f; transition: transform 0.25s; flex-shrink: 0; }
+.inventory-panel.collapsed .inventory-toggle-arrow { transform: rotate(-90deg); }
+
+.inventory-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 18px; }
+
+.inv-item {
+    background: #fff8f2; border-radius: 16px; padding: 12px 10px 10px; text-align: center;
+    position: relative; border: 1.5px solid #f1ded9;
+}
+.inv-item img { width: 100%; height: 64px; object-fit: contain; }
+.inv-item .inv-name { font-size: 12px; font-weight: bold; color: #5b3024; margin-top: 4px; }
+.inv-item .inv-count {
+    position: absolute; top: 6px; right: 6px; background: #e86e90; color: white;
+    font-size: 11px; font-weight: bold; padding: 2px 7px; border-radius: 20px;
+}
+.inv-empty { grid-column: 1 / -1; text-align: center; font-size: 13px; color: #a1817a; padding: 20px 10px; }
+.inv-empty a { color: #df6989; font-weight: bold; }
+
+.inventory-tip {
+    margin-top: 18px; background: #ffe3e8; border-radius: 16px; padding: 14px 16px;
+    display: flex; gap: 10px; align-items: flex-start; font-size: 12.5px; color: #8a4257; line-height: 1.5;
+}
+.inventory-tip img { width: 22px; height: 22px; object-fit: contain; flex-shrink: 0; margin-top: 1px; }
+
+
+/* ============ GARDEN AREA ============ */
+
+.garden-outer { display: flex; flex-direction: column; gap: 16px; }
+
+.garden-topbar { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 14px; }
+
+.status-card {
+    background: rgba(255,255,255,0.92); border-radius: 20px; padding: 16px 22px;
+    display: flex; align-items: center; gap: 18px; box-shadow: 0 8px 22px rgba(90,50,35,0.06);
+}
+.status-card img { width: 28px; height: 28px; object-fit: contain; flex-shrink: 0; }
+.status-card h3 { margin: 0 0 4px; font-family: Georgia, "Times New Roman", serif; font-size: 16px; color: #5b3024; }
+.status-numbers { display: flex; gap: 18px; font-size: 13px; color: #6a4a40; }
+.status-numbers strong { color: #5b3024; }
+
+.garden-actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.action-btn {
+    display: inline-flex; align-items: center; gap: 8px; padding: 11px 18px; border-radius: 20px;
+    background: white; border: 1.5px solid #f1ded9; color: #6a4a40; font-size: 13.5px; font-weight: bold;
+    box-shadow: 0 6px 16px rgba(90,50,35,0.05); transition: 0.2s;
+}
+.action-btn img { width: 20px; height: 20px; object-fit: contain; }
+.action-btn:hover { transform: translateY(-2px); border-color: #e86e90; color: #df6989; }
+.help-btn {
+    width: 38px; height: 38px; border-radius: 50%; background: white; border: 1.5px solid #f1ded9;
+    color: #a9781f; font-weight: bold; font-size: 14px; display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 6px 16px rgba(90,50,35,0.05); position: relative;
+}
+.help-popover {
+    display: none; position: absolute; top: calc(100% + 10px); right: 0; width: 260px;
+    background: white; border-radius: 16px; padding: 16px 18px; box-shadow: 0 14px 34px rgba(90,50,35,0.18);
+    font-size: 12.5px; color: #6a4a40; line-height: 1.6; text-align: left; font-weight: normal; z-index: 40;
+}
+.help-btn.open .help-popover { display: block; }
+
+.garden-field {
+    position: relative; border-radius: 34px; overflow: hidden;
+    background:
+        radial-gradient(circle at 15% 20%, rgba(255,255,255,0.15), transparent 35%),
+        radial-gradient(circle at 85% 70%, rgba(255,255,255,0.1), transparent 40%),
+        linear-gradient(180deg, #a9cf7d 0%, #9bc46c 40%, #8fb95f 100%);
+    min-height: 1500px;
+    box-shadow: 0 15px 40px rgba(90,50,35,0.12);
+}
+
+.garden-field svg.path-svg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
+
+.garden-decor { position: absolute; font-size: 22px; opacity: 0.85; pointer-events: none; }
+
+.plot {
+    position: absolute; width: 78px; height: 78px; transform: translate(-50%, -50%);
+    display: flex; align-items: center; justify-content: center;
+}
+
+.plot-empty {
+    width: 58px; height: 58px; border-radius: 50%;
+    background: rgba(90,60,35,0.28);
+    border: 2.5px dashed rgba(255,255,255,0.75);
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-size: 26px; font-weight: bold;
+    transition: 0.2s;
+}
+.plot-empty:hover { transform: scale(1.1); background: rgba(90,60,35,0.4); }
+
+.plot-flower { position: relative; display: flex; flex-direction: column; align-items: center; cursor: pointer; }
+.plot-flower img {
+    width: 74px; height: 74px; object-fit: contain; filter: drop-shadow(0 6px 8px rgba(0,0,0,0.18));
+    transition: 0.2s;
+}
+.plot-flower:hover img { transform: scale(1.08) translateY(-2px); }
+.plot-flower.dead img { filter: grayscale(1) brightness(0.85) drop-shadow(0 6px 8px rgba(0,0,0,0.18)); }
+.plot-flower .plot-heart { position: absolute; top: -2px; right: 6px; font-size: 12px; }
+
+.plot-label {
+    margin-top: 2px; background: rgba(255,255,255,0.92); padding: 3px 10px; border-radius: 12px;
+    font-size: 11.5px; font-weight: bold; color: #5b3024; white-space: nowrap;
+    box-shadow: 0 3px 8px rgba(90,50,35,0.1);
+}
+
+.bottom-hint {
+    position: sticky; bottom: 18px; margin: 0 auto; width: fit-content;
+    background: white; padding: 12px 22px; border-radius: 24px; font-size: 13.5px; color: #6a4a40;
+    box-shadow: 0 10px 26px rgba(90,50,35,0.16); display: flex; align-items: center; gap: 8px;
+}
+
+
+/* ============ FLOWER DETAIL POPOVER ============ */
+
+.flower-popover {
+    display: none; position: absolute; z-index: 60; width: 250px;
+    background: white; border-radius: 20px; padding: 18px 20px;
+    box-shadow: 0 18px 40px rgba(90,50,35,0.22);
+}
+.flower-popover.open { display: block; }
+.flower-popover-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+.flower-popover-header h3 { margin: 0; font-family: Georgia, "Times New Roman", serif; font-size: 18px; color: #5b3024; }
+.flower-popover-close { background: none; color: #b98277; font-size: 18px; padding: 2px; }
+.flower-popover-close:hover { color: #df6989; }
+
+.meter-row { margin-bottom: 12px; }
+.meter-label { display: flex; align-items: center; gap: 7px; font-size: 12.5px; color: #6a4a40; margin-bottom: 5px; }
+.meter-track { height: 9px; border-radius: 6px; background: #f1ded9; overflow: hidden; }
+.meter-fill { height: 100%; border-radius: 6px; transition: width 0.4s ease; }
+.meter-fill.water { background: #7fb8e6; }
+.meter-fill.sun { background: #f0b545; }
+.meter-value { float: right; font-weight: bold; color: #5b3024; }
+
+.flower-popover-actions { display: flex; gap: 8px; margin-top: 14px; }
+.care-btn {
+    flex: 1; padding: 10px 8px; border-radius: 12px; font-size: 12.5px; font-weight: bold;
+    display: flex; align-items: center; justify-content: center; gap: 6px; transition: 0.2s;
+}
+.care-btn.water-btn { background: #eaf3fb; color: #3f6f96; }
+.care-btn.sun-btn { background: #fff4dc; color: #a9781f; }
+.care-btn:hover { transform: translateY(-1px); }
+.care-btn:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
+
+.dead-note { margin-top: 10px; font-size: 12px; color: #b34a4a; text-align: center; }
+
+
+/* ============ PLANT MODAL ============ */
+
+.modal-overlay { display: none; position: fixed; inset: 0; z-index: 100; background: rgba(91,48,36,0.35); align-items: center; justify-content: center; padding: 20px; }
+.modal-overlay.open { display: flex; }
+.modal {
+    background: #fffcfa; border-radius: 26px; padding: 30px 32px; width: 100%; max-width: 460px;
+    box-shadow: 0 20px 50px rgba(90,50,35,0.25); max-height: 80vh; overflow-y: auto;
+}
+.modal h2 { margin: 0 0 6px; font-family: Georgia, "Times New Roman", serif; font-size: 22px; color: #5b3024; }
+.modal p.modal-sub { margin: 0 0 20px; font-size: 13px; color: #8a685e; }
+
+.pick-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.pick-item { background: white; border: 1.5px solid #f1ded9; border-radius: 16px; padding: 10px 8px; text-align: center; transition: 0.2s; }
+.pick-item:hover { border-color: #e86e90; transform: translateY(-2px); }
+.pick-item img { width: 100%; height: 56px; object-fit: contain; }
+.pick-item .pick-name { font-size: 11.5px; font-weight: bold; color: #5b3024; margin-top: 4px; }
+.pick-item .pick-count { font-size: 11px; color: #a9781f; }
+
+.modal-empty { text-align: center; padding: 30px 10px; color: #a1817a; font-size: 14px; }
+.modal-empty a { color: #df6989; font-weight: bold; }
+
+.modal-close-row { display: flex; justify-content: flex-end; margin-top: 20px; }
+.modal-cancel { padding: 11px 18px; background: none; color: #8a685e; font-size: 14px; border-radius: 12px; }
+.modal-cancel:hover { color: #df6989; }
+
+.toast {
+    position: fixed; top: 100px; left: 50%; transform: translateX(-50%) translateY(-10px);
+    background: #5b3024; color: #ffe9ab; padding: 10px 22px; border-radius: 30px; font-size: 14px; text-align: center;
+    opacity: 0; pointer-events: none; transition: 0.25s; z-index: 200;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+footer { background: #fffaf5; text-align: center; padding: 28px; color: #a17b71; font-size: 13px; }
+
+@media (max-width: 1050px) {
+    .tuin-wrap { grid-template-columns: 1fr; }
+    .inventory-panel { position: static; }
+}
+@media (max-width: 800px) {
+    .menu { display: none; }
+}
+@media (max-width: 550px) {
+    .profile { display: none; }
+    .inventory-grid { grid-template-columns: 1fr 1fr; }
+}
+
+</style>
+</head>
+<body>
+
+<nav>
+<div class="logo">
+<img src="Screenshot 2026-09-09 17.48.27.png" class="logo-image" alt="Lilium">
+</div>
+<div class="menu">
+<a href="index.html">Home</a>
+<a href="Planner.html">Planner</a>
+<a href="AILillium.html" class="ai-nav">AI Assistant <span class="lilium-badge">Lilium</span></a>
+<a href="Shop.html">Shop</a>
+<a href="MijnTuin.html" class="active">Mijn Tuin</a>
+<a href="Profiel.html">Profiel</a>
+</div>
+<div class="right-nav">
+<div class="coin-counter">
+<img src="3820194-gouden-munt-cartoon-gratis-vector.jpg" class="coin" alt="Lilium muntje">
+<span id="coinCount">50</span>
+</div>
+<div class="profile" id="profileToggle">
+<div class="profile-picture"></div>
+<span class="profile-arrow">˅</span>
+<div class="profile-dropdown" id="profileDropdown">
+<a href="Profiel.html">👤 Mijn profiel</a>
+<a href="#">⚙️ Instellingen</a>
+<div class="divider"></div>
+<a href="#">🚪 Uitloggen</a>
+</div>
+</div>
+</div>
+</nav>
+
+
+<div class="tuin-wrap">
+
+    <!-- INVENTORY SIDEBAR -->
+    <div class="inventory-panel" id="inventoryPanel">
+
+        <div class="inventory-header" id="inventoryToggle">
+            <img src="Screenshot 2026-09-14 20.03.17.png" alt="Mijn inventory">
+            <div>
+                <h2>Mijn inventory</h2>
+                <p>Bloemen die je hebt gekocht maar nog niet in je tuin hebt geplaatst.</p>
+            </div>
+            <span class="inventory-toggle-arrow">⌄</span>
+        </div>
+
+        <div class="inventory-grid" id="inventoryGrid"></div>
+
+        <div class="inventory-tip">
+            <img src="Screenshot 2026-09-14 20.25.37.png" alt="Tip">
+            <span>Klik op een lege plek in je tuin om een bloem uit je inventory te plaatsen!</span>
+        </div>
+
+        <div class="inventory-tip">
+            <img src="Screenshot 2026-09-14 20.04.52.png" alt="Tip">
+            <span>Verzorg je bloem goed om haar gelukkig te houden!</span>
+        </div>
+
+    </div>
+
+
+    <!-- GARDEN -->
+    <div class="garden-outer">
+
+        <div class="garden-topbar">
+
+            <div class="status-card">
+                <img src="Screenshot 2026-09-14 20.03.53.png" alt="Tuin status">
+                <div>
+                    <h3>Tuin status</h3>
+                    <div class="status-numbers">
+                        <span>Bloemen: <strong id="flowerCount">0 / 32</strong></span>
+                        <span>Geluk: <strong id="happyPercent">—</strong></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="garden-actions">
+                <button class="action-btn" id="waterAllBtn">
+                    <img src="Screenshot 2026-09-14 20.05.06.png" alt="Alles water geven"> Alles water geven
+                </button>
+                <button class="action-btn" id="sunAllBtn">
+                    <img src="Screenshot 2026-09-14 20.05.17.png" alt="Alles zon geven"> Alles zon geven
+                </button>
+                <button class="action-btn" id="decorBtn">
+                    <img src="Screenshot 2026-09-14 20.05.43.png" alt="Tuin decoraties"> Tuin decoratie
+                </button>
+                <div class="help-btn" id="helpBtn">
+                    ?
+                    <div class="help-popover">
+                        Elke bloem heeft water en zonlicht nodig. Verwaarloos je bloem niet te lang,
+                        anders verwelkt ze en wordt ze zwart-wit — dan kun je haar niet meer verzorgen.
+                        Koop nieuwe bloemen in de Shop en zet ze hier in je tuin!
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="garden-field" id="gardenField">
+            <svg class="path-svg" id="pathSvg" viewBox="0 0 1000 1000" preserveAspectRatio="none"></svg>
+            <!-- plots worden hier via JS toegevoegd -->
+        </div>
+
+        <div class="bottom-hint">
+            <img src="Screenshot 2026-09-14 20.05.31.png" style="width:20px;height:20px;object-fit:contain;" alt="Tip">
+            Klik op een + om een bloem te plaatsen
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- PLANT MODAL -->
+<div class="modal-overlay" id="plantModalOverlay">
+    <div class="modal">
+        <h2>Kies een bloem</h2>
+        <p class="modal-sub">Welke bloem uit je inventory wil je hier planten?</p>
+        <div id="plantModalBody"></div>
+        <div class="modal-close-row">
+            <button class="modal-cancel" onclick="closePlantModal()">Annuleren</button>
+        </div>
+    </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<footer>
+© 2026 Lilium · Plan rustig. Groei op jouw manier. 🌸
+</footer>
+
+
+<script>
+
+/* =====================================================
+   BLOEMEN DATA (zelfde als shop.html)
+===================================================== */
+
+const FLOWERS = [
+{ id: "madeliefje", name: "Madeliefje", price: 50, img: "ChatGPT Image 14 sep 2026, 18_40_22.png" },
+{ id: "zonnebloem", name: "Zonnebloem", price: 100, img: "ChatGPT Image 14 sep 2026, 18_40_19.png" },
+{ id: "lavendel", name: "Lavendel", price: 100, img: "ChatGPT Image 14 sep 2026, 18_40_21.png" },
+{ id: "rozetulp", name: "Roze tulp", price: 150, img: "ChatGPT Image 14 sep 2026, 18_40_15.png" },
+{ id: "pioenroos", name: "Pioenroos", price: 150, img: "ChatGPT Image 14 sep 2026, 18_40_03.png" },
+{ id: "lelie", name: "Lelie", price: 150, img: "ChatGPT Image 14 sep 2026, 18_40_03 (1).png" },
+{ id: "kersenbloesem", name: "Kersenbloesem", price: 200, img: "1fd06434-e041-4c0f-8521-7d55e8ed468e.png" },
+{ id: "orchidee", name: "Orchidee", price: 200, img: "1fd06434-e041-4c0f-8521-7d55e8ed468e (1).png" },
+{ id: "regenboogroos", name: "Regenboog roos", price: 250, img: "1fd06434-e041-4c0f-8521-7d55e8ed468e (2).png" },
+{ id: "regenboogtulp", name: "Regenboog tulp", price: 250, img: "1fd06434-e041-4c0f-8521-7d55e8ed468e (3).png" }
+];
+function flowerById(id) { return FLOWERS.find(f => f.id === id); }
+
+
+/* =====================================================
+   OPSLAG
+===================================================== */
+
+function loadCoins() {
+    const s = localStorage.getItem("lilium_coins");
+    return s === null ? 50 : parseInt(s, 10);
+}
+function saveCoins(v) {
+    localStorage.setItem("lilium_coins", String(v));
+    document.getElementById("coinCount").textContent = v;
+}
+
+function loadInventory() {
+    try { return JSON.parse(localStorage.getItem("lilium_inventory")) || {}; }
+    catch (e) { return {}; }
+}
+function saveInventory(inv) { localStorage.setItem("lilium_inventory", JSON.stringify(inv)); }
+
+function loadGarden() {
+    try { return JSON.parse(localStorage.getItem("lilium_garden_v2")) || {}; }
+    catch (e) { return {}; }
+}
+function saveGarden(g) { localStorage.setItem("lilium_garden_v2", JSON.stringify(g)); }
+
+let coins = loadCoins();
+let inventory = loadInventory();
+let garden = loadGarden(); // { plotId: { flowerId, waterLevel, waterTs, sunLevel, sunTs } }
+
+
+/* =====================================================
+   VERVAL INSTELLINGEN
+===================================================== */
+
+const DECAY_HOURS = 48; // van 100% naar 1% in 48 uur zonder verzorging
+const DECAY_RATE = 99 / DECAY_HOURS; // % per uur
+
+function currentLevel(level, ts) {
+    const hours = (Date.now() - ts) / (1000 * 60 * 60);
+    const value = level - hours * DECAY_RATE;
+    return Math.max(1, Math.min(100, Math.round(value)));
+}
+
+function isDead(plant) {
+    return currentLevel(plant.waterLevel, plant.waterTs) <= 1 && currentLevel(plant.sunLevel, plant.sunTs) <= 1;
+}
+
+
+/* =====================================================
+   PLOTS GENEREREN (hartvormig pad + rijen eronder)
+===================================================== */
+
+const plots = [];
+
+// hart-parametrische curve, genormaliseerd naar 0-100 (voor % positionering)
+function heartPoint(t, scale) {
+    const x = 16 * Math.pow(Math.sin(t), 3);
+    const y = 13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t);
+    return { x: 50 + (x / 17) * scale, y: 24 + (-y / 17) * scale * 0.85 };
+}
+
+// pad-punten (voor de SVG-lijn)
+const pathPoints = [];
+for (let i = 0; i <= 120; i++) {
+    const t = (i / 120) * Math.PI * 2;
+    pathPoints.push(heartPoint(t, 27));
+}
+
+// plots rondom het hart (ring net buiten het pad)
+let plotId = 0;
+const NUM_RING_PLOTS = 22;
+for (let i = 0; i < NUM_RING_PLOTS; i++) {
+    const t = (i / NUM_RING_PLOTS) * Math.PI * 2;
+    const p = heartPoint(t, 34);
+    plots.push({ id: "p" + (plotId++), xPercent: p.x, yPercent: p.y });
+}
+
+// een paar plots wat verder naar buiten, verspreid, voor variatie
+const scatterAngles = [0.3, 1.1, 2.4, 3.3, 4.2, 5.1, 0.8, 2.9];
+scatterAngles.forEach((t) => {
+    const p = heartPoint(t, 42);
+    plots.push({ id: "p" + (plotId++), xPercent: p.x, yPercent: p.y });
+});
+
+// extra rijen eronder (voor het scrollen)
+const EXTRA_ROWS = 3;
+const COLS = 7;
+for (let row = 0; row < EXTRA_ROWS; row++) {
+    for (let col = 0; col < COLS; col++) {
+        const x = 8 + col * (84 / (COLS - 1));
+        const y = 66 + row * 11;
+        plots.push({ id: "p" + (plotId++), xPercent: x, yPercent: y });
+    }
+}
+
+const TOTAL_PLOTS = plots.length;
+
+
+/* =====================================================
+   RENDER: PAD (SVG)
+===================================================== */
+
+function renderPath() {
+    const svg = document.getElementById("pathSvg");
+    const d = pathPoints.map((p, i) => `${i === 0 ? "M" : "L"} ${p.x * 10} ${p.y * 10}`).join(" ") + " Z";
+    svg.innerHTML = `
+        <path d="${d}" fill="none" stroke="#e9d7bd" stroke-width="26" stroke-linecap="round" opacity="0.9"/>
+        <path d="${d}" fill="none" stroke="#f4e6cf" stroke-width="18" stroke-linecap="round" stroke-dasharray="4 14" opacity="0.9"/>
+    `;
+}
+
+
+/* =====================================================
+   RENDER: INVENTORY
+===================================================== */
+
+function renderInventory() {
+    const grid = document.getElementById("inventoryGrid");
+    const entries = Object.entries(inventory).filter(([id, count]) => count > 0);
+
+    if (entries.length === 0) {
+        grid.innerHTML = `<div class="inv-empty">Je inventory is leeg. <a href="Shop.html">Ga naar de shop 🌸</a></div>`;
+        return;
+    }
+
+    grid.innerHTML = entries.map(([id, count]) => {
+        const f = flowerById(id);
+        if (!f) return "";
+        return `
+            <div class="inv-item">
+                <span class="inv-count">${count}</span>
+                <img src="${f.img}" alt="${f.name}">
+                <div class="inv-name">${f.name}</div>
+            </div>
+        `;
+    }).join("");
+}
+
+
+/* =====================================================
+   RENDER: TUIN / PLOTS
+===================================================== */
+
+function renderGarden() {
+    const field = document.getElementById("gardenField");
+
+    // oude plots verwijderen (svg laten staan)
+    field.querySelectorAll(".plot").forEach(el => el.remove());
+    field.querySelectorAll(".flower-popover").forEach(el => el.remove());
+
+    let plantedCount = 0;
+    let happinessSum = 0;
+
+    plots.forEach(plot => {
+        const el = document.createElement("div");
+        el.className = "plot";
+        el.style.left = plot.xPercent + "%";
+        el.style.top = plot.yPercent + "%";
+
+        const plant = garden[plot.id];
+
+        if (!plant) {
+            el.innerHTML = `<div class="plot-empty" data-plot="${plot.id}">+</div>`;
+        } else {
+            const f = flowerById(plant.flowerId);
+            const water = currentLevel(plant.waterLevel, plant.waterTs);
+            const sun = currentLevel(plant.sunLevel, plant.sunTs);
+            const dead = water <= 1 && sun <= 1;
+
+            plantedCount++;
+            happinessSum += Math.round((water + sun) / 2);
+
+            el.innerHTML = `
+                <div class="plot-flower ${dead ? "dead" : ""}" data-plot="${plot.id}">
+                    ${!dead ? '<span class="plot-heart">💗</span>' : ""}
+                    <img src="${f ? f.img : ""}" alt="${f ? f.name : ""}">
+                    <div class="plot-label">${f ? f.name : "Bloem"}</div>
+                </div>
+            `;
+        }
+
+        field.appendChild(el);
+    });
+
+    document.getElementById("flowerCount").textContent = `${plantedCount} / ${TOTAL_PLOTS}`;
+    document.getElementById("happyPercent").textContent = plantedCount > 0 ? Math.round(happinessSum / plantedCount) + "%" : "—";
+}
+
+
+/* =====================================================
+   PLOT KLIKKEN
+===================================================== */
+
+let activePopoverPlot = null;
+
+document.getElementById("gardenField").addEventListener("click", (e) => {
+    const emptyEl = e.target.closest(".plot-empty");
+    const flowerEl = e.target.closest(".plot-flower");
+
+    if (emptyEl) {
+        openPlantModal(emptyEl.dataset.plot);
+        return;
+    }
+    if (flowerEl) {
+        openFlowerPopover(flowerEl);
+        return;
+    }
+});
+
+
+/* =====================================================
+   PLANT MODAL (bloem uit inventory kiezen)
+===================================================== */
+
+let plantTargetPlot = null;
+
+function openPlantModal(plotId) {
+    plantTargetPlot = plotId;
+    const body = document.getElementById("plantModalBody");
+    const entries = Object.entries(inventory).filter(([id, count]) => count > 0);
+
+    if (entries.length === 0) {
+        body.innerHTML = `<div class="modal-empty">Je inventory is leeg 🌱<br><a href="Shop.html">Ga naar de shop om bloemen te kopen</a></div>`;
+    } else {
+        body.innerHTML = `<div class="pick-grid">${entries.map(([id, count]) => {
+            const f = flowerById(id);
+            if (!f) return "";
+            return `
+                <div class="pick-item" onclick="plantFlower('${id}')">
+                    <img src="${f.img}" alt="${f.name}">
+                    <div class="pick-name">${f.name}</div>
+                    <div class="pick-count">${count}× beschikbaar</div>
+                </div>
+            `;
+        }).join("")}</div>`;
+    }
+
+    document.getElementById("plantModalOverlay").classList.add("open");
+}
+
+function closePlantModal() {
+    document.getElementById("plantModalOverlay").classList.remove("open");
+    plantTargetPlot = null;
+}
+
+function plantFlower(flowerId) {
+    if (!plantTargetPlot) return;
+    if (!inventory[flowerId] || inventory[flowerId] <= 0) return;
+
+    inventory[flowerId] -= 1;
+    const now = Date.now();
+    garden[plantTargetPlot] = { flowerId: flowerId, waterLevel: 100, waterTs: now, sunLevel: 100, sunTs: now };
+
+    saveInventory(inventory);
+    saveGarden(garden);
+    closePlantModal();
+    renderInventory();
+    renderGarden();
+    showToast(`${flowerById(flowerId).name} geplant! 🌸`);
+}
+
+document.getElementById("plantModalOverlay").addEventListener("click", (e) => {
+    if (e.target.id === "plantModalOverlay") closePlantModal();
+});
+
+
+/* =====================================================
+   BLOEM VERZORGEN (popover)
+===================================================== */
+
+function openFlowerPopover(flowerEl) {
+    const plotId = flowerEl.dataset.plot;
+    const plant = garden[plotId];
+    if (!plant) return;
+
+    // bestaande popover weg
+    document.querySelectorAll(".flower-popover").forEach(el => el.remove());
+
+    const f = flowerById(plant.flowerId);
+    const water = currentLevel(plant.waterLevel, plant.waterTs);
+    const sun = currentLevel(plant.sunLevel, plant.sunTs);
+    const dead = water <= 1 && sun <= 1;
+
+    const pop = document.createElement("div");
+    pop.className = "flower-popover open";
+    pop.innerHTML = `
+        <div class="flower-popover-header">
+            <h3>${f ? f.name : "Bloem"}</h3>
+            <button class="flower-popover-close" onclick="this.closest('.flower-popover').remove()">×</button>
+        </div>
+
+        <div class="meter-row">
+            <div class="meter-label">💧 Water <span class="meter-value">${water}%</span></div>
+            <div class="meter-track"><div class="meter-fill water" style="width:${water}%"></div></div>
+        </div>
+
+        <div class="meter-row">
+            <div class="meter-label">☀️ Zonlicht <span class="meter-value">${sun}%</span></div>
+            <div class="meter-track"><div class="meter-fill sun" style="width:${sun}%"></div></div>
+        </div>
+
+        ${dead
+            ? `<div class="dead-note">Deze bloem is verwelkt en kan niet meer verzorgd worden 🥀</div>`
+            : `<div class="flower-popover-actions">
+                <button class="care-btn water-btn" onclick="careFor('${plotId}','water')">💧 Water geven</button>
+                <button class="care-btn sun-btn" onclick="careFor('${plotId}','sun')">☀️ Zon geven</button>
+               </div>`
+        }
+    `;
+
+    // positioneren t.o.v. de plot-flower binnen garden-field
+    const field = document.getElementById("gardenField");
+    const fieldRect = field.getBoundingClientRect();
+    const elRect = flowerEl.getBoundingClientRect();
+
+    field.appendChild(pop);
+    let left = elRect.left - fieldRect.left + elRect.width / 2 + 20;
+    let top = elRect.top - fieldRect.top - 20;
+
+    if (left + 250 > field.offsetWidth) left = elRect.left - fieldRect.left - 270;
+    pop.style.left = Math.max(10, left) + "px";
+    pop.style.top = Math.max(10, top) + "px";
+}
+
+function careFor(plotId, type) {
+    const plant = garden[plotId];
+    if (!plant) return;
+    const now = Date.now();
+    if (type === "water") { plant.waterLevel = 100; plant.waterTs = now; }
+    if (type === "sun") { plant.sunLevel = 100; plant.sunTs = now; }
+    saveGarden(garden);
+    renderGarden();
+    document.querySelectorAll(".flower-popover").forEach(el => el.remove());
+    showToast(type === "water" ? "Water gegeven! 💧" : "Zon gegeven! ☀️");
+}
+
+document.addEventListener("click", (e) => {
+    if (!e.target.closest(".flower-popover") && !e.target.closest(".plot-flower")) {
+        document.querySelectorAll(".flower-popover").forEach(el => el.remove());
+    }
+});
+
+
+/* =====================================================
+   ALLES WATER / ZON GEVEN
+===================================================== */
+
+document.getElementById("waterAllBtn").addEventListener("click", () => {
+    const now = Date.now();
+    let count = 0;
+    Object.values(garden).forEach(plant => {
+        if (!isDead(plant)) { plant.waterLevel = 100; plant.waterTs = now; count++; }
+    });
+    saveGarden(garden);
+    renderGarden();
+    showToast(count > 0 ? `Alle bloemen water gegeven! 💧` : "Geen bloemen om water te geven.");
+});
+
+document.getElementById("sunAllBtn").addEventListener("click", () => {
+    const now = Date.now();
+    let count = 0;
+    Object.values(garden).forEach(plant => {
+        if (!isDead(plant)) { plant.sunLevel = 100; plant.sunTs = now; count++; }
+    });
+    saveGarden(garden);
+    renderGarden();
+    showToast(count > 0 ? `Alle bloemen zon gegeven! ☀️` : "Geen bloemen om zon te geven.");
+});
+
+document.getElementById("decorBtn").addEventListener("click", () => {
+    showToast("Tuin decoraties komen binnenkort! 🌷");
+});
+
+
+/* =====================================================
+   INVENTORY TOGGLE
+===================================================== */
+
+document.getElementById("inventoryToggle").addEventListener("click", () => {
+    document.getElementById("inventoryPanel").classList.toggle("collapsed");
+});
+
+
+/* =====================================================
+   HELP POPOVER
+===================================================== */
+
+document.getElementById("helpBtn").addEventListener("click", function (e) {
+    this.classList.toggle("open");
+    e.stopPropagation();
+});
+document.addEventListener("click", () => {
+    document.getElementById("helpBtn").classList.remove("open");
+});
+
+
+/* =====================================================
+   TOAST
+===================================================== */
+
+function showToast(msg) {
+    const toast = document.getElementById("toast");
+    toast.textContent = msg;
+    toast.classList.add("show");
+    clearTimeout(showToast._t);
+    showToast._t = setTimeout(() => toast.classList.remove("show"), 1600);
+}
+
+
+/* =====================================================
+   PROFIELMENU
+===================================================== */
+
+const profileToggle = document.getElementById("profileToggle");
+const profileDropdown = document.getElementById("profileDropdown");
+profileToggle.addEventListener("click", function (e) {
+    profileDropdown.classList.toggle("open");
+    e.stopPropagation();
+});
+document.addEventListener("click", function () {
+    profileDropdown.classList.remove("open");
+});
+
+
+/* =====================================================
+   START
+===================================================== */
+
+saveCoins(coins);
+renderPath();
+renderInventory();
+renderGarden();
+
+// meters langzaam laten bijwerken (elke minuut) zodat verval zichtbaar blijft zonder herladen
+setInterval(renderGarden, 60000);
+
+</script>
+
+</body>
+</html>

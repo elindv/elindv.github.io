@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lilium — AI Assistant</title>
+
+<style>
+
+* { box-sizing: border-box; }
+body { margin: 0; background: #fffcfa; color: #5b3024; font-family: Arial, Helvetica, sans-serif; }
+a { text-decoration: none; color: inherit; }
+button { font-family: inherit; cursor: pointer; border: none; }
+
+/* ============ NAV ============ */
+
+nav {
+    position: relative; z-index: 30; height: 76px; margin: 24px 5.5% 0; padding: 0 28px 0 36px;
+    background: rgba(255,255,255,0.93); border-radius: 24px;
+    display: flex; align-items: center; justify-content: space-between;
+    box-shadow: 0 5px 25px rgba(90,50,35,0.07);
+}
+.logo { display: flex; align-items: center; gap: 8px; white-space: nowrap; }
+.logo-image { width: 120px; height: 52px; object-fit: contain; display: block; }
+.menu { display: flex; align-items: center; gap: 32px; margin-left: 60px; }
+.menu a { font-size: 16px; color: #57372e; transition: 0.2s; }
+.menu a:hover, .menu a.active { color: #df6989; }
+.ai-nav { display: flex; align-items: center; gap: 9px; }
+.lilium-badge { background: #ffe0e8; color: #df6687; padding: 7px 13px; border-radius: 20px; font-size: 13px; }
+.right-nav { display: flex; align-items: center; gap: 15px; }
+.coin-counter { display: flex; align-items: center; gap: 9px; background: #fff4dc; padding: 6px 17px 6px 7px; border-radius: 30px; font-size: 16px; font-weight: bold; color: #a9781f; }
+.coin-counter img.coin { width: 24px; height: 24px; object-fit: contain; border-radius: 50%; flex-shrink: 0; }
+.profile { position: relative; display: flex; align-items: center; gap: 8px; cursor: pointer; }
+.profile-picture { width: 40px; height: 40px; border-radius: 50%; background: #f5b0c3; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+.profile-picture::before { content: ""; position: absolute; width: 11px; height: 11px; border-radius: 50%; background: #fff7f8; top: 8px; left: 50%; transform: translateX(-50%); }
+.profile-picture::after { content: ""; position: absolute; width: 25px; height: 14px; border-radius: 15px 15px 0 0; background: #fff7f8; bottom: 6px; left: 50%; transform: translateX(-50%); }
+.profile-arrow { font-size: 15px; color: #6b4038; position: relative; top: 1px; }
+.profile-dropdown { display: none; flex-direction: column; position: absolute; top: calc(100% + 14px); right: 0; min-width: 190px; background: white; border-radius: 18px; padding: 10px; box-shadow: 0 14px 34px rgba(90,50,35,0.18); z-index: 50; }
+.profile-dropdown.open { display: flex; }
+.profile-dropdown a { padding: 10px 12px; border-radius: 12px; font-size: 14px; color: #5b3024; display: flex; align-items: center; gap: 8px; }
+.profile-dropdown a:hover { background: #fff1ed; color: #df6989; }
+.profile-dropdown .divider { height: 1px; background: #f1ded9; margin: 6px 4px; }
+
+
+/* ============ LAYOUT ============ */
+
+.ai-wrap { max-width: 1500px; margin: 0 auto; padding: 24px 3% 30px; display: grid; grid-template-columns: 320px 1fr; gap: 20px; align-items: start; height: calc(100vh - 150px); min-height: 620px; }
+
+/* ============ SIDEBAR ============ */
+
+.ai-sidebar {
+    background: rgba(255,255,255,0.92); border-radius: 26px; padding: 22px 18px;
+    box-shadow: 0 12px 30px rgba(90,50,35,0.08);
+    display: flex; flex-direction: column; gap: 18px; height: 100%;
+}
+
+.sidebar-profile { display: flex; align-items: center; gap: 12px; }
+.sidebar-avatar { width: 56px; height: 56px; border-radius: 50%; background: #ffe0e8; display: flex; align-items: center; justify-content: center; font-size: 28px; flex-shrink: 0; }
+.sidebar-profile h2 { margin: 0; font-family: Georgia, "Times New Roman", serif; font-size: 18px; color: #5b3024; }
+.sidebar-profile p { margin: 2px 0 0; font-size: 12.5px; color: #8a685e; }
+
+.new-chat-btn {
+    padding: 13px; border-radius: 16px; background: #e86e90; color: white; font-size: 14px; font-weight: bold;
+    box-shadow: 0 8px 20px rgba(232,110,144,0.22); transition: 0.2s;
+}
+.new-chat-btn:hover { transform: translateY(-2px); }
+
+.old-plans-header { display: flex; align-items: center; gap: 8px; font-size: 13.5px; font-weight: bold; color: #5b3024; }
+
+.old-plans-list { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; padding-right: 2px; }
+
+.old-plan-item {
+    background: #fff8f2; border-radius: 14px; padding: 10px 12px; cursor: pointer; transition: 0.2s;
+    border: 1.5px solid transparent;
+}
+.old-plan-item:hover { border-color: #f1c6d0; }
+.old-plan-item .plan-title { font-size: 13px; font-weight: bold; color: #5b3024; }
+.old-plan-item .plan-meta { font-size: 11px; color: #a1817a; margin-top: 2px; }
+
+.old-plans-empty { font-size: 12.5px; color: #a1817a; padding: 10px 4px; }
+
+.sidebar-footer {
+    background: #ffe3e8; border-radius: 18px; padding: 16px 18px; text-align: center;
+}
+.sidebar-footer strong { display: block; font-size: 14px; color: #5b3024; margin-bottom: 4px; }
+.sidebar-footer span { font-size: 12px; color: #8a4257; line-height: 1.5; }
+
+
+/* ============ CHAT PANEL ============ */
+
+.chat-panel {
+    background: rgba(255,255,255,0.92); border-radius: 34px; padding: 26px 30px 20px;
+    box-shadow: 0 15px 40px rgba(90,50,35,0.09);
+    display: flex; flex-direction: column; height: 100%; position: relative;
+}
+
+.chat-topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; gap: 14px; flex-wrap: wrap; }
+.chat-topbar h1 { margin: 0; font-family: Georgia, "Times New Roman", serif; font-size: 22px; color: #5b3024; }
+
+.scope-picker { display: flex; gap: 8px; background: #fff1ed; padding: 5px; border-radius: 16px; }
+.scope-btn { padding: 8px 16px; border-radius: 12px; font-size: 13px; color: #8a685e; transition: 0.2s; }
+.scope-btn.active { background: white; color: #df6989; font-weight: bold; box-shadow: 0 4px 10px rgba(90,50,35,0.08); }
+
+.chat-messages { flex: 1; overflow-y: auto; padding: 6px 6px 10px; display: flex; flex-direction: column; gap: 18px; }
+
+.msg-row { display: flex; gap: 12px; align-items: flex-start; }
+.msg-row.user { flex-direction: row-reverse; }
+
+.msg-avatar { width: 38px; height: 38px; border-radius: 50%; background: #ffe0e8; display: flex; align-items: center; justify-content: center; font-size: 19px; flex-shrink: 0; }
+
+.msg-bubble { max-width: 640px; background: #fff1ed; border-radius: 18px; padding: 14px 18px; font-size: 14.5px; line-height: 1.6; color: #5b3024; }
+.msg-row.user .msg-bubble { background: #e86e90; color: white; border-bottom-right-radius: 4px; }
+.msg-row.bot .msg-bubble { border-bottom-left-radius: 4px; }
+
+.msg-time { font-size: 11px; color: #b8988f; margin-top: 4px; }
+.msg-row.user .msg-time { text-align: right; }
+
+.suggested-row { display: flex; flex-wrap: wrap; gap: 10px; margin: 2px 0 4px 50px; }
+.suggest-chip {
+    background: white; border: 1.5px solid #f1ded9; color: #6a4a40; font-size: 13px; padding: 9px 15px;
+    border-radius: 20px; transition: 0.2s;
+}
+.suggest-chip:hover { border-color: #e86e90; color: #df6989; transform: translateY(-1px); }
+
+/* PLAN CARD */
+.plan-card {
+    max-width: 640px; background: #fff8f2; border: 1.5px solid #f1ded9; border-radius: 18px; padding: 16px 18px;
+    margin-left: 50px;
+}
+.plan-card-title { font-size: 14px; font-weight: bold; color: #5b3024; margin-bottom: 10px; }
+.plan-row {
+    display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px dashed #eadbd5; font-size: 13.5px;
+}
+.plan-row:last-child { border-bottom: none; }
+.plan-row .p-time { color: #a9781f; font-weight: bold; min-width: 92px; font-size: 12.5px; }
+.plan-row .p-icon { font-size: 15px; flex-shrink: 0; }
+.plan-row .p-name { flex: 1; color: #5b3024; }
+.plan-row .p-dur { font-size: 12px; color: #a1817a; }
+
+.plan-tip {
+    margin-top: 12px; background: #ffe3e8; border-radius: 14px; padding: 12px 14px; font-size: 12.5px;
+    color: #8a4257; line-height: 1.5;
+}
+.plan-tip strong { display: block; color: #5b3024; margin-bottom: 3px; font-size: 13px; }
+
+.plan-actions { display: flex; gap: 10px; margin: 10px 0 6px 50px; flex-wrap: wrap; }
+.plan-action-btn {
+    padding: 10px 16px; border-radius: 14px; font-size: 13px; font-weight: bold; display: flex; align-items: center; gap: 6px;
+    transition: 0.2s;
+}
+.plan-action-btn.good { background: #eef0dc; color: #5c6a3a; }
+.plan-action-btn.edit { background: #fff2d6; color: #a9781f; }
+.plan-action-btn.tasks { background: #ffe3e8; color: #c2557a; }
+.plan-action-btn:hover { transform: translateY(-1px); }
+.plan-action-btn:disabled { opacity: 0.5; cursor: default; transform: none; }
+
+/* INPUT AREA */
+.chat-input-row { position: relative; display: flex; align-items: center; gap: 10px; margin-top: 14px; }
+
+.input-plus {
+    width: 42px; height: 42px; border-radius: 50%; background: #ffe3e8; color: #df6687; font-size: 20px;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: 0.2s;
+}
+.input-plus:hover { transform: scale(1.06); }
+
+.attach-menu {
+    display: none; position: absolute; bottom: calc(100% + 10px); left: 0; width: 240px;
+    background: white; border-radius: 16px; padding: 8px; box-shadow: 0 14px 34px rgba(90,50,35,0.18); z-index: 40;
+}
+.attach-menu.open { display: block; }
+.attach-menu button {
+    width: 100%; text-align: left; padding: 11px 12px; border-radius: 12px; font-size: 13.5px; color: #5b3024;
+    display: flex; align-items: center; gap: 10px; background: none;
+}
+.attach-menu button:hover { background: #fff1ed; color: #df6989; }
+
+.chat-input {
+    flex: 1; padding: 13px 18px; border-radius: 20px; border: 2px solid #f1ded9; font-size: 14px; font-family: inherit;
+    color: #5b3024; background: white; resize: none; max-height: 120px;
+}
+.chat-input:focus { outline: none; border-color: #f0b7c4; }
+
+.send-btn {
+    width: 44px; height: 44px; border-radius: 50%; background: #e86e90; color: white; font-size: 17px;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 8px 18px rgba(232,110,144,0.25);
+    transition: 0.2s;
+}
+.send-btn:hover { transform: translateY(-2px); }
+
+.toast {
+    position: fixed; top: 100px; left: 50%; transform: translateX(-50%) translateY(-10px);
+    background: #5b3024; color: #ffe9ab; padding: 10px 22px; border-radius: 30px; font-size: 14px; text-align: center;
+    opacity: 0; pointer-events: none; transition: 0.25s; z-index: 200;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+@media (max-width: 1050px) {
+    .ai-wrap { grid-template-columns: 1fr; height: auto; }
+    .ai-sidebar { height: auto; max-height: 320px; }
+    .chat-panel { height: 640px; }
+}
+@media (max-width: 800px) { .menu { display: none; } }
+@media (max-width: 550px) {
+    .profile { display: none; }
+    .plan-actions, .suggested-row, .plan-card { margin-left: 0; }
+}
+
+</style>
+</head>
+<body>
+
+<nav>
+<div class="logo">
+<img src="Screenshot 2026-09-09 17.48.27.png" class="logo-image" alt="Lilium">
+</div>
+<div class="menu">
+<a href="index.html">Home</a>
+<a href="Planner.html">Planner</a>
+<a href="AILillium.html" class="ai-nav active">AI Assistant <span class="lilium-badge">Lilium</span></a>
+<a href="Shop.html">Shop</a>
+<a href="MijnTuin.html">Mijn Tuin</a>
+<a href="Profiel.html">Profiel</a>
+</div>
+<div class="right-nav">
+<div class="coin-counter">
+<img src="3820194-gouden-munt-cartoon-gratis-vector.jpg" class="coin" alt="Lilium muntje">
+<span id="coinCount">50</span>
+</div>
+<div class="profile" id="profileToggle">
+<div class="profile-picture"></div>
+<span class="profile-arrow">˅</span>
+<div class="profile-dropdown" id="profileDropdown">
+<a href="Profiel.html">👤 Mijn profiel</a>
+<a href="#">⚙️ Instellingen</a>
+<div class="divider"></div>
+<a href="#">🚪 Uitloggen</a>
+</div>
+</div>
+</div>
+</nav>
+
+
+<div class="ai-wrap">
+
+    <!-- SIDEBAR -->
+    <div class="ai-sidebar">
+
+        <div class="sidebar-profile">
+            <div class="sidebar-avatar">🌸</div>
+            <div>
+                <h2>AI Assistant Lilium</h2>
+                <p>Je slimme studiepartner</p>
+            </div>
+        </div>
+
+        <button class="new-chat-btn" id="newChatBtn">＋ Nieuwe chat</button>
+
+        <div class="old-plans-header">🕐 Oude planningen</div>
+        <div class="old-plans-list" id="oldPlansList"></div>
+
+        <div class="sidebar-footer">
+            <strong>Lilium helpt je groeien</strong>
+            <span>Samen maken we elke dag een stap vooruit! 💗</span>
+        </div>
+
+    </div>
+
+
+    <!-- CHAT -->
+    <div class="chat-panel">
+
+        <div class="chat-topbar">
+            <h1>🌸 Lilium</h1>
+            <div class="scope-picker" id="scopePicker">
+                <button class="scope-btn active" data-scope="day">Vandaag</button>
+                <button class="scope-btn" data-scope="week">Deze week</button>
+            </div>
+        </div>
+
+        <div class="chat-messages" id="chatMessages"></div>
+
+        <div class="chat-input-row">
+
+            <div class="input-plus" id="plusBtn">＋</div>
+            <div class="attach-menu" id="attachMenu">
+                <button data-action="files">📎 Foto's en bestanden toevoegen</button>
+                <button data-action="library">📚 Uit bibliotheek halen</button>
+                <button data-action="web">🌐 Zoeken op het web</button>
+            </div>
+
+            <textarea class="chat-input" id="chatInput" rows="1" placeholder="Stel Lilium een vraag..."></textarea>
+
+            <button class="send-btn" id="sendBtn">➤</button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+
+<script>
+
+/* =====================================================
+   OPSLAG
+===================================================== */
+
+function loadCoins() {
+    const s = localStorage.getItem("lilium_coins");
+    return s === null ? 50 : parseInt(s, 10);
+}
+function saveCoinsDisplay() {
+    document.getElementById("coinCount").textContent = loadCoins();
+}
+
+function loadTasks() {
+    try { return JSON.parse(localStorage.getItem("lilium_tasks")) || []; }
+    catch (e) { return []; }
+}
+
+function loadPlans() {
+    try { return JSON.parse(localStorage.getItem("lilium_ai_plans")) || []; }
+    catch (e) { return []; }
+}
+function savePlans(plans) { localStorage.setItem("lilium_ai_plans", JSON.stringify(plans)); }
+
+let aiPlans = loadPlans();
+let currentScope = "day";
+
+const CATEGORY_ICON = {
+    wiskunde: "📐", taal: "💬", lezen: "📖", natuur: "🌿", mens: "🏛️", pauze: "☕", overig: "⭐"
+};
+
+const DAY_NAMES = ["Maandag","Dinsdag","Woensdag","Donderdag","Vrijdag","Zaterdag","Zondag"];
+const MONTHS = ["jan","feb","mrt","apr","mei","jun","jul","aug","sep","okt","nov","dec"];
+
+function toDateKey(date) {
+    return date.getFullYear() + "-" + String(date.getMonth() + 1).padStart(2, "0") + "-" + String(date.getDate()).padStart(2, "0");
+}
+function getWeekDates() {
+    const today = new Date();
+    const dayIndex = (today.getDay() + 6) % 7;
+    const monday = new Date(today);
+    monday.setDate(today.getDate() - dayIndex);
+    const week = [];
+    for (let i = 0; i < 7; i++) { const d = new Date(monday); d.setDate(monday.getDate() + i); week.push(d); }
+    return week;
+}
+
+
+/* =====================================================
+   CHAT RENDEREN
+===================================================== */
+
+const chatMessages = document.getElementById("chatMessages");
+
+function nowLabel() {
+    const d = new Date();
+    return String(d.getHours()).padStart(2, "0") + ":" + String(d.getMinutes()).padStart(2, "0");
+}
+
+function addBotBubble(html, withSuggestions) {
+    const row = document.createElement("div");
+    row.className = "msg-row bot";
+    row.innerHTML = `
+        <div class="msg-avatar">🌸</div>
+        <div>
+            <div class="msg-bubble">${html}</div>
+            <div class="msg-time">${nowLabel()}</div>
+        </div>
+    `;
+    chatMessages.appendChild(row);
+    scrollToBottom();
+}
+
+function addUserBubble(text) {
+    const row = document.createElement("div");
+    row.className = "msg-row user";
+    row.innerHTML = `
+        <div></div>
+        <div>
+            <div class="msg-bubble">${escapeHtml(text)}</div>
+            <div class="msg-time">${nowLabel()} ✓</div>
+        </div>
+    `;
+    chatMessages.appendChild(row);
+    scrollToBottom();
+}
+
+function addSuggestions() {
+    const row = document.createElement("div");
+    row.className = "suggested-row";
+    const suggestions = [
+        "Maak een planning voor vandaag",
+        "Maak een planning voor deze week",
+        "Help me mijn taken prioriteren",
+        "Ik heb veel huiswerk, help!",
+        "Maak tijd voor ontspanning",
+        "Hoe blijf ik gemotiveerd?"
+    ];
+    row.innerHTML = suggestions.map(s => `<button class="suggest-chip">${s}</button>`).join("");
+    chatMessages.appendChild(row);
+    scrollToBottom();
+}
+
+function scrollToBottom() { chatMessages.scrollTop = chatMessages.scrollHeight; }
+
+function escapeHtml(str) {
+    const div = document.createElement("div");
+    div.textContent = str;
+    return div.innerHTML;
+}
+
+
+/* =====================================================
+   PLANNING GENEREREN OP BASIS VAN ECHTE TAKEN
+===================================================== */
+
+function buildPlanForDay(date) {
+    const tasks = loadTasks().filter(t => t.date === toDateKey(date)).sort((a, b) => a.time.localeCompare(b.time));
+    const items = tasks.map(t => ({ time: t.time, name: t.name, icon: CATEGORY_ICON[t.category] || "⭐" }));
+
+    if (items.length === 0) {
+        return { items: [], label: DAY_NAMES[(date.getDay() + 6) % 7] + " " + date.getDate() + " " + MONTHS[date.getMonth()] };
+    }
+
+    // korte pauzes tussen taken invoegen
+    const withPauses = [];
+    items.forEach((it, i) => {
+        withPauses.push(it);
+        if (i < items.length - 1) {
+            withPauses.push({ time: "", name: "Korte pauze", icon: "☕", isPause: true });
+        }
+    });
+
+    return { items: withPauses, label: DAY_NAMES[(date.getDay() + 6) % 7] + " " + date.getDate() + " " + MONTHS[date.getMonth()] };
+}
+
+function buildPlanForWeek() {
+    const week = getWeekDates();
+    let allItems = [];
+    week.forEach(d => {
+        const dayTasks = loadTasks().filter(t => t.date === toDateKey(d)).sort((a, b) => a.time.localeCompare(b.time));
+        dayTasks.forEach(t => allItems.push({
+            time: DAY_NAMES[(d.getDay() + 6) % 7].slice(0, 2) + " " + t.time,
+            name: t.name,
+            icon: CATEGORY_ICON[t.category] || "⭐"
+        }));
+    });
+    return { items: allItems, label: "Weekoverzicht" };
+}
+
+function renderPlanCard(plan, scope) {
+    const card = document.createElement("div");
+    card.className = "plan-card";
+
+    if (plan.items.length === 0) {
+        card.innerHTML = `
+            <div class="plan-card-title">Nog geen taken gevonden voor ${plan.label} 🌱</div>
+            <div style="font-size:13px;color:#8a685e;">Voeg eerst een paar taken toe in je <a href="Planner.html" style="color:#df6989;font-weight:bold;">planner</a>, dan maak ik er een fijne planning van!</div>
+        `;
+        chatMessages.appendChild(card);
+        scrollToBottom();
+        return;
+    }
+
+    card.innerHTML = `
+        <div class="plan-card-title">Planning voor ${plan.label}</div>
+        ${plan.items.map(it => `
+            <div class="plan-row">
+                <span class="p-time">${it.time}</span>
+                <span class="p-icon">${it.icon}</span>
+                <span class="p-name">${escapeHtml(it.name)}</span>
+            </div>
+        `).join("")}
+        <div class="plan-tip">
+            <strong>Lilium's tip 💡</strong>
+            Wissel zware en lichte taken af en neem korte pauzes — dat helpt je om gefocust en fris te blijven!
+        </div>
+    `;
+    chatMessages.appendChild(card);
+
+    const actions = document.createElement("div");
+    actions.className = "plan-actions";
+    actions.innerHTML = `
+        <button class="plan-action-btn good">✔ Planning is goed!</button>
+        <button class="plan-action-btn edit">✎ Planning aanpassen</button>
+        <button class="plan-action-btn tasks">✎ Pas takenlijst aan</button>
+    `;
+    chatMessages.appendChild(actions);
+    scrollToBottom();
+
+    const [goodBtn, editBtn, tasksBtn] = actions.querySelectorAll("button");
+
+    goodBtn.addEventListener("click", () => {
+        savePlan(plan, scope);
+        goodBtn.disabled = true; editBtn.disabled = true; tasksBtn.disabled = true;
+        addBotBubble("Fijn dat de planning goed is! Ik heb 'm opgeslagen bij je oude planningen. Veel succes vandaag! 🌷");
+    });
+
+    editBtn.addEventListener("click", () => {
+        const input = document.getElementById("chatInput");
+        input.value = "De planning is nog niet helemaal goed, omdat ";
+        input.focus();
+        input.setSelectionRange(input.value.length, input.value.length);
+    });
+
+    tasksBtn.addEventListener("click", () => {
+        window.location.href = "Planner.html";
+    });
+}
+
+function savePlan(plan, scope) {
+    aiPlans.unshift({
+        id: "plan" + Date.now(),
+        title: scope === "week" ? "Weekplanning" : "Planning voor " + plan.label,
+        scope: scope,
+        timestamp: Date.now(),
+        items: plan.items
+    });
+    savePlans(aiPlans);
+    renderOldPlans();
+}
+
+
+/* =====================================================
+   OUDE PLANNINGEN SIDEBAR
+===================================================== */
+
+function renderOldPlans() {
+    const list = document.getElementById("oldPlansList");
+    if (aiPlans.length === 0) {
+        list.innerHTML = `<div class="old-plans-empty">Nog geen opgeslagen planningen. Vraag Lilium om er een te maken!</div>`;
+        return;
+    }
+    list.innerHTML = aiPlans.map(p => {
+        const d = new Date(p.timestamp);
+        const dateStr = d.getDate() + " " + MONTHS[d.getMonth()] + " " + d.getFullYear();
+        return `
+            <div class="old-plan-item" onclick="viewOldPlan('${p.id}')">
+                <div class="plan-title">${escapeHtml(p.title)}</div>
+                <div class="plan-meta">${dateStr}</div>
+            </div>
+        `;
+    }).join("");
+}
+
+function viewOldPlan(id) {
+    const plan = aiPlans.find(p => p.id === id);
+    if (!plan) return;
+    addBotBubble(`Hier is je opgeslagen planning: <strong>${escapeHtml(plan.title)}</strong> 🌸`);
+    const card = document.createElement("div");
+    card.className = "plan-card";
+    card.innerHTML = `
+        <div class="plan-card-title">${escapeHtml(plan.title)}</div>
+        ${plan.items.map(it => `
+            <div class="plan-row">
+                <span class="p-time">${it.time}</span>
+                <span class="p-icon">${it.icon}</span>
+                <span class="p-name">${escapeHtml(it.name)}</span>
+            </div>
+        `).join("")}
+    `;
+    chatMessages.appendChild(card);
+    scrollToBottom();
+}
+
+
+/* =====================================================
+   BERICHT VERSTUREN / AI ANTWOORD
+===================================================== */
+
+function handleUserMessage(text) {
+    if (!text.trim()) return;
+    addUserBubble(text);
+
+    const lower = text.toLowerCase();
+    let scope = currentScope;
+    if (lower.includes("week")) scope = "week";
+    else if (lower.includes("vandaag") || lower.includes("dag")) scope = "day";
+
+    setTimeout(() => {
+        if (lower.includes("planning") || lower.includes("plan") || lower.includes("huiswerk") || lower.includes("prioriteren")) {
+            addBotBubble(scope === "week"
+                ? "Hier is je planning voor deze week! 🌸"
+                : "Hier is je planning voor " + (scope === "day" ? "vandaag" : "deze periode") + "! 🌸");
+            const plan = scope === "week" ? buildPlanForWeek() : buildPlanForDay(new Date());
+            renderPlanCard(plan, scope);
+        } else if (lower.includes("motiv")) {
+            addBotBubble("Kleine stappen tellen ook! Probeer met de makkelijkste taak te beginnen — dat geeft je meteen wat energie voor de rest. Je kan dit! 💗");
+        } else if (lower.includes("ontspan") || lower.includes("pauze")) {
+            addBotBubble("Zelfzorg is belangrijk! Ik zorg dat er in je planning altijd ruimte is voor pauzes. Wil je dat ik een planning maak met extra ontspanmomenten?");
+        } else {
+            addBotBubble("Goed dat je dat vertelt! Wil je dat ik hier een planning voor maak? Zeg gewoon 'maak een planning voor vandaag' of 'voor deze week' 🌷");
+        }
+    }, 500);
+}
+
+document.getElementById("sendBtn").addEventListener("click", () => {
+    const input = document.getElementById("chatInput");
+    handleUserMessage(input.value);
+    input.value = "";
+    input.style.height = "auto";
+});
+
+const chatInput = document.getElementById("chatInput");
+chatInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+        e.preventDefault();
+        document.getElementById("sendBtn").click();
+    }
+});
+chatInput.addEventListener("input", function () {
+    this.style.height = "auto";
+    this.style.height = Math.min(this.scrollHeight, 120) + "px";
+});
+
+chatMessages.addEventListener("click", (e) => {
+    const chip = e.target.closest(".suggest-chip");
+    if (chip) handleUserMessage(chip.textContent);
+});
+
+
+/* =====================================================
+   SCOPE PICKER (dag / week)
+===================================================== */
+
+document.getElementById("scopePicker").addEventListener("click", (e) => {
+    const btn = e.target.closest(".scope-btn");
+    if (!btn) return;
+    document.querySelectorAll(".scope-btn").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    currentScope = btn.dataset.scope;
+});
+
+
+/* =====================================================
+   + MENU (bijlagen)
+===================================================== */
+
+const plusBtn = document.getElementById("plusBtn");
+const attachMenu = document.getElementById("attachMenu");
+plusBtn.addEventListener("click", (e) => {
+    attachMenu.classList.toggle("open");
+    e.stopPropagation();
+});
+document.addEventListener("click", () => attachMenu.classList.remove("open"));
+
+attachMenu.addEventListener("click", (e) => {
+    const btn = e.target.closest("button");
+    if (!btn) return;
+    const labels = {
+        files: "Foto's en bestanden toevoegen — kies leerstof om aan Lilium toe te voegen.",
+        library: "Uit bibliotheek halen — kies eerder toegevoegde leerstof.",
+        web: "Zoeken op het web — Lilium zoekt informatie voor je op."
+    };
+    showToast(labels[btn.dataset.action] || "Binnenkort beschikbaar!");
+    attachMenu.classList.remove("open");
+});
+
+
+/* =====================================================
+   NIEUWE CHAT
+===================================================== */
+
+document.getElementById("newChatBtn").addEventListener("click", () => {
+    startChat();
+});
+
+function startChat() {
+    chatMessages.innerHTML = "";
+    addBotBubble("Hoi! Ik ben Lilium 🌸<br>Ik help je graag met het maken van de perfecte studieplanning. Vertel me welke dag of week je wilt plannen, of stel me een vraag!<br>Wat wil je vandaag plannen?");
+    addSuggestions();
+}
+
+
+/* =====================================================
+   TOAST
+===================================================== */
+
+function showToast(msg) {
+    const toast = document.getElementById("toast");
+    toast.textContent = msg;
+    toast.classList.add("show");
+    clearTimeout(showToast._t);
+    showToast._t = setTimeout(() => toast.classList.remove("show"), 2200);
+}
+
+
+/* =====================================================
+   PROFIELMENU
+===================================================== */
+
+const profileToggle = document.getElementById("profileToggle");
+const profileDropdown = document.getElementById("profileDropdown");
+profileToggle.addEventListener("click", function (e) {
+    profileDropdown.classList.toggle("open");
+    e.stopPropagation();
+});
+document.addEventListener("click", function () {
+    profileDropdown.classList.remove("open");
+});
+
+
+/* =====================================================
+   START
+===================================================== */
+
+saveCoinsDisplay();
+renderOldPlans();
+startChat();
+
+</script>
+
+</body>
+</html>

@@ -7,549 +7,137 @@
 
 <style>
 
-/* =====================================================
-BASIS (zelfde als homepagina / planner)
-===================================================== */
+* { box-sizing: border-box; }
 
-* {
-box-sizing: border-box;
-}
-
-body {
-margin: 0;
-background: #fffcfa;
-color: #5b3024;
-font-family: Arial, Helvetica, sans-serif;
-}
-
-a {
-text-decoration: none;
-color: inherit;
-}
-
-button {
-font-family: inherit;
-cursor: pointer;
-border: none;
-}
-
-
-/* =====================================================
-NAVIGATIE (zelfde als homepagina / planner)
-===================================================== */
+body { margin: 0; background: #fffcfa; color: #5b3024; font-family: Arial, Helvetica, sans-serif; }
+a { text-decoration: none; color: inherit; }
+button { font-family: inherit; cursor: pointer; border: none; }
 
 nav {
-position: relative;
-z-index: 10;
-
-height: 76px;
-
-margin: 24px 5.5% 0;
-
-padding: 0 28px 0 36px;
-
-background: rgba(255,255,255,0.93);
-
-border-radius: 24px;
-
-display: flex;
-align-items: center;
-justify-content: space-between;
-
-box-shadow: 0 5px 25px rgba(90,50,35,0.07);
+    position: relative; z-index: 10; height: 76px; margin: 24px 5.5% 0; padding: 0 28px 0 36px;
+    background: rgba(255,255,255,0.93); border-radius: 24px;
+    display: flex; align-items: center; justify-content: space-between;
+    box-shadow: 0 5px 25px rgba(90,50,35,0.07);
 }
 
-.logo {
-display: flex;
-align-items: center;
-gap: 8px;
+.logo { display: flex; align-items: center; gap: 8px; white-space: nowrap; }
+.logo-image { width: 120px; height: 52px; object-fit: contain; display: block; }
 
-font-family: Georgia, "Times New Roman", serif;
-font-size: 35px;
-font-style: italic;
+.menu { display: flex; align-items: center; gap: 32px; margin-left: 60px; }
+.menu a { font-size: 16px; color: #57372e; transition: 0.2s; }
+.menu a:hover, .menu a.active { color: #df6989; }
 
-color: #603326;
+.ai-nav { display: flex; align-items: center; gap: 9px; }
+.lilium-badge { background: #ffe0e8; color: #df6687; padding: 7px 13px; border-radius: 20px; font-size: 13px; }
 
-white-space: nowrap;
-}
-
-.logo-image {
-width: 120px;
-height: 52px;
-object-fit: contain;
-display: block;
-}
-
-.menu {
-display: flex;
-align-items: center;
-gap: 36px;
-margin-left: 80px;
-}
-
-.menu a {
-font-size: 16px;
-color: #57372e;
-transition: 0.2s;
-}
-
-.menu a:hover,
-.menu a.active {
-color: #df6989;
-}
-
-.ai-nav {
-display: flex;
-align-items: center;
-gap: 9px;
-}
-
-.lilium-badge {
-background: #ffe0e8;
-color: #df6687;
-padding: 7px 13px;
-border-radius: 20px;
-font-size: 13px;
-}
-
-.right-nav {
-display: flex;
-align-items: center;
-gap: 15px;
-}
+.right-nav { display: flex; align-items: center; gap: 15px; }
 
 .coin-counter {
-display: flex;
-align-items: center;
-gap: 9px;
-
-background: #fff4dc;
-
-padding: 6px 17px 6px 7px;
-
-border-radius: 30px;
-
-font-size: 16px;
-font-weight: bold;
-color: #a9781f;
+    display: flex; align-items: center; gap: 9px; background: #fff4dc; padding: 6px 17px 6px 7px; border-radius: 30px;
+    font-size: 16px; font-weight: bold; color: #a9781f;
 }
+.coin-counter img.coin { width: 24px; height: 24px; object-fit: contain; border-radius: 50%; flex-shrink: 0; }
 
-.coin-counter img.coin {
-width: 24px;
-height: 24px;
-object-fit: contain;
-border-radius: 50%;
-flex-shrink: 0;
-}
-
-.profile {
-display: flex;
-align-items: center;
-gap: 8px;
-cursor: pointer;
-}
-
+.profile { position: relative; display: flex; align-items: center; gap: 8px; cursor: pointer; }
 .profile-picture {
-width: 40px;
-height: 40px;
-border-radius: 50%;
-background: #f5b0c3;
-position: relative;
-overflow: hidden;
-display: flex;
-align-items: center;
-justify-content: center;
+    width: 40px; height: 40px; border-radius: 50%; background: #f5b0c3;
+    position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center;
 }
+.profile-picture::before { content: ""; position: absolute; width: 11px; height: 11px; border-radius: 50%; background: #fff7f8; top: 8px; left: 50%; transform: translateX(-50%); }
+.profile-picture::after { content: ""; position: absolute; width: 25px; height: 14px; border-radius: 15px 15px 0 0; background: #fff7f8; bottom: 6px; left: 50%; transform: translateX(-50%); }
+.profile-arrow { font-size: 15px; color: #6b4038; position: relative; top: 1px; }
 
-.profile-picture::before {
-content: "";
-position: absolute;
-width: 11px;
-height: 11px;
-border-radius: 50%;
-background: #fff7f8;
-top: 8px;
-left: 50%;
-transform: translateX(-50%);
+.profile-dropdown {
+    display: none; flex-direction: column; position: absolute; top: calc(100% + 14px); right: 0;
+    min-width: 190px; background: white; border-radius: 18px; padding: 10px;
+    box-shadow: 0 14px 34px rgba(90,50,35,0.18); z-index: 50;
 }
-
-.profile-picture::after {
-content: "";
-position: absolute;
-width: 25px;
-height: 14px;
-border-radius: 15px 15px 0 0;
-background: #fff7f8;
-bottom: 6px;
-left: 50%;
-transform: translateX(-50%);
-}
-
-.profile-arrow {
-font-size: 15px;
-color: #6b4038;
-position: relative;
-top: 1px;
-}
+.profile-dropdown.open { display: flex; }
+.profile-dropdown a { padding: 10px 12px; border-radius: 12px; font-size: 14px; color: #5b3024; display: flex; align-items: center; gap: 8px; }
+.profile-dropdown a:hover { background: #fff1ed; color: #df6989; }
+.profile-dropdown .divider { height: 1px; background: #f1ded9; margin: 6px 4px; }
 
 
-/* =====================================================
-PAGINA WRAP
-===================================================== */
+.shop-wrap { max-width: 1300px; margin: 0 auto; padding: 40px 5.5% 70px; }
 
-.shop-wrap {
-max-width: 1300px;
-margin: 0 auto;
-padding: 40px 5.5% 70px;
-}
+.shop-topbar { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 24px; margin-bottom: 26px; }
+.shop-title { display: flex; gap: 16px; align-items: flex-start; }
+.shop-bag { width: 40px; height: 40px; object-fit: contain; flex-shrink: 0; margin-top: 2px; }
+.shop-title h1 { margin: 0; font-family: Georgia, "Times New Roman", serif; font-size: 34px; color: #5b3024; }
+.shop-title p { margin: 8px 0 0; font-size: 14px; color: #8a685e; max-width: 420px; line-height: 1.5; }
 
-.shop-topbar {
-display: flex;
-justify-content: space-between;
-align-items: flex-start;
-flex-wrap: wrap;
-gap: 24px;
-margin-bottom: 26px;
-}
+.shop-filters { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+.filter-btn { padding: 10px 18px; border-radius: 20px; background: white; border: 1.5px solid #f1ded9; color: #6a4a40; font-size: 14px; transition: 0.2s; }
+.filter-btn:hover { border-color: #e86e90; color: #df6989; }
+.filter-btn.active { background: #e86e90; color: white; border-color: #e86e90; }
 
-.shop-title {
-display: flex;
-gap: 16px;
-align-items: flex-start;
-}
+.info-card { background: #fff1ed; border-radius: 20px; padding: 16px 20px; max-width: 260px; font-size: 13px; color: #6a4a40; line-height: 1.5; }
+.info-card strong { display: block; margin-bottom: 6px; color: #5b3024; font-size: 14px; }
 
-.shop-bag {
-width: 40px;
-height: 40px;
-object-fit: contain;
-flex-shrink: 0;
-margin-top: 2px;
-}
-
-.shop-title h1 {
-margin: 0;
-font-family: Georgia, "Times New Roman", serif;
-font-size: 34px;
-color: #5b3024;
-}
-
-.shop-title p {
-margin: 8px 0 0;
-font-size: 14px;
-color: #8a685e;
-max-width: 420px;
-line-height: 1.5;
-}
-
-.shop-filters {
-display: flex;
-gap: 10px;
-flex-wrap: wrap;
-align-items: center;
-}
-
-.filter-btn {
-padding: 10px 18px;
-border-radius: 20px;
-background: white;
-border: 1.5px solid #f1ded9;
-color: #6a4a40;
-font-size: 14px;
-transition: 0.2s;
-}
-
-.filter-btn:hover {
-border-color: #e86e90;
-color: #df6989;
-}
-
-.filter-btn.active {
-background: #e86e90;
-color: white;
-border-color: #e86e90;
-}
-
-.info-card {
-background: #fff1ed;
-border-radius: 20px;
-padding: 16px 20px;
-max-width: 260px;
-font-size: 13px;
-color: #6a4a40;
-line-height: 1.5;
-}
-
-.info-card strong {
-display: block;
-margin-bottom: 6px;
-color: #5b3024;
-font-size: 14px;
-}
-
-
-/* =====================================================
-SCHAPPEN MET BLOEMPOTTEN
-===================================================== */
-
-.shelf-section {
-margin-bottom: 50px;
-}
-
-.shelf-row {
-position: relative;
-display: grid;
-grid-template-columns: repeat(5, 1fr);
-gap: 18px;
-padding-bottom: 26px;
-}
-
+.shelf-section { margin-bottom: 50px; }
+.shelf-row { position: relative; display: grid; grid-template-columns: repeat(5, 1fr); gap: 18px; padding-bottom: 26px; }
 .shelf-row::after {
-content: "";
-position: absolute;
-left: -1.5%;
-right: -1.5%;
-bottom: 0;
-height: 16px;
-background: #d9a06c;
-border-radius: 8px;
-box-shadow: 0 10px 0 rgba(90,50,35,0.06);
+    content: ""; position: absolute; left: -1.5%; right: -1.5%; bottom: 0; height: 16px;
+    background: #d9a06c; border-radius: 8px; box-shadow: 0 10px 0 rgba(90,50,35,0.06);
 }
 
 .flower-card {
-position: relative;
-z-index: 2;
-
-background: rgba(255,255,255,0.9);
-border-radius: 24px;
-padding: 18px 14px 20px;
-
-display: flex;
-flex-direction: column;
-align-items: center;
-gap: 10px;
-
-box-shadow: 0 6px 18px rgba(90,50,35,0.05);
-transition: 0.2s;
+    position: relative; z-index: 2; background: rgba(255,255,255,0.9); border-radius: 24px; padding: 18px 14px 20px;
+    display: flex; flex-direction: column; align-items: center; gap: 10px;
+    box-shadow: 0 6px 18px rgba(90,50,35,0.05); transition: 0.2s;
 }
+.flower-card:hover { transform: translateY(-3px); }
 
-.flower-card:hover {
-transform: translateY(-3px);
-}
-
-.pot-area {
-width: 100%;
-height: 130px;
-
-display: flex;
-align-items: flex-end;
-justify-content: center;
-position: relative;
-}
-
-.flower-img {
-max-width: 100%;
-max-height: 130px;
-object-fit: contain;
-position: relative;
-z-index: 2;
-}
-
-.flower-name {
-font-size: 15px;
-font-weight: bold;
-color: #5b3024;
-text-align: center;
-}
+.pot-area { width: 100%; height: 130px; display: flex; align-items: flex-end; justify-content: center; position: relative; }
+.flower-img { max-width: 100%; max-height: 130px; object-fit: contain; position: relative; z-index: 2; }
+.flower-name { font-size: 15px; font-weight: bold; color: #5b3024; text-align: center; }
 
 .price-btn {
-display: inline-flex;
-align-items: center;
-gap: 6px;
+    display: inline-flex; align-items: center; gap: 6px; padding: 9px 16px; border-radius: 20px;
+    background: #fff4dc; color: #a9781f; font-size: 14px; font-weight: bold; transition: 0.2s;
+}
+.price-btn img.price-coin { width: 18px; height: 18px; object-fit: contain; flex-shrink: 0; }
+.price-btn:hover { transform: translateY(-2px); }
+.price-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 
-padding: 9px 16px;
-border-radius: 20px;
-
-background: #fff4dc;
-color: #a9781f;
-
-font-size: 14px;
-font-weight: bold;
-
-transition: 0.2s;
+.owned-badge {
+    display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 20px;
+    background: #eef0dc; color: #6a7147; font-size: 12px; font-weight: bold;
 }
 
-.price-btn img.price-coin {
-width: 18px;
-height: 18px;
-object-fit: contain;
-flex-shrink: 0;
-}
-
-.price-btn:hover {
-transform: translateY(-2px);
-}
-
-.owned-btn {
-display: inline-flex;
-align-items: center;
-gap: 6px;
-
-padding: 9px 16px;
-border-radius: 20px;
-
-background: #e86e90;
-color: white;
-
-font-size: 12.5px;
-font-weight: bold;
-
-box-shadow: 0 6px 14px rgba(232,110,144,0.25);
-transition: 0.2s;
-white-space: nowrap;
-}
-
-.owned-btn:hover {
-transform: translateY(-2px);
-}
-
-.no-results {
-text-align: center;
-padding: 40px 20px;
-color: #a1817a;
-font-size: 14px;
-}
-
-
-/* =====================================================
-ONDERSTE INFO
-===================================================== */
+.no-results { text-align: center; padding: 40px 20px; color: #a1817a; font-size: 14px; }
 
 .info-footer {
-margin-top: 10px;
-background: rgba(255,255,255,0.88);
-border-radius: 26px;
-padding: 28px 32px;
-
-display: flex;
-justify-content: space-around;
-flex-wrap: wrap;
-gap: 22px;
-
-box-shadow: 0 6px 18px rgba(90,50,35,0.05);
+    margin-top: 10px; background: rgba(255,255,255,0.88); border-radius: 26px; padding: 28px 32px;
+    display: flex; justify-content: space-around; flex-wrap: wrap; gap: 22px;
+    box-shadow: 0 6px 18px rgba(90,50,35,0.05);
 }
-
-.info-footer-item {
-display: flex;
-align-items: flex-start;
-gap: 12px;
-font-size: 13.5px;
-color: #6a4a40;
-max-width: 260px;
-line-height: 1.5;
-}
-
-.info-footer-item .icon {
-font-size: 20px;
-flex-shrink: 0;
-}
-
-.info-footer-item img.icon {
-width: 24px;
-height: 24px;
-object-fit: contain;
-}
-
-.info-footer-item strong {
-display: block;
-color: #5b3024;
-margin-bottom: 2px;
-}
-
-
-/* =====================================================
-TOAST
-===================================================== */
+.info-footer-item { display: flex; align-items: flex-start; gap: 12px; font-size: 13.5px; color: #6a4a40; max-width: 260px; line-height: 1.5; }
+.info-footer-item .icon { font-size: 20px; flex-shrink: 0; }
+.info-footer-item img.icon { width: 24px; height: 24px; object-fit: contain; }
+.info-footer-item strong { display: block; color: #5b3024; margin-bottom: 2px; }
 
 .coin-toast {
-position: fixed;
-top: 100px;
-left: 50%;
-transform: translateX(-50%) translateY(-10px);
-
-background: #5b3024;
-color: #ffe9ab;
-
-padding: 10px 22px;
-border-radius: 30px;
-
-font-size: 14px;
-text-align: center;
-
-opacity: 0;
-pointer-events: none;
-transition: 0.25s;
-
-z-index: 200;
+    position: fixed; top: 100px; left: 50%; transform: translateX(-50%) translateY(-10px);
+    background: #5b3024; color: #ffe9ab; padding: 10px 22px; border-radius: 30px; font-size: 14px; text-align: center;
+    opacity: 0; pointer-events: none; transition: 0.25s; z-index: 200;
 }
+.coin-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+.coin-toast.error { background: #b34a4a; color: #ffe4e4; }
 
-.coin-toast.show {
-opacity: 1;
-transform: translateX(-50%) translateY(0);
-}
+footer { background: #fffaf5; text-align: center; padding: 28px; color: #a17b71; font-size: 13px; }
 
-.coin-toast.error {
-background: #b34a4a;
-color: #ffe4e4;
-}
-
-
-footer {
-background: #fffaf5;
-text-align: center;
-padding: 28px;
-color: #a17b71;
-font-size: 13px;
-}
-
-
-/* =====================================================
-RESPONSIVE
-===================================================== */
-
-@media (max-width: 1050px) {
-.shelf-row {
-grid-template-columns: repeat(3, 1fr);
-}
-}
-
-@media (max-width: 800px) {
-.menu {
-display: none;
-}
-.shelf-row {
-grid-template-columns: repeat(2, 1fr);
-}
-}
-
+@media (max-width: 1050px) { .shelf-row { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 800px) { .menu { display: none; } .shelf-row { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 550px) {
-.profile {
-display: none;
-}
-.shelf-row {
-grid-template-columns: 1fr;
-}
-.shop-filters {
-width: 100%;
-}
+    .profile { display: none; }
+    .shelf-row { grid-template-columns: 1fr; }
+    .shop-filters { width: 100%; }
 }
 
 </style>
 </head>
 <body>
-
-<!-- =====================================================
-NAVIGATIE
-===================================================== -->
 
 <nav>
 
@@ -558,11 +146,12 @@ NAVIGATIE
 </div>
 
 <div class="menu">
-<a href="index.html">Planner</a>
-<a href="#" class="ai-nav">AI Assistant <span class="lilium-badge">Lilium</span></a>
-<a href="shop.html" class="active">Shop</a>
-<a href="tuin.html">Mijn Tuin</a>
-<a href="#">Profiel</a>
+<a href="index.html">Home</a>
+<a href="Planner.html">Planner</a>
+<a href="AILillium.html" class="ai-nav">AI Assistant <span class="lilium-badge">Lilium</span></a>
+<a href="Shop.html" class="active">Shop</a>
+<a href="MijnTuin.html">Mijn Tuin</a>
+<a href="Profiel.html">Profiel</a>
 </div>
 
 <div class="right-nav">
@@ -570,9 +159,15 @@ NAVIGATIE
 <img src="3820194-gouden-munt-cartoon-gratis-vector.jpg" class="coin" alt="Lilium muntje">
 <span id="coinCount">50</span>
 </div>
-<div class="profile">
+<div class="profile" id="profileToggle">
 <div class="profile-picture"></div>
 <span class="profile-arrow">˅</span>
+<div class="profile-dropdown" id="profileDropdown">
+<a href="Profiel.html">👤 Mijn profiel</a>
+<a href="#">⚙️ Instellingen</a>
+<div class="divider"></div>
+<a href="#">🚪 Uitloggen</a>
+</div>
 </div>
 </div>
 
@@ -587,7 +182,7 @@ NAVIGATIE
 <img src="Screenshot 2026-09-14 18.22.11.png" class="shop-bag" alt="Bloemen shop">
 <div>
 <h1>Bloemen shop</h1>
-<p>Koop bloemen met je muntjes en voeg ze toe aan jouw tuin om te laten groeien!</p>
+<p>Koop bloemen met je muntjes. Ze komen in je inventory — zet ze daarna in je tuin om te laten groeien!</p>
 </div>
 </div>
 
@@ -601,7 +196,7 @@ NAVIGATIE
 
 <div class="info-card">
 <strong>🌸 Hoe werkt het?</strong>
-Kies een bloem, koop hem met je muntjes en voeg hem toe aan je tuin. Hoe meer je plant, hoe mooier je tuin!
+Kies een bloem, koop hem met je muntjes. Hij komt in je inventory — ga naar Mijn Tuin om hem te planten!
 </div>
 
 </div>
@@ -638,12 +233,6 @@ Kies een bloem, koop hem met je muntjes en voeg hem toe aan je tuin. Hoe meer je
 
 <script>
 
-/* =====================================================
-BLOEMEN DATA
-(prijzen: 50 / 100 / 150 / 200 / 250 — alleen de 2
-regenboog-bloemen kosten 250)
-===================================================== */
-
 const FLOWERS = [
 { id: "madeliefje", name: "Madeliefje", price: 50, img: "ChatGPT Image 14 sep 2026, 18_40_22.png", tier: "goedkoop" },
 { id: "zonnebloem", name: "Zonnebloem", price: 100, img: "ChatGPT Image 14 sep 2026, 18_40_19.png", tier: "goedkoop" },
@@ -657,163 +246,122 @@ const FLOWERS = [
 { id: "regenboogtulp", name: "Regenboog tulp", price: 250, img: "1fd06434-e041-4c0f-8521-7d55e8ed468e (3).png", tier: "premium", rainbow: true }
 ];
 
-
-/* =====================================================
-OPSLAG (zelfde localStorage-sleutels als de planner)
-===================================================== */
+/* FLOWERS is ook beschikbaar voor MijnTuin.html via window.LILIUM_FLOWERS */
+window.LILIUM_FLOWERS = FLOWERS;
 
 function loadCoins() {
-const stored = localStorage.getItem("lilium_coins");
-return stored === null ? 50 : parseInt(stored, 10);
+    const stored = localStorage.getItem("lilium_coins");
+    return stored === null ? 50 : parseInt(stored, 10);
 }
-
 function saveCoins(amount) {
-localStorage.setItem("lilium_coins", String(amount));
-document.getElementById("coinCount").textContent = amount;
+    localStorage.setItem("lilium_coins", String(amount));
+    document.getElementById("coinCount").textContent = amount;
 }
 
-function loadGarden() {
-try {
-return JSON.parse(localStorage.getItem("lilium_garden")) || [];
-} catch (e) {
-return [];
+function loadInventory() {
+    try { return JSON.parse(localStorage.getItem("lilium_inventory")) || {}; }
+    catch (e) { return {}; }
 }
-}
-
-function saveGarden(garden) {
-localStorage.setItem("lilium_garden", JSON.stringify(garden));
+function saveInventory(inv) {
+    localStorage.setItem("lilium_inventory", JSON.stringify(inv));
 }
 
 let coins = loadCoins();
-let garden = loadGarden();
+let inventory = loadInventory();
 let activeTier = "alle";
 
-
-/* =====================================================
-RENDEREN
-===================================================== */
-
 function chunk(arr, size) {
-const rows = [];
-for (let i = 0; i < arr.length; i += size) {
-rows.push(arr.slice(i, i + size));
-}
-return rows;
+    const rows = [];
+    for (let i = 0; i < arr.length; i += size) rows.push(arr.slice(i, i + size));
+    return rows;
 }
 
 function flowerCardHtml(flower) {
-const owned = garden.includes(flower.id);
+    const owned = inventory[flower.id] || 0;
+    const canAfford = coins >= flower.price;
 
-const button = owned
-? `<button class="owned-btn" onclick="goToGarden()">✓ Voeg toe aan mijn tuin</button>`
-: `<button class="price-btn" onclick="buyFlower('${flower.id}')"><img src="Muntje-roze123.png" class="price-coin" alt="muntje"> ${flower.price}</button>`;
-
-return `
-<div class="flower-card">
-<div class="pot-area">
-<img src="${flower.img}" class="flower-img" alt="${flower.name}">
-</div>
-<div class="flower-name">${flower.name}</div>
-${button}
-</div>
-`;
+    return `
+        <div class="flower-card">
+            <div class="pot-area">
+                <img src="${flower.img}" class="flower-img" alt="${flower.name}">
+            </div>
+            <div class="flower-name">${flower.name}</div>
+            <button class="price-btn" onclick="buyFlower('${flower.id}')" ${canAfford ? "" : "disabled"}>
+                <img src="Muntje-roze123.png" class="price-coin" alt="muntje"> ${flower.price}
+            </button>
+            ${owned > 0 ? `<div class="owned-badge">🎒 ${owned}× in inventory</div>` : ""}
+        </div>
+    `;
 }
 
 function renderShop() {
-let list = FLOWERS.slice().sort((a, b) => a.price - b.price);
+    let list = FLOWERS.slice().sort((a, b) => a.price - b.price);
+    if (activeTier !== "alle") list = list.filter(f => f.tier === activeTier);
 
-if (activeTier !== "alle") {
-list = list.filter(f => f.tier === activeTier);
+    const shelves = document.getElementById("shelves");
+    if (list.length === 0) {
+        shelves.innerHTML = `<div class="no-results">Geen bloemen gevonden in deze categorie 🌱</div>`;
+        return;
+    }
+
+    const rows = chunk(list, 5);
+    shelves.innerHTML = rows.map(row => `
+        <div class="shelf-section">
+            <div class="shelf-row">
+                ${row.map(flowerCardHtml).join("")}
+            </div>
+        </div>
+    `).join("");
 }
-
-const shelves = document.getElementById("shelves");
-
-if (list.length === 0) {
-shelves.innerHTML = `<div class="no-results">Geen bloemen gevonden in deze categorie 🌱</div>`;
-return;
-}
-
-const rows = chunk(list, 5);
-
-shelves.innerHTML = rows.map(row => `
-<div class="shelf-section">
-<div class="shelf-row">
-${row.map(flowerCardHtml).join("")}
-</div>
-</div>
-`).join("");
-}
-
-
-/* =====================================================
-KOPEN
-===================================================== */
 
 function buyFlower(id) {
-const flower = FLOWERS.find(f => f.id === id);
-if (!flower) return;
+    const flower = FLOWERS.find(f => f.id === id);
+    if (!flower) return;
 
-if (garden.includes(id)) {
-goToGarden();
-return;
+    if (coins < flower.price) {
+        showToast("Niet genoeg muntjes ⭐", true);
+        return;
+    }
+
+    coins -= flower.price;
+    if (coins < 0) coins = 0;
+
+    inventory[id] = (inventory[id] || 0) + 1;
+
+    saveCoins(coins);
+    saveInventory(inventory);
+
+    renderShop();
+    showToast(`${flower.name} toegevoegd aan je inventory! 🎒`);
 }
-
-if (coins < flower.price) {
-showToast("Niet genoeg muntjes ⭐", true);
-return;
-}
-
-coins -= flower.price;
-if (coins < 0) coins = 0;
-
-garden.push(id);
-
-saveCoins(coins);
-saveGarden(garden);
-
-renderShop();
-showToast(`${flower.name} toegevoegd aan je tuin! 🌸`);
-}
-
-function goToGarden() {
-window.location.href = "tuin.html";
-}
-
-
-/* =====================================================
-TOAST
-===================================================== */
 
 function showToast(message, isError) {
-const toast = document.getElementById("toast");
-toast.textContent = message;
-toast.classList.toggle("error", !!isError);
-toast.classList.add("show");
-
-clearTimeout(showToast._t);
-showToast._t = setTimeout(() => toast.classList.remove("show"), 1600);
+    const toast = document.getElementById("toast");
+    toast.textContent = message;
+    toast.classList.toggle("error", !!isError);
+    toast.classList.add("show");
+    clearTimeout(showToast._t);
+    showToast._t = setTimeout(() => toast.classList.remove("show"), 1600);
 }
 
-
-/* =====================================================
-FILTERS
-===================================================== */
-
 document.getElementById("shopFilters").addEventListener("click", (e) => {
-const btn = e.target.closest(".filter-btn");
-if (!btn) return;
-
-document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
-btn.classList.add("active");
-
-activeTier = btn.dataset.tier;
-renderShop();
+    const btn = e.target.closest(".filter-btn");
+    if (!btn) return;
+    document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    activeTier = btn.dataset.tier;
+    renderShop();
 });
 
-
-/* =====================================================
-START
-===================================================== */
+const profileToggle = document.getElementById("profileToggle");
+const profileDropdown = document.getElementById("profileDropdown");
+profileToggle.addEventListener("click", function (e) {
+    profileDropdown.classList.toggle("open");
+    e.stopPropagation();
+});
+document.addEventListener("click", function () {
+    profileDropdown.classList.remove("open");
+});
 
 saveCoins(coins);
 renderShop();

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lilium — Profiel</title>
+<style>
+* { box-sizing: border-box; }
+body { margin: 0; background: #fffcfa; color: #5b3024; font-family: Arial, Helvetica, sans-serif; }
+a { text-decoration: none; color: inherit; }
+nav {
+    position: relative; z-index: 30; height: 76px; margin: 24px 5.5% 0; padding: 0 28px 0 36px;
+    background: rgba(255,255,255,0.93); border-radius: 24px;
+    display: flex; align-items: center; justify-content: space-between;
+    box-shadow: 0 5px 25px rgba(90,50,35,0.07);
+}
+.logo-image { width: 120px; height: 52px; object-fit: contain; display: block; }
+.menu { display: flex; align-items: center; gap: 32px; margin-left: 60px; }
+.menu a { font-size: 16px; color: #57372e; transition: 0.2s; }
+.menu a:hover, .menu a.active { color: #df6989; }
+.ai-nav { display: flex; align-items: center; gap: 9px; }
+.lilium-badge { background: #ffe0e8; color: #df6687; padding: 7px 13px; border-radius: 20px; font-size: 13px; }
+.right-nav { display: flex; align-items: center; gap: 15px; }
+.coin-counter { display: flex; align-items: center; gap: 9px; background: #fff4dc; padding: 6px 17px 6px 7px; border-radius: 30px; font-size: 16px; font-weight: bold; color: #a9781f; }
+.coin-counter img.coin { width: 24px; height: 24px; object-fit: contain; border-radius: 50%; flex-shrink: 0; }
+.profile { position: relative; display: flex; align-items: center; gap: 8px; cursor: pointer; }
+.profile-picture { width: 40px; height: 40px; border-radius: 50%; background: #f5b0c3; position: relative; overflow: hidden; }
+.profile-picture::before { content: ""; position: absolute; width: 11px; height: 11px; border-radius: 50%; background: #fff7f8; top: 8px; left: 50%; transform: translateX(-50%); }
+.profile-picture::after { content: ""; position: absolute; width: 25px; height: 14px; border-radius: 15px 15px 0 0; background: #fff7f8; bottom: 6px; left: 50%; transform: translateX(-50%); }
+.profile-arrow { font-size: 15px; color: #6b4038; position: relative; top: 1px; }
+.profile-dropdown { display: none; flex-direction: column; position: absolute; top: calc(100% + 14px); right: 0; min-width: 190px; background: white; border-radius: 18px; padding: 10px; box-shadow: 0 14px 34px rgba(90,50,35,0.18); z-index: 50; }
+.profile-dropdown.open { display: flex; }
+.profile-dropdown a { padding: 10px 12px; border-radius: 12px; font-size: 14px; color: #5b3024; display: flex; align-items: center; gap: 8px; }
+.profile-dropdown a:hover { background: #fff1ed; color: #df6989; }
+.profile-dropdown .divider { height: 1px; background: #f1ded9; margin: 6px 4px; }
+
+.placeholder-wrap { max-width: 700px; margin: 80px auto; text-align: center; padding: 0 20px; }
+.placeholder-wrap .icon { font-size: 54px; margin-bottom: 16px; }
+.placeholder-wrap h1 { font-family: Georgia, "Times New Roman", serif; font-size: 30px; margin: 0 0 12px; }
+.placeholder-wrap p { color: #8a685e; font-size: 15px; line-height: 1.6; }
+footer { background: #fffaf5; text-align: center; padding: 28px; color: #a17b71; font-size: 13px; margin-top: 60px; }
+</style>
+</head>
+<body>
+
+<nav>
+<div class="logo"><img src="Screenshot 2026-09-09 17.48.27.png" class="logo-image" alt="Lilium"></div>
+<div class="menu">
+<a href="index.html">Home</a>
+<a href="Planner.html">Planner</a>
+<a href="AILillium.html" class="ai-nav">AI Assistant <span class="lilium-badge">Lilium</span></a>
+<a href="Shop.html">Shop</a>
+<a href="MijnTuin.html">Mijn Tuin</a>
+<a href="Profiel.html" class="active">Profiel</a>
+</div>
+<div class="right-nav">
+<div class="coin-counter">
+<img src="3820194-gouden-munt-cartoon-gratis-vector.jpg" class="coin" alt="Lilium muntje">
+<span id="coinCount">50</span>
+</div>
+<div class="profile" id="profileToggle">
+<div class="profile-picture"></div>
+<span class="profile-arrow">˅</span>
+<div class="profile-dropdown" id="profileDropdown">
+<a href="Profiel.html">👤 Mijn profiel</a>
+<a href="#">⚙️ Instellingen</a>
+<div class="divider"></div>
+<a href="#">🚪 Uitloggen</a>
+</div>
+</div>
+</div>
+</nav>
+
+<div class="placeholder-wrap">
+    <div class="icon">🌸</div>
+    <h1>Jouw profiel</h1>
+    <p>Deze pagina is nog in ontwikkeling. Hier komt straks je profiel met je gegevens, voortgang en instellingen te staan.</p>
+</div>
+
+<footer>© 2026 Lilium · Plan rustig. Groei op jouw manier. 🌸</footer>
+
+<script>
+function loadCoins() {
+    const s = localStorage.getItem("lilium_coins");
+    return s === null ? 50 : parseInt(s, 10);
+}
+document.getElementById("coinCount").textContent = loadCoins();
+const profileToggle = document.getElementById("profileToggle");
+const profileDropdown = document.getElementById("profileDropdown");
+profileToggle.addEventListener("click", function (e) { profileDropdown.classList.toggle("open"); e.stopPropagation(); });
+document.addEventListener("click", function () { profileDropdown.classList.remove("open"); });
+</script>
+
+</body>
+</html>

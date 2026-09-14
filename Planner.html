@@ -3,18 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Lilium — Mijn planner</title>
 
 <style>
 
-/* =====================================================
-   BASIS (zelfde als homepagina)
-===================================================== */
-
-* {
-    box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 body {
     margin: 0;
@@ -23,1015 +16,272 @@ body {
     font-family: Arial, Helvetica, sans-serif;
 }
 
-a {
-    text-decoration: none;
-    color: inherit;
-}
-
-button {
-    font-family: inherit;
-    cursor: pointer;
-    border: none;
-}
-
-
-/* =====================================================
-   NAVIGATIE (zelfde als homepagina)
-===================================================== */
+a { text-decoration: none; color: inherit; }
+button { font-family: inherit; cursor: pointer; border: none; }
 
 nav {
     position: relative;
     z-index: 10;
-
     height: 76px;
-
     margin: 24px 5.5% 0;
-
     padding: 0 28px 0 36px;
-
     background: rgba(255,255,255,0.93);
-
     border-radius: 24px;
-
     display: flex;
     align-items: center;
     justify-content: space-between;
-
-    box-shadow:
-        0 5px 25px rgba(90,50,35,0.07);
+    box-shadow: 0 5px 25px rgba(90,50,35,0.07);
 }
 
-.logo {
-    display: flex;
-    align-items: center;
-    gap: 8px;
+.logo { display: flex; align-items: center; gap: 8px; white-space: nowrap; }
+.logo-image { width: 120px; height: 52px; object-fit: contain; display: block; }
 
-    font-family: Georgia, "Times New Roman", serif;
-    font-size: 35px;
-    font-style: italic;
+.menu { display: flex; align-items: center; gap: 32px; margin-left: 60px; }
+.menu a { font-size: 16px; color: #57372e; transition: 0.2s; }
+.menu a:hover, .menu a.active { color: #df6989; }
 
-    color: #603326;
+.ai-nav { display: flex; align-items: center; gap: 9px; }
+.lilium-badge { background: #ffe0e8; color: #df6687; padding: 7px 13px; border-radius: 20px; font-size: 13px; }
 
-    white-space: nowrap;
-}
-
-.logo-flower {
-    font-size: 32px;
-    font-style: normal;
-}
-
-/* NIEUW: logo-afbeelding */
-
-.logo-image {
-    width: 120px;
-    height: 52px;
-
-    object-fit: contain;
-
-    display: block;
-}
-
-.menu {
-    display: flex;
-    align-items: center;
-    gap: 36px;
-
-    margin-left: 80px;
-}
-
-.menu a {
-    font-size: 16px;
-    color: #57372e;
-
-    transition: 0.2s;
-}
-
-.menu a:hover,
-.menu a.active {
-    color: #df6989;
-}
-
-.ai-nav {
-    display: flex;
-    align-items: center;
-    gap: 9px;
-}
-
-.lilium-badge {
-    background: #ffe0e8;
-    color: #df6687;
-
-    padding: 7px 13px;
-
-    border-radius: 20px;
-
-    font-size: 13px;
-}
-
-.right-nav {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-}
+.right-nav { display: flex; align-items: center; gap: 15px; }
 
 .coin-counter {
-    display: flex;
-    align-items: center;
-    gap: 9px;
-
-    background: #fff4dc;
-
-    padding: 6px 17px 6px 7px;
-
-    border-radius: 30px;
-
-    font-size: 16px;
-    font-weight: bold;
-    color: #a9781f;
+    display: flex; align-items: center; gap: 9px;
+    background: #fff4dc; padding: 6px 17px 6px 7px; border-radius: 30px;
+    font-size: 16px; font-weight: bold; color: #a9781f;
 }
+.coin-counter img.coin { width: 24px; height: 24px; object-fit: contain; border-radius: 50%; flex-shrink: 0; }
 
-.coin-counter img.coin {
-    width: 24px;
-    height: 24px;
-
-    object-fit: contain;
-
-    border-radius: 50%;
-
-    flex-shrink: 0;
-}
-
-.profile {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    cursor: pointer;
-}
-
+.profile { position: relative; display: flex; align-items: center; gap: 8px; cursor: pointer; }
 .profile-picture {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-
-    background: #f5b0c3;
-
-    position: relative;
-    overflow: hidden;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    width: 40px; height: 40px; border-radius: 50%; background: #f5b0c3;
+    position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center;
 }
-
 .profile-picture::before {
-    content: "";
-    position: absolute;
-
-    width: 11px;
-    height: 11px;
-    border-radius: 50%;
-
-    background: #fff7f8;
-
-    top: 8px;
-    left: 50%;
-    transform: translateX(-50%);
+    content: ""; position: absolute; width: 11px; height: 11px; border-radius: 50%;
+    background: #fff7f8; top: 8px; left: 50%; transform: translateX(-50%);
 }
-
 .profile-picture::after {
-    content: "";
-    position: absolute;
-
-    width: 25px;
-    height: 14px;
-
-    border-radius: 15px 15px 0 0;
-
-    background: #fff7f8;
-
-    bottom: 6px;
-    left: 50%;
-    transform: translateX(-50%);
+    content: ""; position: absolute; width: 25px; height: 14px; border-radius: 15px 15px 0 0;
+    background: #fff7f8; bottom: 6px; left: 50%; transform: translateX(-50%);
 }
+.profile-arrow { font-size: 15px; color: #6b4038; position: relative; top: 1px; }
 
-.profile-arrow {
-    font-size: 15px;
-    color: #6b4038;
-    position: relative;
-    top: 1px;
+.profile-dropdown {
+    display: none; flex-direction: column;
+    position: absolute; top: calc(100% + 14px); right: 0;
+    min-width: 190px; background: white; border-radius: 18px; padding: 10px;
+    box-shadow: 0 14px 34px rgba(90,50,35,0.18); z-index: 50;
 }
+.profile-dropdown.open { display: flex; }
+.profile-dropdown a { padding: 10px 12px; border-radius: 12px; font-size: 14px; color: #5b3024; display: flex; align-items: center; gap: 8px; }
+.profile-dropdown a:hover { background: #fff1ed; color: #df6989; }
+.profile-dropdown .divider { height: 1px; background: #f1ded9; margin: 6px 4px; }
 
 
-/* =====================================================
-   PAGINA HEADER
-===================================================== */
-
-.page-wrap {
-    max-width: 1300px;
-    margin: 0 auto;
-    padding: 40px 5.5% 70px;
-}
+.page-wrap { max-width: 1300px; margin: 0 auto; padding: 40px 5.5% 70px; }
 
 .planner-topbar {
     display: grid;
     grid-template-columns: auto 1fr auto;
     align-items: center;
     gap: 24px;
-
     margin-bottom: 30px;
 }
 
-.planner-title {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-}
-
-.planner-title-flower {
-    width: 40px;
-    height: 40px;
-
-    object-fit: contain;
-
-    flex-shrink: 0;
-}
-
-.planner-title h1 {
-    margin: 0;
-    font-family: Georgia, "Times New Roman", serif;
-    font-size: 36px;
-    color: #5b3024;
-}
-
-.planner-title p {
-    margin: 4px 0 0;
-    font-size: 14px;
-    color: #8a685e;
-}
+.planner-title { display: flex; align-items: center; gap: 14px; }
+.planner-title-flower { width: 40px; height: 40px; object-fit: contain; flex-shrink: 0; }
+.planner-title h1 { margin: 0; font-family: Georgia, "Times New Roman", serif; font-size: 36px; color: #5b3024; }
+.planner-title p { margin: 4px 0 0; font-size: 14px; color: #8a685e; }
 
 .greeting-card {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-
-    background: rgba(255,255,255,0.9);
-    border-radius: 20px;
-    padding: 14px 26px;
+    display: flex; align-items: center; gap: 16px;
+    background: rgba(255,255,255,0.9); border-radius: 20px; padding: 14px 26px;
     box-shadow: 0 6px 20px rgba(90,50,35,0.06);
 }
-
-.greeting-avatar {
-    width: 46px;
-    height: 46px;
-    border-radius: 50%;
-    background: #f5b0c3;
-    flex-shrink: 0;
-    position: relative;
-}
-
-.greeting-avatar::before {
-    content: "";
-    position: absolute;
-    width: 13px;
-    height: 13px;
-    border-radius: 50%;
-    background: #fff7f8;
-    top: 9px;
-    left: 50%;
-    transform: translateX(-50%);
-}
-
-.greeting-avatar::after {
-    content: "";
-    position: absolute;
-    width: 28px;
-    height: 16px;
-    border-radius: 16px 16px 0 0;
-    background: #fff7f8;
-    bottom: 6px;
-    left: 50%;
-    transform: translateX(-50%);
-}
-
-.greeting-text strong {
-    display: block;
-    font-size: 15px;
-    color: #5b3024;
-}
-
-.greeting-text span {
-    font-size: 13px;
-    color: #8a685e;
-}
+.greeting-avatar { width: 46px; height: 46px; border-radius: 50%; background: #f5b0c3; flex-shrink: 0; position: relative; }
+.greeting-avatar::before { content: ""; position: absolute; width: 13px; height: 13px; border-radius: 50%; background: #fff7f8; top: 9px; left: 50%; transform: translateX(-50%); }
+.greeting-avatar::after { content: ""; position: absolute; width: 28px; height: 16px; border-radius: 16px 16px 0 0; background: #fff7f8; bottom: 6px; left: 50%; transform: translateX(-50%); }
+.greeting-text strong { display: block; font-size: 15px; color: #5b3024; }
+.greeting-text span { font-size: 13px; color: #8a685e; }
 
 .add-task-button {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-
-    padding: 15px 22px;
-
-    background: #e86e90;
-    color: white;
-
-    border-radius: 17px;
-
-    font-size: 15px;
-
-    box-shadow: 0 8px 20px rgba(232,110,144,0.22);
-    transition: 0.2s;
-    white-space: nowrap;
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 15px 22px; background: #e86e90; color: white; border-radius: 17px; font-size: 15px;
+    box-shadow: 0 8px 20px rgba(232,110,144,0.22); transition: 0.2s; white-space: nowrap;
 }
+.add-task-button:hover { transform: translateY(-2px); }
 
-.add-task-button:hover {
-    transform: translateY(-2px);
-}
+.planner-layout { display: grid; grid-template-columns: 1fr 400px; gap: 22px; align-items: start; }
+.left-column { display: flex; flex-direction: column; gap: 22px; }
 
-
-/* =====================================================
-   LAYOUT: WEEK LINKS, TIJDLIJN RECHTS
-===================================================== */
-
-.planner-layout {
-    display: grid;
-    grid-template-columns: 1fr 400px;
-    gap: 22px;
-    align-items: start;
-}
-
-.left-column {
-    display: flex;
-    flex-direction: column;
-    gap: 22px;
-}
-
-
-/* WEEKRASTER */
-
-.week-grid {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 14px;
-}
+.week-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 14px; }
 
 .day-column {
-    background: rgba(255,255,255,0.9);
-    border: 2px solid transparent;
-    border-radius: 22px;
-    padding: 16px 12px;
-
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-
-    min-height: 220px;
-
-    cursor: pointer;
-    transition: 0.2s;
-
-    box-shadow: 0 6px 18px rgba(90,50,35,0.05);
+    background: rgba(255,255,255,0.9); border: 2px solid transparent; border-radius: 22px; padding: 16px 12px;
+    display: flex; flex-direction: column; gap: 10px; min-height: 220px;
+    cursor: pointer; transition: 0.2s; box-shadow: 0 6px 18px rgba(90,50,35,0.05);
 }
+.day-column:hover { transform: translateY(-2px); }
+.day-column.selected { border-color: #f0b7c4; background: rgba(255,255,255,0.98); }
 
-.day-column:hover {
-    transform: translateY(-2px);
-}
+.day-column-header { text-align: center; padding-bottom: 6px; border-bottom: 1px dashed #eadbd5; }
+.day-column-header .day-name { display: block; font-size: 14px; font-weight: bold; color: #5b3024; }
+.day-column.selected .day-name { color: #df6989; }
+.day-column-header .day-date { font-size: 12px; color: #a1817a; }
 
-.day-column.selected {
-    border-color: #f0b7c4;
-    background: rgba(255,255,255,0.98);
-}
+.mini-task { background: #fff1ed; border-radius: 12px; padding: 8px 10px; display: flex; align-items: center; gap: 8px; font-size: 13px; color: #62392f; transition: 0.2s; }
+.mini-task:hover { transform: scale(1.03); }
+.mini-task.yellow { background: #fff2d6; }
+.mini-task.green { background: #eef0dc; color: #6a7147; }
+.mini-task.done { opacity: 0.55; }
+.mini-task.done .mini-task-name { text-decoration: line-through; }
 
-.day-column-header {
-    text-align: center;
-    padding-bottom: 6px;
-    border-bottom: 1px dashed #eadbd5;
-}
+.mini-checkbox { width: 17px; height: 17px; flex-shrink: 0; background: white; border: 2px solid #e4c0bb; border-radius: 5px; position: relative; }
+.mini-checkbox.checked { background: #e76d8e; border-color: #e76d8e; }
+.mini-checkbox.checked::after { content: "✓"; position: absolute; left: 2px; top: -3px; color: white; font-size: 13px; font-weight: bold; }
+.mini-task-icon { font-size: 14px; flex-shrink: 0; }
+.mini-task-name { flex: 1; line-height: 1.25; }
 
-.day-column-header .day-name {
-    display: block;
-    font-size: 14px;
-    font-weight: bold;
-    color: #5b3024;
-}
-
-.day-column.selected .day-name {
-    color: #df6989;
-}
-
-.day-column-header .day-date {
-    font-size: 12px;
-    color: #a1817a;
-}
-
-.day-column-flower {
-    text-align: center;
-    font-size: 13px;
-}
-
-.mini-task {
-    background: #fff1ed;
-    border-radius: 12px;
-    padding: 8px 10px;
-
-    display: flex;
-    align-items: center;
-    gap: 8px;
-
-    font-size: 13px;
-    color: #62392f;
-
-    transition: 0.2s;
-}
-
-.mini-task:hover {
-    transform: scale(1.03);
-}
-
-.mini-task.yellow {
-    background: #fff2d6;
-}
-
-.mini-task.green {
-    background: #eef0dc;
-    color: #6a7147;
-}
-
-.mini-task.done {
-    opacity: 0.55;
-}
-
-.mini-task.done .mini-task-name {
-    text-decoration: line-through;
-}
-
-.mini-checkbox {
-    width: 17px;
-    height: 17px;
-    flex-shrink: 0;
-
-    background: white;
-    border: 2px solid #e4c0bb;
-    border-radius: 5px;
-    position: relative;
-}
-
-.mini-checkbox.checked {
-    background: #e76d8e;
-    border-color: #e76d8e;
-}
-
-.mini-checkbox.checked::after {
-    content: "✓";
-    position: absolute;
-    left: 2px;
-    top: -3px;
-    color: white;
-    font-size: 13px;
-    font-weight: bold;
-}
-
-.mini-task-icon {
-    font-size: 14px;
-    flex-shrink: 0;
-}
-
-.mini-task-name {
-    flex: 1;
-    line-height: 1.25;
-}
-
-.day-empty {
-    font-size: 12px;
-    color: #c3a9a2;
-    text-align: center;
-    padding: 10px 4px;
-}
-
-
-/* FOCUS KAART */
+.day-empty { font-size: 12px; color: #c3a9a2; text-align: center; padding: 10px 4px; }
 
 .focus-card {
-    background: rgba(255,255,255,0.9);
-    border-radius: 26px;
-    padding: 24px 28px;
-
-    display: flex;
-    align-items: center;
-    gap: 30px;
-    flex-wrap: wrap;
-
+    background: rgba(255,255,255,0.9); border-radius: 26px; padding: 24px 28px;
+    display: flex; align-items: center; gap: 30px; flex-wrap: wrap;
     box-shadow: 0 6px 18px rgba(90,50,35,0.05);
 }
+.focus-card h3 { margin: 0; font-family: Georgia, "Times New Roman", serif; font-size: 18px; color: #5b3024; flex-shrink: 0; }
+.focus-items { display: flex; gap: 26px; flex-wrap: wrap; }
+.focus-item { display: flex; align-items: center; gap: 10px; font-size: 13px; color: #6a4a40; }
+.focus-icon { width: 32px; height: 32px; object-fit: contain; flex-shrink: 0; }
+.focus-item strong { display: block; font-size: 13px; color: #5b3024; }
 
-.focus-card h3 {
-    margin: 0;
-    font-family: Georgia, "Times New Roman", serif;
-    font-size: 18px;
-    color: #5b3024;
-    flex-shrink: 0;
-}
+.timeline-panel { background: rgba(255,255,255,0.92); border-radius: 34px; padding: 32px 30px; box-shadow: 0 15px 40px rgba(90,50,35,0.09); position: relative; }
+.timeline-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 22px; }
+.timeline-header h2 { margin: 0; font-family: Georgia, "Times New Roman", serif; font-size: 24px; color: #5b3024; }
+.timeline-flower { width: 34px; height: 34px; object-fit: contain; flex-shrink: 0; }
 
-.focus-items {
-    display: flex;
-    gap: 26px;
-    flex-wrap: wrap;
-}
+.timeline { position: relative; }
+.timeline::before { content: ""; position: absolute; left: 28px; top: 6px; bottom: 30px; border-left: 2px dashed #eadbd5; }
 
-.focus-item {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 13px;
-    color: #6a4a40;
-}
-
-.focus-icon {
-    width: 32px;
-    height: 32px;
-
-    object-fit: contain;
-
-    flex-shrink: 0;
-}
-
-.focus-item strong {
-    display: block;
-    font-size: 13px;
-    color: #5b3024;
-}
-
-
-/* =====================================================
-   TIJDLIJN PANEEL (RECHTS)
-===================================================== */
-
-.timeline-panel {
-    background: rgba(255,255,255,0.92);
-    border-radius: 34px;
-    padding: 32px 30px;
-
-    box-shadow: 0 15px 40px rgba(90,50,35,0.09);
-
-    position: relative;
-}
-
-.timeline-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 22px;
-}
-
-.timeline-header h2 {
-    margin: 0;
-    font-family: Georgia, "Times New Roman", serif;
-    font-size: 24px;
-    color: #5b3024;
-}
-
-.timeline-flower {
-    width: 34px;
-    height: 34px;
-
-    object-fit: contain;
-
-    flex-shrink: 0;
-}
-
-.timeline {
-    position: relative;
-}
-
-.timeline::before {
-    content: "";
-    position: absolute;
-    left: 28px;
-    top: 6px;
-    bottom: 30px;
-    border-left: 2px dashed #eadbd5;
-}
-
-.task-row {
-    position: relative;
-    z-index: 2;
-
-    display: grid;
-    grid-template-columns: 52px 1fr;
-    align-items: flex-start;
-
-    margin-bottom: 12px;
-}
-
-.time {
-    font-size: 14px;
-    color: #76584e;
-    padding-top: 16px;
-}
+.task-row { position: relative; z-index: 2; display: grid; grid-template-columns: 52px 1fr; align-items: flex-start; margin-bottom: 12px; }
+.time { font-size: 14px; color: #76584e; padding-top: 16px; }
 
 .task {
-    position: relative;
-
-    min-height: 57px;
-    padding: 12px 17px;
-
-    border-radius: 15px;
-
-    background: #fff1ed;
-
-    display: flex;
-    align-items: center;
-    gap: 13px;
-
-    font-size: 15px;
-    color: #62392f;
-
-    transition: transform 0.2s ease;
+    position: relative; min-height: 57px; padding: 12px 17px; border-radius: 15px; background: #fff1ed;
+    display: flex; align-items: center; gap: 13px; font-size: 15px; color: #62392f; transition: transform 0.2s ease;
 }
+.task:hover { transform: scale(1.02); }
+.task.yellow { background: #fff2d6; }
+.task.green { background: #eef0dc; color: #6a7147; }
+.task.done { opacity: 0.55; }
+.task.done .task-name { text-decoration: line-through; }
 
-.task:hover {
-    transform: scale(1.02);
-}
+.checkbox { width: 23px; height: 23px; flex-shrink: 0; background: white; border: 2px solid #e4c0bb; border-radius: 6px; position: relative; cursor: pointer; }
+.checkbox.checked { background: #e76d8e; border-color: #e76d8e; }
+.checkbox.checked::after { content: "✓"; position: absolute; left: 4px; top: -2px; color: white; font-size: 17px; font-weight: bold; }
 
-.task.yellow {
-    background: #fff2d6;
-}
+.task-icon { font-size: 17px; flex-shrink: 0; }
+.task-body { flex: 1; min-width: 0; }
+.task-name { line-height: 1.3; }
+.task-due { font-size: 12px; color: #a1817a; white-space: nowrap; }
 
-.task.green {
-    background: #eef0dc;
-    color: #6a7147;
-}
-
-.task.done {
-    opacity: 0.55;
-}
-
-.task.done .task-name {
-    text-decoration: line-through;
-}
-
-.checkbox {
-    width: 23px;
-    height: 23px;
-    flex-shrink: 0;
-
-    background: white;
-    border: 2px solid #e4c0bb;
-    border-radius: 6px;
-    position: relative;
-    cursor: pointer;
-}
-
-.checkbox.checked {
-    background: #e76d8e;
-    border-color: #e76d8e;
-}
-
-.checkbox.checked::after {
-    content: "✓";
-    position: absolute;
-    left: 4px;
-    top: -2px;
-    color: white;
-    font-size: 17px;
-    font-weight: bold;
-}
-
-.task-icon {
-    font-size: 17px;
-    flex-shrink: 0;
-}
-
-.task-body {
-    flex: 1;
-    min-width: 0;
-}
-
-.task-name {
-    line-height: 1.3;
-}
-
-.task-due {
-    font-size: 12px;
-    color: #a1817a;
-    white-space: nowrap;
-}
-
-.task-delete {
-    background: none;
-    color: #c99b93;
-    font-size: 18px;
-    line-height: 1;
-    padding: 4px;
-    opacity: 0;
-    transition: 0.15s;
-    flex-shrink: 0;
-}
-
-.task:hover .task-delete {
-    opacity: 1;
-}
-
-.task-delete:hover {
-    color: #df6989;
-}
-
-/* TOOLTIP MET BESCHRIJVING */
+.task-delete { background: none; color: #c99b93; font-size: 18px; line-height: 1; padding: 4px; opacity: 0; transition: 0.15s; flex-shrink: 0; }
+.task:hover .task-delete { opacity: 1; }
+.task-delete:hover { color: #df6989; }
 
 .task-tooltip {
-    display: none;
-    position: absolute;
-    top: calc(100% + 8px);
-    left: 0;
-    right: 0;
-    z-index: 20;
-
-    background: white;
-    border-radius: 14px;
-    padding: 14px 16px;
-
-    box-shadow: 0 10px 30px rgba(90,50,35,0.15);
-
-    font-size: 13px;
-    line-height: 1.5;
-    color: #6a4a40;
+    display: none; position: absolute; top: calc(100% + 8px); left: 0; right: 0; z-index: 20;
+    background: white; border-radius: 14px; padding: 14px 16px;
+    box-shadow: 0 10px 30px rgba(90,50,35,0.15); font-size: 13px; line-height: 1.5; color: #6a4a40;
 }
+.task:hover .task-tooltip { display: block; }
+.task-tooltip.empty { display: none !important; }
 
-.task:hover .task-tooltip {
-    display: block;
-}
+.timeline-empty { font-size: 14px; color: #a1817a; padding: 20px 10px; text-align: center; }
 
-.task-tooltip.empty {
-    display: none !important;
-}
+.add-inline { display: flex; align-items: center; gap: 10px; margin-top: 6px; margin-left: 52px; color: #b98277; font-size: 14px; background: none; }
+.add-inline:hover { color: #df6989; }
 
-.timeline-empty {
-    font-size: 14px;
-    color: #a1817a;
-    padding: 20px 10px;
-    text-align: center;
-}
+.modal-overlay { display: none; position: fixed; inset: 0; z-index: 100; background: rgba(91,48,36,0.35); align-items: center; justify-content: center; padding: 20px; }
+.modal-overlay.open { display: flex; }
+.modal { background: #fffcfa; border-radius: 26px; padding: 32px 34px; width: 100%; max-width: 440px; box-shadow: 0 20px 50px rgba(90,50,35,0.25); }
+.modal h2 { margin: 0 0 6px; font-family: Georgia, "Times New Roman", serif; font-size: 24px; color: #5b3024; }
+.modal p.modal-sub { margin: 0 0 22px; font-size: 13px; color: #8a685e; }
 
-.add-inline {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+.field { margin-bottom: 16px; }
+.field label { display: block; font-size: 13px; color: #6a4a40; margin-bottom: 6px; }
+.field input, .field select, .field textarea { width: 100%; padding: 11px 13px; border: 2px solid #f1ded9; border-radius: 12px; font-size: 14px; font-family: inherit; color: #5b3024; background: white; }
+.field input:focus, .field select:focus, .field textarea:focus { outline: none; border-color: #f0b7c4; }
+.field textarea { resize: vertical; min-height: 64px; }
 
-    margin-top: 6px;
-    margin-left: 52px;
-
-    color: #b98277;
-    font-size: 14px;
-    background: none;
-}
-
-.add-inline:hover {
-    color: #df6989;
-}
-
-
-/* =====================================================
-   MODAL: TAAK TOEVOEGEN
-===================================================== */
-
-.modal-overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    z-index: 100;
-
-    background: rgba(91,48,36,0.35);
-
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-}
-
-.modal-overlay.open {
-    display: flex;
-}
-
-.modal {
-    background: #fffcfa;
-    border-radius: 26px;
-    padding: 32px 34px;
-    width: 100%;
-    max-width: 440px;
-
-    box-shadow: 0 20px 50px rgba(90,50,35,0.25);
-}
-
-.modal h2 {
-    margin: 0 0 6px;
-    font-family: Georgia, "Times New Roman", serif;
-    font-size: 24px;
-    color: #5b3024;
-}
-
-.modal p.modal-sub {
-    margin: 0 0 22px;
-    font-size: 13px;
-    color: #8a685e;
-}
-
-.field {
-    margin-bottom: 16px;
-}
-
-.field label {
-    display: block;
-    font-size: 13px;
-    color: #6a4a40;
-    margin-bottom: 6px;
-}
-
-.field input,
-.field select,
-.field textarea {
-    width: 100%;
-    padding: 11px 13px;
-
-    border: 2px solid #f1ded9;
-    border-radius: 12px;
-
-    font-size: 14px;
-    font-family: inherit;
-    color: #5b3024;
-
-    background: white;
-}
-
-.field input:focus,
-.field select:focus,
-.field textarea:focus {
-    outline: none;
-    border-color: #f0b7c4;
-}
-
-.field textarea {
-    resize: vertical;
-    min-height: 64px;
-}
-
-.field-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-}
-
-.modal-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 12px;
-    margin-top: 22px;
-}
-
-.modal-cancel {
-    padding: 12px 18px;
-    background: none;
-    color: #8a685e;
-    font-size: 14px;
-    border-radius: 12px;
-}
-
-.modal-cancel:hover {
-    color: #df6989;
-}
-
-.modal-save {
-    padding: 12px 22px;
-    background: #e86e90;
-    color: white;
-    border-radius: 12px;
-    font-size: 14px;
-    box-shadow: 0 8px 20px rgba(232,110,144,0.22);
-}
-
-.modal-save:hover {
-    transform: translateY(-1px);
-}
+.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.modal-actions { display: flex; justify-content: flex-end; gap: 12px; margin-top: 22px; }
+.modal-cancel { padding: 12px 18px; background: none; color: #8a685e; font-size: 14px; border-radius: 12px; }
+.modal-cancel:hover { color: #df6989; }
+.modal-save { padding: 12px 22px; background: #e86e90; color: white; border-radius: 12px; font-size: 14px; box-shadow: 0 8px 20px rgba(232,110,144,0.22); }
+.modal-save:hover { transform: translateY(-1px); }
 
 .coin-toast {
-    position: fixed;
-    top: 100px;
-    left: 50%;
-    transform: translateX(-50%) translateY(-10px);
-
-    background: #5b3024;
-    color: #ffe9ab;
-
-    padding: 10px 22px;
-    border-radius: 30px;
-
-    font-size: 14px;
-
-    opacity: 0;
-    pointer-events: none;
-    transition: 0.25s;
-
-    z-index: 200;
+    position: fixed; top: 100px; left: 50%; transform: translateX(-50%) translateY(-10px);
+    background: #5b3024; color: #ffe9ab; padding: 10px 22px; border-radius: 30px; font-size: 14px;
+    opacity: 0; pointer-events: none; transition: 0.25s; z-index: 200;
 }
+.coin-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-.coin-toast.show {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-}
-
-
-/* =====================================================
-   FOOTER
-===================================================== */
-
-footer {
-    background: #fffaf5;
-    text-align: center;
-    padding: 28px;
-    color: #a17b71;
-    font-size: 13px;
-}
-
-
-/* =====================================================
-   RESPONSIVE
-===================================================== */
+footer { background: #fffaf5; text-align: center; padding: 28px; color: #a17b71; font-size: 13px; }
 
 @media (max-width: 1050px) {
-    .planner-layout {
-        grid-template-columns: 1fr;
-    }
-    .week-grid {
-        grid-template-columns: repeat(4, 1fr);
-    }
+    .planner-layout { grid-template-columns: 1fr; }
+    .week-grid { grid-template-columns: repeat(4, 1fr); }
 }
-
 @media (max-width: 800px) {
-    .menu {
-        display: none;
-    }
-    .planner-topbar {
-        grid-template-columns: 1fr;
-    }
-    .greeting-card {
-        order: 3;
-    }
-    .week-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
+    .menu { display: none; }
+    .planner-topbar { grid-template-columns: 1fr; }
+    .greeting-card { order: 3; }
+    .week-grid { grid-template-columns: repeat(2, 1fr); }
 }
-
 @media (max-width: 550px) {
-    .profile {
-        display: none;
-    }
-    .week-grid {
-        grid-template-columns: 1fr;
-    }
-    .field-row {
-        grid-template-columns: 1fr;
-    }
+    .profile { display: none; }
+    .week-grid { grid-template-columns: 1fr; }
+    .field-row { grid-template-columns: 1fr; }
 }
 
 </style>
 </head>
 <body>
 
-<!-- =====================================================
-     NAVIGATIE
-===================================================== -->
-
 <nav>
 
     <div class="logo">
-
-        <img
-            src="Screenshot 2026-09-09 17.48.27.png"
-            class="logo-image"
-            alt="Lilium"
-        >
-
+        <img src="Screenshot 2026-09-09 17.48.27.png" class="logo-image" alt="Lilium">
     </div>
 
     <div class="menu">
-        <a href="index.html" class="active">Planner</a>
-        <a href="#" class="ai-nav">AI Assistant <span class="lilium-badge">Lilium</span></a>
-        <a href="#">Shop</a>
-        <a href="#">Mijn Tuin</a>
-        <a href="#">Profiel</a>
+        <a href="index.html">Home</a>
+        <a href="Planner.html" class="active">Planner</a>
+        <a href="AILillium.html" class="ai-nav">AI Assistant <span class="lilium-badge">Lilium</span></a>
+        <a href="Shop.html">Shop</a>
+        <a href="MijnTuin.html">Mijn Tuin</a>
+        <a href="Profiel.html">Profiel</a>
     </div>
 
     <div class="right-nav">
 
         <div class="coin-counter">
-            <img
-                src="3820194-gouden-munt-cartoon-gratis-vector.jpg"
-                class="coin"
-                alt="Lilium muntje"
-            >
+            <img src="3820194-gouden-munt-cartoon-gratis-vector.jpg" class="coin" alt="Lilium muntje">
             <span id="coinCount">50</span>
         </div>
 
-        <div class="profile">
+        <div class="profile" id="profileToggle">
             <div class="profile-picture"></div>
             <span class="profile-arrow">˅</span>
+            <div class="profile-dropdown" id="profileDropdown">
+                <a href="Profiel.html">👤 Mijn profiel</a>
+                <a href="#">⚙️ Instellingen</a>
+                <div class="divider"></div>
+                <a href="#">🚪 Uitloggen</a>
+            </div>
         </div>
 
     </div>
@@ -1041,15 +291,10 @@ footer {
 
 <div class="page-wrap">
 
-    <!-- TOPBAR -->
     <div class="planner-topbar">
 
         <div class="planner-title">
-            <img 
-                src="Screenshot 2026-09-14 17.05.13.png"
-                class="planner-title-flower"
-                alt="Mijn planner"
-            />
+            <img src="Screenshot 2026-09-14 17.05.13.png" class="planner-title-flower" alt="Mijn planner"/>
             <div>
                 <h1>Mijn planner</h1>
                 <p id="weekRange">Weekoverzicht</p>
@@ -1064,47 +309,30 @@ footer {
             </div>
         </div>
 
-        <button class="add-task-button" onclick="openModal()">
-            ＋ Taak toevoegen
-        </button>
+        <button class="add-task-button" onclick="openModal()">＋ Taak toevoegen</button>
 
     </div>
 
 
-    <!-- LAYOUT -->
     <div class="planner-layout">
 
         <div class="left-column">
 
-            <!-- WEEKRASTER -->
             <div class="week-grid" id="weekGrid"></div>
 
-            <!-- FOCUS -->
             <div class="focus-card">
                 <h3>🌸 Focus voor deze week</h3>
                 <div class="focus-items">
                     <div class="focus-item">
-                        <img
-                            src="Screenshot 2026-09-14 17.05.36.png"
-                            class="focus-icon"
-                            alt="Plan slim"
-                        />
+                        <img src="Screenshot 2026-09-14 17.05.36.png" class="focus-icon" alt="Plan slim"/>
                         <div><strong>Plan slim</strong>Max. 2 grote taken per dag</div>
                     </div>
                     <div class="focus-item">
-                        <img
-                            src="Screenshot 2026-09-14 17.05.46.png"
-                            class="focus-icon"
-                            alt="Blijf in balans"
-                        />
+                        <img src="Screenshot 2026-09-14 17.05.46.png" class="focus-icon" alt="Blijf in balans"/>
                         <div><strong>Blijf in balans</strong>Pauzeren helpt je focussen</div>
                     </div>
                     <div class="focus-item">
-                        <img
-                            src="Screenshot 2026-09-14 17.06.14.png"
-                            class="focus-icon"
-                            alt="Kleine stappen"
-                        />
+                        <img src="Screenshot 2026-09-14 17.06.14.png" class="focus-icon" alt="Kleine stappen"/>
                         <div><strong>Kleine stappen</strong>Elke stap is een overwinning</div>
                     </div>
                 </div>
@@ -1112,23 +340,16 @@ footer {
 
         </div>
 
-        <!-- TIJDLIJN -->
         <div class="timeline-panel">
 
             <div class="timeline-header">
                 <h2 id="timelineTitle">Vandaag</h2>
-                <img 
-                    src="roze-bloem-voorjaarsseizoen_24877-83916.avif"
-                    class="timeline-flower"
-                    alt="Bloem"
-                />
+                <img src="roze-bloem-voorjaarsseizoen_24877-83916.avif" class="timeline-flower" alt="Bloem"/>
             </div>
 
             <div class="timeline" id="timeline"></div>
 
-            <button class="add-inline" id="addInlineBtn" onclick="openModal()">
-                ＋ Taak toevoegen
-            </button>
+            <button class="add-inline" id="addInlineBtn" onclick="openModal()">＋ Taak toevoegen</button>
 
         </div>
 
@@ -1136,10 +357,6 @@ footer {
 
 </div>
 
-
-<!-- =====================================================
-     MODAL: TAAK TOEVOEGEN
-===================================================== -->
 
 <div class="modal-overlay" id="modalOverlay">
     <div class="modal">
@@ -1203,10 +420,6 @@ footer {
 
 <script>
 
-/* =====================================================
-   INSTELLINGEN
-===================================================== */
-
 const CATEGORY_STYLE = {
     wiskunde: { icon: "📐", css: "" },
     taal:     { icon: "💬", css: "" },
@@ -1223,28 +436,16 @@ const MONTHS = ["jan","feb","mrt","apr","mei","jun","jul","aug","sep","okt","nov
 
 const COINS_PER_TASK = 10;
 
-
-/* =====================================================
-   OPSLAG (localStorage, blijft bewaard per browser)
-===================================================== */
-
 function loadTasks() {
-    try {
-        return JSON.parse(localStorage.getItem("lilium_tasks")) || [];
-    } catch (e) {
-        return [];
-    }
+    try { return JSON.parse(localStorage.getItem("lilium_tasks")) || []; }
+    catch (e) { return []; }
 }
-
-function saveTasks(tasks) {
-    localStorage.setItem("lilium_tasks", JSON.stringify(tasks));
-}
+function saveTasks(tasks) { localStorage.setItem("lilium_tasks", JSON.stringify(tasks)); }
 
 function loadCoins() {
     const stored = localStorage.getItem("lilium_coins");
     return stored === null ? 50 : parseInt(stored, 10);
 }
-
 function saveCoins(amount) {
     localStorage.setItem("lilium_coins", String(amount));
     document.getElementById("coinCount").textContent = amount;
@@ -1253,23 +454,15 @@ function saveCoins(amount) {
 let tasks = loadTasks();
 let coins = loadCoins();
 
-
-/* =====================================================
-   WEEK BEREKENEN (huidige week, ma t/m zo)
-===================================================== */
-
 function toDateKey(date) {
-    return date.getFullYear() + "-" +
-        String(date.getMonth() + 1).padStart(2, "0") + "-" +
-        String(date.getDate()).padStart(2, "0");
+    return date.getFullYear() + "-" + String(date.getMonth() + 1).padStart(2, "0") + "-" + String(date.getDate()).padStart(2, "0");
 }
 
 function getWeekDates() {
     const today = new Date();
-    const dayIndex = (today.getDay() + 6) % 7; // 0 = maandag
+    const dayIndex = (today.getDay() + 6) % 7;
     const monday = new Date(today);
     monday.setDate(today.getDate() - dayIndex);
-
     const week = [];
     for (let i = 0; i < 7; i++) {
         const d = new Date(monday);
@@ -1280,24 +473,14 @@ function getWeekDates() {
 }
 
 const weekDates = getWeekDates();
-const todayKey = toDateKey(new Date());
 let selectedDayIndex = (new Date().getDay() + 6) % 7;
 
 function shortLabel(date) {
-    return DAY_SHORT[(date.getDay() + 6) % 7] + " " +
-        String(date.getDate()).padStart(2, "0") + "-" +
-        String(date.getMonth() + 1).padStart(2, "0");
+    return DAY_SHORT[(date.getDay() + 6) % 7] + " " + String(date.getDate()).padStart(2, "0") + "-" + String(date.getMonth() + 1).padStart(2, "0");
 }
-
 function fullLabel(date) {
-    return DAY_NAMES[(date.getDay() + 6) % 7] + " " +
-        date.getDate() + " " + MONTHS[date.getMonth()];
+    return DAY_NAMES[(date.getDay() + 6) % 7] + " " + date.getDate() + " " + MONTHS[date.getMonth()];
 }
-
-
-/* =====================================================
-   RENDEREN: WEEKRASTER
-===================================================== */
 
 function renderWeek() {
     const grid = document.getElementById("weekGrid");
@@ -1305,9 +488,7 @@ function renderWeek() {
 
     weekDates.forEach((date, i) => {
         const key = toDateKey(date);
-        const dayTasks = tasks
-            .filter(t => t.date === key)
-            .sort((a, b) => a.time.localeCompare(b.time));
+        const dayTasks = tasks.filter(t => t.date === key).sort((a, b) => a.time.localeCompare(b.time));
 
         const col = document.createElement("div");
         col.className = "day-column" + (i === selectedDayIndex ? " selected" : "");
@@ -1341,23 +522,14 @@ function renderWeek() {
     });
 }
 
-
-/* =====================================================
-   RENDEREN: TIJDLIJN VAN GESELECTEERDE DAG
-===================================================== */
-
 function renderTimeline() {
     const date = weekDates[selectedDayIndex];
     const key = toDateKey(date);
 
     document.getElementById("timelineTitle").textContent = fullLabel(date);
-    document.getElementById("weekRange").textContent =
-        "Weekoverzicht · " + shortLabel(weekDates[0]) + " – " + shortLabel(weekDates[6]);
+    document.getElementById("weekRange").textContent = "Weekoverzicht · " + shortLabel(weekDates[0]) + " – " + shortLabel(weekDates[6]);
 
-    const dayTasks = tasks
-        .filter(t => t.date === key)
-        .sort((a, b) => a.time.localeCompare(b.time));
-
+    const dayTasks = tasks.filter(t => t.date === key).sort((a, b) => a.time.localeCompare(b.time));
     const timeline = document.getElementById("timeline");
 
     if (dayTasks.length === 0) {
@@ -1378,9 +550,7 @@ function renderTimeline() {
                     </div>
                     <span class="task-due">${shortLabel(date)}</span>
                     <button type="button" class="task-delete" onclick="deleteTask('${t.id}')">×</button>
-                    ${t.description
-                        ? `<div class="task-tooltip">${escapeHtml(t.description)}</div>`
-                        : `<div class="task-tooltip empty"></div>`}
+                    ${t.description ? `<div class="task-tooltip">${escapeHtml(t.description)}</div>` : `<div class="task-tooltip empty"></div>`}
                 </div>
             </div>
         `;
@@ -1393,24 +563,16 @@ function selectDay(i) {
     renderTimeline();
 }
 
-
-/* =====================================================
-   TAAK AFVINKEN / VERWIJDEREN
-===================================================== */
-
 function toggleTask(id) {
     const task = tasks.find(t => t.id === id);
     if (!task) return;
-
     task.done = !task.done;
     coins += task.done ? COINS_PER_TASK : -COINS_PER_TASK;
     if (coins < 0) coins = 0;
-
     saveTasks(tasks);
     saveCoins(coins);
     renderWeek();
     renderTimeline();
-
     if (task.done) showCoinToast();
 }
 
@@ -1428,16 +590,9 @@ function showCoinToast() {
     showCoinToast._t = setTimeout(() => toast.classList.remove("show"), 1400);
 }
 
-
-/* =====================================================
-   MODAL: NIEUWE TAAK
-===================================================== */
-
 function populateDaySelect() {
     const select = document.getElementById("taskDay");
-    select.innerHTML = weekDates.map((d, i) =>
-        `<option value="${i}">${DAY_NAMES[i]} ${d.getDate()} ${MONTHS[d.getMonth()]}</option>`
-    ).join("");
+    select.innerHTML = weekDates.map((d, i) => `<option value="${i}">${DAY_NAMES[i]} ${d.getDate()} ${MONTHS[d.getMonth()]}</option>`).join("");
     select.value = selectedDayIndex;
 }
 
@@ -1446,7 +601,6 @@ function openModal() {
     document.getElementById("modalOverlay").classList.add("open");
     document.getElementById("taskName").focus();
 }
-
 function closeModal() {
     document.getElementById("modalOverlay").classList.remove("open");
     document.getElementById("taskForm").reset();
@@ -1458,7 +612,6 @@ document.getElementById("modalOverlay").addEventListener("click", (e) => {
 
 document.getElementById("taskForm").addEventListener("submit", (e) => {
     e.preventDefault();
-
     const dayIdx = parseInt(document.getElementById("taskDay").value, 10);
     const date = weekDates[dayIdx];
 
@@ -1471,7 +624,6 @@ document.getElementById("taskForm").addEventListener("submit", (e) => {
         category: document.getElementById("taskCategory").value,
         done: false
     };
-
     if (!newTask.name) return;
 
     tasks.push(newTask);
@@ -1483,21 +635,21 @@ document.getElementById("taskForm").addEventListener("submit", (e) => {
     renderTimeline();
 });
 
-
-/* =====================================================
-   HULPFUNCTIE
-===================================================== */
-
 function escapeHtml(str) {
     const div = document.createElement("div");
     div.textContent = str;
     return div.innerHTML;
 }
 
-
-/* =====================================================
-   START
-===================================================== */
+const profileToggle = document.getElementById("profileToggle");
+const profileDropdown = document.getElementById("profileDropdown");
+profileToggle.addEventListener("click", function (e) {
+    profileDropdown.classList.toggle("open");
+    e.stopPropagation();
+});
+document.addEventListener("click", function () {
+    profileDropdown.classList.remove("open");
+});
 
 saveCoins(coins);
 renderWeek();

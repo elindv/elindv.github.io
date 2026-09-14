@@ -28,6 +28,12 @@ a {
     color: inherit;
 }
 
+button {
+    font-family: inherit;
+    cursor: pointer;
+    border: none;
+}
+
 
 /* =====================================================
    NAVIGATIE
@@ -77,7 +83,7 @@ nav {
     font-style: normal;
 }
 
-/* NIEUW: logo-afbeelding */
+/* logo-afbeelding */
 
 .logo-image {
     width: 120px;
@@ -94,9 +100,9 @@ nav {
 .menu {
     display: flex;
     align-items: center;
-    gap: 36px;
+    gap: 32px;
 
-    margin-left: 80px;
+    margin-left: 60px;
 }
 
 .menu a {
@@ -106,7 +112,8 @@ nav {
     transition: 0.2s;
 }
 
-.menu a:hover {
+.menu a:hover,
+.menu a.active {
     color: #df6989;
 }
 
@@ -156,15 +163,18 @@ nav {
     border-radius: 30px;
 
     font-size: 16px;
+    font-weight: bold;
+    color: #a9781f;
 }
 
 .coin {
-    width: 36px;
-    height: 36px;
+    width: 24px;
+    height: 24px;
 
-    object-fit: cover;
+    object-fit: contain;
 
     border-radius: 50%;
+    flex-shrink: 0;
 }
 
 
@@ -173,6 +183,7 @@ nav {
 ===================================================== */
 
 .profile {
+    position: relative;
     display: flex;
     align-items: center;
     gap: 8px;
@@ -234,6 +245,52 @@ nav {
     color: #6b4038;
     position: relative;
     top: 1px;
+}
+
+/* PROFIEL DROPDOWN */
+
+.profile-dropdown {
+    display: none;
+    flex-direction: column;
+
+    position: absolute;
+    top: calc(100% + 14px);
+    right: 0;
+
+    min-width: 190px;
+
+    background: white;
+    border-radius: 18px;
+    padding: 10px;
+
+    box-shadow: 0 14px 34px rgba(90,50,35,0.18);
+
+    z-index: 50;
+}
+
+.profile-dropdown.open {
+    display: flex;
+}
+
+.profile-dropdown a {
+    padding: 10px 12px;
+    border-radius: 12px;
+    font-size: 14px;
+    color: #5b3024;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.profile-dropdown a:hover {
+    background: #fff1ed;
+    color: #df6989;
+}
+
+.profile-dropdown .divider {
+    height: 1px;
+    background: #f1ded9;
+    margin: 6px 4px;
 }
 
 
@@ -916,7 +973,7 @@ h1 span {
 }
 
 
-/* NIEUW: afbeeldingen bij de 4 iconen */
+/* afbeeldingen bij de iconen */
 
 .everything-icon-image {
     width: 43px;
@@ -1093,6 +1150,10 @@ footer {
 
     <div class="menu">
 
+        <a href="index.html" class="active">
+            Home
+        </a>
+
         <a href="Planner.html">
             Planner
         </a>
@@ -1131,7 +1192,7 @@ footer {
     <div class="right-nav">
 
 
-        <!-- 50 MUNTJES -->
+        <!-- MUNTJES -->
 
         <div class="coin-counter">
 
@@ -1141,7 +1202,7 @@ footer {
                 alt="Lilium muntje"
             >
 
-            <span>
+            <span id="coinCount">
                 50
             </span>
 
@@ -1150,13 +1211,20 @@ footer {
 
         <!-- PROFIEL -->
 
-        <div class="profile">
+        <div class="profile" id="profileToggle">
 
             <div class="profile-picture"></div>
 
             <span class="profile-arrow">
                 ˅
             </span>
+
+            <div class="profile-dropdown" id="profileDropdown">
+                <a href="Profiel.html">👤 Mijn profiel</a>
+                <a href="#">⚙️ Instellingen</a>
+                <div class="divider"></div>
+                <a href="#">🚪 Uitloggen</a>
+            </div>
 
         </div>
 
@@ -1206,7 +1274,7 @@ footer {
 
         <div class="button-row">
 
-            <a href="#" class="main-button">
+            <a href="Planner.html" class="main-button">
 
                 🌸
 
@@ -1616,6 +1684,26 @@ footer {
 
 
 </div>
+
+<script>
+/* Muntjes teller synchroniseren met localStorage */
+function loadCoins() {
+    const stored = localStorage.getItem("lilium_coins");
+    return stored === null ? 50 : parseInt(stored, 10);
+}
+document.getElementById("coinCount").textContent = loadCoins();
+
+/* Profielmenu open/dicht */
+const profileToggle = document.getElementById("profileToggle");
+const profileDropdown = document.getElementById("profileDropdown");
+profileToggle.addEventListener("click", function (e) {
+    profileDropdown.classList.toggle("open");
+    e.stopPropagation();
+});
+document.addEventListener("click", function () {
+    profileDropdown.classList.remove("open");
+});
+</script>
 
 </body>
 </html>
