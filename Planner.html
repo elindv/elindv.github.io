@@ -80,6 +80,17 @@ nav {
     font-style: normal;
 }
 
+/* NIEUW: logo-afbeelding */
+
+.logo-image {
+    width: 120px;
+    height: 52px;
+
+    object-fit: contain;
+
+    display: block;
+}
+
 .menu {
     display: flex;
     align-items: center;
@@ -993,7 +1004,11 @@ footer {
     <div class="right-nav">
 
         <div class="coin-counter">
-            <span class="coin-icon">★</span>
+            <img
+                src="3820194-gouden-munt-cartoon-gratis-vector.jpg"
+                class="coin"
+                alt="Lilium muntje"
+            >
             <span id="coinCount">50</span>
         </div>
 
@@ -1013,7 +1028,11 @@ footer {
     <div class="planner-topbar">
 
         <div class="planner-title">
-            <span class="planner-title-flower">🌷</span>
+            <img 
+            src="Screenshot 2026-09-14 17.05.13.png"
+            class="planner-title-flower"
+            alt="Mijn planner"
+            />
             <div>
                 <h1>Mijn planner</h1>
                 <p id="weekRange">Weekoverzicht</p>
@@ -1045,18 +1064,30 @@ footer {
 
             <!-- FOCUS -->
             <div class="focus-card">
-                <h3>🌸 Focus voor deze week</h3>
+                <h3> Focus voor deze week</h3>
                 <div class="focus-items">
                     <div class="focus-item">
-                        <span class="focus-icon">🎯</span>
+                        <img
+                        src="Screenshot 2026-09-14 17.05.36.png"
+                        class="focus-icon"
+                        alt="Plan slim"
+                        />
                         <div><strong>Plan slim</strong>Max. 2 grote taken per dag</div>
                     </div>
                     <div class="focus-item">
-                        <span class="focus-icon">🌱</span>
+                        <img
+                        src="Screenshot 2026-09-14 17.05.46.png"
+                        class="focus-icon"
+                        alt="Blijf in balans"
+                        />
                         <div><strong>Blijf in balans</strong>Pauzeren helpt je focussen</div>
                     </div>
                     <div class="focus-item">
-                        <span class="focus-icon">⭐</span>
+                        <img
+                        src="Screenshot 2026-09-14 17.06.14.png"
+                        class="focus-icon"
+                        alt="Kleine stappen"
+                        />
                         <div><strong>Kleine stappen</strong>Elke stap is een overwinning</div>
                     </div>
                 </div>
@@ -1069,8 +1100,11 @@ footer {
 
             <div class="timeline-header">
                 <h2 id="timelineTitle">Vandaag</h2>
-                <span class="timeline-flower">🌸</span>
-            </div>
+                <img 
+                src="roze-bloem-voorjaarsseizoen_24877-83916.avif"
+                class="timeline-flower"
+                alt="Bloem"
+            />
 
             <div class="timeline" id="timeline"></div>
 
