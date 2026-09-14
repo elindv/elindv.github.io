@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lilium — Bloemen shop</title>
+
+<style>
+
+/* =====================================================
+BASIS (zelfde als homepagina / planner)
+===================================================== */
+
+* {
+box-sizing: border-box;
+}
+
+body {
+margin: 0;
+background: #fffcfa;
+color: #5b3024;
+font-family: Arial, Helvetica, sans-serif;
+}
+
+a {
+text-decoration: none;
+color: inherit;
+}
+
+button {
+font-family: inherit;
+cursor: pointer;
+border: none;
+}
+
+
+/* =====================================================
+NAVIGATIE (zelfde als homepagina / planner)
+===================================================== */
+
+nav {
+position: relative;
+z-index: 10;
+
+height: 76px;
+
+margin: 24px 5.5% 0;
+
+padding: 0 28px 0 36px;
+
+background: rgba(255,255,255,0.93);
+
+border-radius: 24px;
+
+display: flex;
+align-items: center;
+justify-content: space-between;
+
+box-shadow: 0 5px 25px rgba(90,50,35,0.07);
+}
+
+.logo {
+display: flex;
+align-items: center;
+gap: 8px;
+
+font-family: Georgia, "Times New Roman", serif;
+font-size: 35px;
+font-style: italic;
+
+color: #603326;
+
+white-space: nowrap;
+}
+
+.logo-image {
+width: 120px;
+height: 52px;
+object-fit: contain;
+display: block;
+}
+
+.menu {
+display: flex;
+align-items: center;
+gap: 36px;
+margin-left: 80px;
+}
+
+.menu a {
+font-size: 16px;
+color: #57372e;
+transition: 0.2s;
+}
+
+.menu a:hover,
+.menu a.active {
+color: #df6989;
+}
+
+.ai-nav {
+display: flex;
+align-items: center;
+gap: 9px;
+}
+
+.lilium-badge {
+background: #ffe0e8;
+color: #df6687;
+padding: 7px 13px;
+border-radius: 20px;
+font-size: 13px;
+}
+
+.right-nav {
+display: flex;
+align-items: center;
+gap: 15px;
+}
+
+.coin-counter {
+display: flex;
+align-items: center;
+gap: 9px;
+
+background: #fff4dc;
+
+padding: 6px 17px 6px 7px;
+
+border-radius: 30px;
+
+font-size: 16px;
+font-weight: bold;
+color: #a9781f;
+}
+
+.coin-counter img.coin {
+width: 24px;
+height: 24px;
+object-fit: contain;
+border-radius: 50%;
+flex-shrink: 0;
+}
+
+.profile {
+display: flex;
+align-items: center;
+gap: 8px;
+cursor: pointer;
+}
+
+.profile-picture {
+width: 40px;
+height: 40px;
+border-radius: 50%;
+background: #f5b0c3;
+position: relative;
+overflow: hidden;
+display: flex;
+align-items: center;
+justify-content: center;
+}
+
+.profile-picture::before {
+content: "";
+position: absolute;
+width: 11px;
+height: 11px;
+border-radius: 50%;
+background: #fff7f8;
+top: 8px;
+left: 50%;
+transform: translateX(-50%);
+}
+
+.profile-picture::after {
+content: "";
+position: absolute;
+width: 25px;
+height: 14px;
+border-radius: 15px 15px 0 0;
+background: #fff7f8;
+bottom: 6px;
+left: 50%;
+transform: translateX(-50%);
+}
+
+.profile-arrow {
+font-size: 15px;
+color: #6b4038;
+position: relative;
+top: 1px;
+}
+
+
+/* =====================================================
+PAGINA WRAP
+===================================================== */
+
+.shop-wrap {
+max-width: 1300px;
+margin: 0 auto;
+padding: 40px 5.5% 70px;
+}
+
+.shop-topbar {
+display: flex;
+justify-content: space-between;
+align-items: flex-start;
+flex-wrap: wrap;
+gap: 24px;
+margin-bottom: 26px;
+}
+
+.shop-title {
+display: flex;
+gap: 16px;
+align-items: flex-start;
+}
+
+.shop-bag {
+width: 40px;
+height: 40px;
+object-fit: contain;
+flex-shrink: 0;
+margin-top: 2px;
+}
+
+.shop-title h1 {
+margin: 0;
+font-family: Georgia, "Times New Roman", serif;
+font-size: 34px;
+color: #5b3024;
+}
+
+.shop-title p {
+margin: 8px 0 0;
+font-size: 14px;
+color: #8a685e;
+max-width: 420px;
+line-height: 1.5;
+}
+
+.shop-filters {
+display: flex;
+gap: 10px;
+flex-wrap: wrap;
+align-items: center;
+}
+
+.filter-btn {
+padding: 10px 18px;
+border-radius: 20px;
+background: white;
+border: 1.5px solid #f1ded9;
+color: #6a4a40;
+font-size: 14px;
+transition: 0.2s;
+}
+
+.filter-btn:hover {
+border-color: #e86e90;
+color: #df6989;
+}
+
+.filter-btn.active {
+background: #e86e90;
+color: white;
+border-color: #e86e90;
+}
+
+.info-card {
+background: #fff1ed;
+border-radius: 20px;
+padding: 16px 20px;
+max-width: 260px;
+font-size: 13px;
+color: #6a4a40;
+line-height: 1.5;
+}
+
+.info-card strong {
+display: block;
+margin-bottom: 6px;
+color: #5b3024;
+font-size: 14px;
+}
+
+
+/* =====================================================
+SCHAPPEN MET BLOEMPOTTEN
+===================================================== */
+
+.shelf-section {
+margin-bottom: 50px;
+}
+
+.shelf-row {
+position: relative;
+display: grid;
+grid-template-columns: repeat(5, 1fr);
+gap: 18px;
+padding-bottom: 26px;
+}
+
+.shelf-row::after {
+content: "";
+position: absolute;
+left: -1.5%;
+right: -1.5%;
+bottom: 0;
+height: 16px;
+background: #d9a06c;
+border-radius: 8px;
+box-shadow: 0 10px 0 rgba(90,50,35,0.06);
+}
+
+.flower-card {
+position: relative;
+z-index: 2;
+
+background: rgba(255,255,255,0.9);
+border-radius: 24px;
+padding: 18px 14px 20px;
+
+display: flex;
+flex-direction: column;
+align-items: center;
+gap: 10px;
+
+box-shadow: 0 6px 18px rgba(90,50,35,0.05);
+transition: 0.2s;
+}
+
+.flower-card:hover {
+transform: translateY(-3px);
+}
+
+.pot-area {
+width: 100%;
+height: 130px;
+
+display: flex;
+align-items: flex-end;
+justify-content: center;
+position: relative;
+}
+
+.flower-img {
+max-width: 100%;
+max-height: 130px;
+object-fit: contain;
+position: relative;
+z-index: 2;
+}
+
+.flower-name {
+font-size: 15px;
+font-weight: bold;
+color: #5b3024;
+text-align: center;
+}
+
+.price-btn {
+display: inline-flex;
+align-items: center;
+gap: 6px;
+
+padding: 9px 16px;
+border-radius: 20px;
+
+background: #fff4dc;
+color: #a9781f;
+
+font-size: 14px;
+font-weight: bold;
+
+transition: 0.2s;
+}
+
+.price-btn img.price-coin {
+width: 18px;
+height: 18px;
+object-fit: contain;
+flex-shrink: 0;
+}
+
+.price-btn:hover {
+transform: translateY(-2px);
+}
+
+.owned-btn {
+display: inline-flex;
+align-items: center;
+gap: 6px;
+
+padding: 9px 16px;
+border-radius: 20px;
+
+background: #e86e90;
+color: white;
+
+font-size: 12.5px;
+font-weight: bold;
+
+box-shadow: 0 6px 14px rgba(232,110,144,0.25);
+transition: 0.2s;
+white-space: nowrap;
+}
+
+.owned-btn:hover {
+transform: translateY(-2px);
+}
+
+.no-results {
+text-align: center;
+padding: 40px 20px;
+color: #a1817a;
+font-size: 14px;
+}
+
+
+/* =====================================================
+ONDERSTE INFO
+===================================================== */
+
+.info-footer {
+margin-top: 10px;
+background: rgba(255,255,255,0.88);
+border-radius: 26px;
+padding: 28px 32px;
+
+display: flex;
+justify-content: space-around;
+flex-wrap: wrap;
+gap: 22px;
+
+box-shadow: 0 6px 18px rgba(90,50,35,0.05);
+}
+
+.info-footer-item {
+display: flex;
+align-items: flex-start;
+gap: 12px;
+font-size: 13.5px;
+color: #6a4a40;
+max-width: 260px;
+line-height: 1.5;
+}
+
+.info-footer-item .icon {
+font-size: 20px;
+flex-shrink: 0;
+}
+
+.info-footer-item img.icon {
+width: 24px;
+height: 24px;
+object-fit: contain;
+}
+
+.info-footer-item strong {
+display: block;
+color: #5b3024;
+margin-bottom: 2px;
+}
+
+
+/* =====================================================
+TOAST
+===================================================== */
+
+.coin-toast {
+position: fixed;
+top: 100px;
+left: 50%;
+transform: translateX(-50%) translateY(-10px);
+
+background: #5b3024;
+color: #ffe9ab;
+
+padding: 10px 22px;
+border-radius: 30px;
+
+font-size: 14px;
+text-align: center;
+
+opacity: 0;
+pointer-events: none;
+transition: 0.25s;
+
+z-index: 200;
+}
+
+.coin-toast.show {
+opacity: 1;
+transform: translateX(-50%) translateY(0);
+}
+
+.coin-toast.error {
+background: #b34a4a;
+color: #ffe4e4;
+}
+
+
+footer {
+background: #fffaf5;
+text-align: center;
+padding: 28px;
+color: #a17b71;
+font-size: 13px;
+}
+
+
+/* =====================================================
+RESPONSIVE
+===================================================== */
+
+@media (max-width: 1050px) {
+.shelf-row {
+grid-template-columns: repeat(3, 1fr);
+}
+}
+
+@media (max-width: 800px) {
+.menu {
+display: none;
+}
+.shelf-row {
+grid-template-columns: repeat(2, 1fr);
+}
+}
+
+@media (max-width: 550px) {
+.profile {
+display: none;
+}
+.shelf-row {
+grid-template-columns: 1fr;
+}
+.shop-filters {
+width: 100%;
+}
+}
+
+</style>
+</head>
+<body>
+
+<!-- =====================================================
+NAVIGATIE
+===================================================== -->
+
+<nav>
+
+<div class="logo">
+<img src="Screenshot 2026-09-09 17.48.27.png" class="logo-image" alt="Lilium">
+</div>
+
+<div class="menu">
+<a href="index.html">Planner</a>
+<a href="#" class="ai-nav">AI Assistant <span class="lilium-badge">Lilium</span></a>
+<a href="shop.html" class="active">Shop</a>
+<a href="tuin.html">Mijn Tuin</a>
+<a href="#">Profiel</a>
+</div>
+
+<div class="right-nav">
+<div class="coin-counter">
+<img src="3820194-gouden-munt-cartoon-gratis-vector.jpg" class="coin" alt="Lilium muntje">
+<span id="coinCount">50</span>
+</div>
+<div class="profile">
+<div class="profile-picture"></div>
+<span class="profile-arrow">˅</span>
+</div>
+</div>
+
+</nav>
+
+
+<div class="shop-wrap">
+
+<div class="shop-topbar">
+
+<div class="shop-title">
+<img src="Screenshot 2026-09-14 18.22.11.png" class="shop-bag" alt="Bloemen shop">
+<div>
+<h1>Bloemen shop</h1>
+<p>Koop bloemen met je muntjes en voeg ze toe aan jouw tuin om te laten groeien!</p>
+</div>
+</div>
+
+<div class="shop-filters" id="shopFilters">
+<button class="filter-btn active" data-tier="alle">Alle bloemen</button>
+<button class="filter-btn" data-tier="goedkoop">Goedkoop</button>
+<button class="filter-btn" data-tier="normaal">Normaal</button>
+<button class="filter-btn" data-tier="zeldzaam">Zeldzaam</button>
+<button class="filter-btn" data-tier="premium">Premium</button>
+</div>
+
+<div class="info-card">
+<strong>🌸 Hoe werkt het?</strong>
+Kies een bloem, koop hem met je muntjes en voeg hem toe aan je tuin. Hoe meer je plant, hoe mooier je tuin!
+</div>
+
+</div>
+
+<div id="shelves"></div>
+
+<div class="info-footer">
+<div class="info-footer-item">
+<span class="icon">🛍️</span>
+<div><strong>Belangrijk om te weten</strong></div>
+</div>
+<div class="info-footer-item">
+<img src="Screenshot 2026-09-14 18.23.11.png" class="icon" alt="Muntjes">
+<div><strong>Muntjes</strong>Je kunt alleen bloemen kopen met je muntjes.</div>
+</div>
+<div class="info-footer-item">
+<img src="Screenshot 2026-09-14 18.22.58.png" class="icon" alt="Jouw tuin">
+<div><strong>Jouw tuin</strong>Zet bloemen in je tuin en zie ze groeien!</div>
+</div>
+<div class="info-footer-item">
+<img src="Screenshot 2026-09-14 18.22.45.png" class="icon" alt="Verzorging">
+<div><strong>Verzorging</strong>Verzorg je bloemen goed voor meer groei.</div>
+</div>
+</div>
+
+</div>
+
+<div class="coin-toast" id="toast"></div>
+
+<footer>
+© 2026 Lilium · Plan rustig. Groei op jouw manier. 🌸
+</footer>
+
+
+<script>
+
+/* =====================================================
+BLOEMEN DATA
+(prijzen: 50 / 100 / 150 / 200 / 250 — alleen de 2
+regenboog-bloemen kosten 250)
+===================================================== */
+
+const FLOWERS = [
+{ id: "madeliefje", name: "Madeliefje", price: 50, img: "ChatGPT Image 14 sep 2026, 18_40_22.png", tier: "goedkoop" },
+{ id: "zonnebloem", name: "Zonnebloem", price: 100, img: "ChatGPT Image 14 sep 2026, 18_40_19.png", tier: "goedkoop" },
+{ id: "lavendel", name: "Lavendel", price: 100, img: "ChatGPT Image 14 sep 2026, 18_40_21.png", tier: "goedkoop" },
+{ id: "rozetulp", name: "Roze tulp", price: 150, img: "ChatGPT Image 14 sep 2026, 18_40_15.png", tier: "normaal" },
+{ id: "pioenroos", name: "Pioenroos", price: 150, img: "ChatGPT Image 14 sep 2026, 18_40_03.png", tier: "normaal" },
+{ id: "lelie", name: "Lelie", price: 150, img: "ChatGPT Image 14 sep 2026, 18_40_03 (1).png", tier: "normaal" },
+{ id: "kersenbloesem", name: "Kersenbloesem", price: 200, img: "1fd06434-e041-4c0f-8521-7d55e8ed468e.png", tier: "zeldzaam" },
+{ id: "orchidee", name: "Orchidee", price: 200, img: "1fd06434-e041-4c0f-8521-7d55e8ed468e (1).png", tier: "zeldzaam" },
+{ id: "regenboogroos", name: "Regenboog roos", price: 250, img: "1fd06434-e041-4c0f-8521-7d55e8ed468e (2).png", tier: "premium", rainbow: true },
+{ id: "regenboogtulp", name: "Regenboog tulp", price: 250, img: "1fd06434-e041-4c0f-8521-7d55e8ed468e (3).png", tier: "premium", rainbow: true }
+];
+
+
+/* =====================================================
+OPSLAG (zelfde localStorage-sleutels als de planner)
+===================================================== */
+
+function loadCoins() {
+const stored = localStorage.getItem("lilium_coins");
+return stored === null ? 50 : parseInt(stored, 10);
+}
+
+function saveCoins(amount) {
+localStorage.setItem("lilium_coins", String(amount));
+document.getElementById("coinCount").textContent = amount;
+}
+
+function loadGarden() {
+try {
+return JSON.parse(localStorage.getItem("lilium_garden")) || [];
+} catch (e) {
+return [];
+}
+}
+
+function saveGarden(garden) {
+localStorage.setItem("lilium_garden", JSON.stringify(garden));
+}
+
+let coins = loadCoins();
+let garden = loadGarden();
+let activeTier = "alle";
+
+
+/* =====================================================
+RENDEREN
+===================================================== */
+
+function chunk(arr, size) {
+const rows = [];
+for (let i = 0; i < arr.length; i += size) {
+rows.push(arr.slice(i, i + size));
+}
+return rows;
+}
+
+function flowerCardHtml(flower) {
+const owned = garden.includes(flower.id);
+
+const button = owned
+? `<button class="owned-btn" onclick="goToGarden()">✓ Voeg toe aan mijn tuin</button>`
+: `<button class="price-btn" onclick="buyFlower('${flower.id}')"><img src="Muntje-roze123.png" class="price-coin" alt="muntje"> ${flower.price}</button>`;
+
+return `
+<div class="flower-card">
+<div class="pot-area">
+<img src="${flower.img}" class="flower-img" alt="${flower.name}">
+</div>
+<div class="flower-name">${flower.name}</div>
+${button}
+</div>
+`;
+}
+
+function renderShop() {
+let list = FLOWERS.slice().sort((a, b) => a.price - b.price);
+
+if (activeTier !== "alle") {
+list = list.filter(f => f.tier === activeTier);
+}
+
+const shelves = document.getElementById("shelves");
+
+if (list.length === 0) {
+shelves.innerHTML = `<div class="no-results">Geen bloemen gevonden in deze categorie 🌱</div>`;
+return;
+}
+
+const rows = chunk(list, 5);
+
+shelves.innerHTML = rows.map(row => `
+<div class="shelf-section">
+<div class="shelf-row">
+${row.map(flowerCardHtml).join("")}
+</div>
+</div>
+`).join("");
+}
+
+
+/* =====================================================
+KOPEN
+===================================================== */
+
+function buyFlower(id) {
+const flower = FLOWERS.find(f => f.id === id);
+if (!flower) return;
+
+if (garden.includes(id)) {
+goToGarden();
+return;
+}
+
+if (coins < flower.price) {
+showToast("Niet genoeg muntjes ⭐", true);
+return;
+}
+
+coins -= flower.price;
+if (coins < 0) coins = 0;
+
+garden.push(id);
+
+saveCoins(coins);
+saveGarden(garden);
+
+renderShop();
+showToast(`${flower.name} toegevoegd aan je tuin! 🌸`);
+}
+
+function goToGarden() {
+window.location.href = "tuin.html";
+}
+
+
+/* =====================================================
+TOAST
+===================================================== */
+
+function showToast(message, isError) {
+const toast = document.getElementById("toast");
+toast.textContent = message;
+toast.classList.toggle("error", !!isError);
+toast.classList.add("show");
+
+clearTimeout(showToast._t);
+showToast._t = setTimeout(() => toast.classList.remove("show"), 1600);
+}
+
+
+/* =====================================================
+FILTERS
+===================================================== */
+
+document.getElementById("shopFilters").addEventListener("click", (e) => {
+const btn = e.target.closest(".filter-btn");
+if (!btn) return;
+
+document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+btn.classList.add("active");
+
+activeTier = btn.dataset.tier;
+renderShop();
+});
+
+
+/* =====================================================
+START
+===================================================== */
+
+saveCoins(coins);
+renderShop();
+
+</script>
+
+</body>
+</html>
