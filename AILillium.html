@@ -65,6 +65,12 @@ nav {
 }
 .new-chat-btn:hover { transform: translateY(-2px); }
 
+.prefs-btn {
+    padding: 11px; border-radius: 16px; background: #fff4dc; color: #a9781f; font-size: 13px; font-weight: bold;
+    transition: 0.2s;
+}
+.prefs-btn:hover { transform: translateY(-2px); }
+
 .old-plans-header { display: flex; align-items: center; gap: 8px; font-size: 13.5px; font-weight: bold; color: #5b3024; }
 
 .old-plans-list { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; padding-right: 2px; }
@@ -132,6 +138,7 @@ nav {
     display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px dashed #eadbd5; font-size: 13.5px;
 }
 .plan-row:last-child { border-bottom: none; }
+.plan-row.is-pause { opacity: 0.75; font-style: italic; }
 .plan-row .p-time { color: #a9781f; font-weight: bold; min-width: 92px; font-size: 12.5px; }
 .plan-row .p-icon { font-size: 15px; flex-shrink: 0; }
 .plan-row .p-name { flex: 1; color: #5b3024; }
@@ -142,6 +149,11 @@ nav {
     color: #8a4257; line-height: 1.5;
 }
 .plan-tip strong { display: block; color: #5b3024; margin-bottom: 3px; font-size: 13px; }
+
+.plan-warning {
+    margin-top: 10px; background: #fff2d6; border-radius: 14px; padding: 12px 14px; font-size: 12.5px;
+    color: #8a651f; line-height: 1.5;
+}
 
 .plan-actions { display: flex; gap: 10px; margin: 10px 0 6px 50px; flex-wrap: wrap; }
 .plan-action-btn {
@@ -194,6 +206,74 @@ nav {
 }
 .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
+
+/* ============ INTAKE-VRAGENLIJST (eerste bezoek) ============ */
+
+.survey-overlay {
+    display: none; position: fixed; inset: 0; z-index: 300; background: rgba(91,48,36,0.45);
+    align-items: center; justify-content: center; padding: 20px;
+}
+.survey-overlay.open { display: flex; }
+
+.survey-modal {
+    background: #fffcfa; border-radius: 28px; width: 100%; max-width: 620px; max-height: 88vh;
+    box-shadow: 0 24px 60px rgba(90,50,35,0.3); display: flex; flex-direction: column; overflow: hidden;
+}
+
+.survey-header { padding: 24px 30px 14px; border-bottom: 1px solid #f1ded9; }
+.survey-header h2 { margin: 0 0 4px; font-family: Georgia, "Times New Roman", serif; font-size: 21px; color: #5b3024; }
+.survey-header p { margin: 0; font-size: 13px; color: #8a685e; line-height: 1.5; }
+
+.survey-progress-track { height: 6px; background: #f1ded9; border-radius: 6px; margin-top: 14px; overflow: hidden; }
+.survey-progress-fill { height: 100%; background: #e86e90; border-radius: 6px; transition: width 0.3s ease; }
+.survey-progress-label { font-size: 11.5px; color: #a1817a; margin-top: 6px; }
+
+.survey-body { padding: 20px 30px; overflow-y: auto; flex: 1; }
+.survey-section-title { font-family: Georgia, "Times New Roman", serif; font-size: 17px; color: #5b3024; margin: 0 0 16px; }
+
+.survey-q { margin-bottom: 20px; }
+.survey-q-label { font-size: 13.5px; font-weight: bold; color: #5b3024; margin-bottom: 9px; display: block; }
+
+.survey-options { display: flex; flex-wrap: wrap; gap: 8px; }
+.survey-option {
+    background: white; border: 1.5px solid #f1ded9; color: #6a4a40; font-size: 12.5px; padding: 9px 14px;
+    border-radius: 16px; transition: 0.2s; display: inline-flex; align-items: center; gap: 6px;
+}
+.survey-option:hover { border-color: #f0b7c4; }
+.survey-option.selected { background: #ffe3e8; border-color: #e86e90; color: #c2557a; font-weight: bold; }
+
+.survey-inline-text {
+    margin-top: 8px; width: 100%; max-width: 260px; padding: 8px 12px; border-radius: 12px;
+    border: 1.5px solid #f1ded9; font-size: 13px; font-family: inherit; color: #5b3024;
+}
+.survey-inline-text:disabled { background: #f7f2ee; color: #b8988f; }
+
+.survey-time-row { display: flex; gap: 10px; }
+.survey-time-row input[type="time"] {
+    padding: 8px 12px; border-radius: 12px; border: 1.5px solid #f1ded9; font-size: 13.5px; font-family: inherit; color: #5b3024;
+}
+
+.survey-scale { display: flex; gap: 8px; }
+.survey-star {
+    width: 40px; height: 40px; border-radius: 50%; background: white; border: 1.5px solid #f1ded9;
+    display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: bold; color: #a9781f;
+    transition: 0.2s;
+}
+.survey-star.selected { background: #fff4dc; border-color: #f0b545; color: #a9781f; }
+
+.survey-textarea {
+    width: 100%; min-height: 70px; padding: 10px 14px; border-radius: 14px; border: 1.5px solid #f1ded9;
+    font-size: 13.5px; font-family: inherit; color: #5b3024; resize: vertical;
+}
+
+.survey-footer { padding: 16px 30px 22px; border-top: 1px solid #f1ded9; display: flex; justify-content: space-between; gap: 10px; }
+.survey-nav-btn { padding: 12px 22px; border-radius: 16px; font-size: 13.5px; font-weight: bold; transition: 0.2s; }
+.survey-nav-btn.back { background: none; color: #8a685e; }
+.survey-nav-btn.back:hover { color: #df6989; }
+.survey-nav-btn.next { background: #e86e90; color: white; box-shadow: 0 8px 18px rgba(232,110,144,0.22); }
+.survey-nav-btn.next:hover { transform: translateY(-2px); }
+.survey-nav-btn:disabled { opacity: 0.4; cursor: default; transform: none; }
+
 @media (max-width: 1050px) {
     .ai-wrap { grid-template-columns: 1fr; height: auto; }
     .ai-sidebar { height: auto; max-height: 320px; }
@@ -203,6 +283,7 @@ nav {
 @media (max-width: 550px) {
     .profile { display: none; }
     .plan-actions, .suggested-row, .plan-card { margin-left: 0; }
+    .survey-body, .survey-header, .survey-footer { padding-left: 18px; padding-right: 18px; }
 }
 
 </style>
@@ -254,6 +335,7 @@ nav {
         </div>
 
         <button class="new-chat-btn" id="newChatBtn">＋ Nieuwe chat</button>
+        <button class="prefs-btn" id="editPrefsBtn">🔧 Mijn voorkeuren aanpassen</button>
 
         <div class="old-plans-header">🕐 Oude planningen</div>
         <div class="old-plans-list" id="oldPlansList"></div>
@@ -301,6 +383,24 @@ nav {
 <div class="toast" id="toast"></div>
 
 
+<!-- INTAKE-VRAGENLIJST -->
+<div class="survey-overlay" id="surveyOverlay">
+    <div class="survey-modal">
+        <div class="survey-header">
+            <h2>Welkom bij Lilium 🌸</h2>
+            <p>Voordat ik een planning voor je maak, wil ik je graag wat beter leren kennen. Beantwoord deze korte vragenlijst zodat ik plannen kan maken die echt bij jou passen.</p>
+            <div class="survey-progress-track"><div class="survey-progress-fill" id="surveyProgressFill"></div></div>
+            <div class="survey-progress-label" id="surveyProgressLabel"></div>
+        </div>
+        <div class="survey-body" id="surveyBody"></div>
+        <div class="survey-footer">
+            <button class="survey-nav-btn back" id="surveyBackBtn">← Vorige</button>
+            <button class="survey-nav-btn next" id="surveyNextBtn">Volgende →</button>
+        </div>
+    </div>
+</div>
+
+
 <script>
 
 /* =====================================================
@@ -326,6 +426,12 @@ function loadPlans() {
 }
 function savePlans(plans) { localStorage.setItem("lilium_ai_plans", JSON.stringify(plans)); }
 
+function loadPrefs() {
+    try { return JSON.parse(localStorage.getItem("lilium_ai_prefs")) || null; }
+    catch (e) { return null; }
+}
+function savePrefsToStorage(prefs) { localStorage.setItem("lilium_ai_prefs", JSON.stringify(prefs)); }
+
 let aiPlans = loadPlans();
 let currentScope = "day";
 
@@ -347,6 +453,542 @@ function getWeekDates() {
     const week = [];
     for (let i = 0; i < 7; i++) { const d = new Date(monday); d.setDate(monday.getDate() + i); week.push(d); }
     return week;
+}
+
+
+/* =====================================================================
+   INTAKE-VRAGENLIJST
+   Wordt getoond zodra iemand voor het eerst de AI Assistant opent
+   (dus zolang er nog geen "lilium_ai_prefs" is opgeslagen).
+   De antwoorden worden gebruikt om de planning te personaliseren.
+===================================================================== */
+
+const SURVEY = [
+    {
+        title: "1. Wanneer wil je werken/leren?",
+        questions: [
+            { id: "days", type: "multi", label: "Op welke dagen wil je meestal leren/werken?",
+              options: ["Maandag","Dinsdag","Woensdag","Donderdag","Vrijdag","Zaterdag","Zondag"] },
+            { id: "startTime", type: "time", label: "Hoe laat begin je op een normale dag het liefst?" },
+            { id: "endTime", type: "time", label: "Hoe laat wil je uiterlijk stoppen?" },
+            { id: "unavailable", type: "yesno_text", label: "Zijn er dagen waarop je op bepaalde tijden niet kunt?", placeholder: "Welke dagen + tijden?" }
+        ]
+    },
+    {
+        title: "2. Hoe lang kun je goed achter elkaar werken?",
+        questions: [
+            { id: "focusDuration", type: "single_other", label: "Hoe lang kun je meestal goed geconcentreerd werken voordat je een pauze nodig hebt?",
+              options: ["15 min","25 min","30 min","45 min","60 min","90 min"] },
+            { id: "maxTaskDuration", type: "single_other", label: "Hoe lang wil je maximaal achter elkaar aan één taak werken?",
+              options: ["30 min","45 min","60 min","90 min","2 uur"] },
+            { id: "peakFocus", type: "single", label: "Wanneer ben je meestal het meest geconcentreerd?",
+              options: ["Ochtend","Middag","Avond","Verschilt per dag"] }
+        ]
+    },
+    {
+        title: "3. Pauzes",
+        questions: [
+            { id: "shortBreakFreq", type: "single", label: "Hoe vaak wil je een korte pauze?",
+              options: ["Na elke 20–30 min","Na elke 30–45 min","Na elk uur","Na 1,5 uur","Zo weinig mogelijk pauzes","AI mag dit bepalen"] },
+            { id: "shortBreakDuration", type: "single_other", label: "Hoe lang moet een korte pauze zijn?",
+              options: ["5 min","10 min","15 min"] },
+            { id: "longBreak", type: "yesno_text", label: "Wil je ook langere pauzes?", placeholder: "Ongeveer elke ___ uur" },
+            { id: "longBreakDuration", type: "single_other", label: "Hoe lang moet een lange pauze zijn?",
+              options: ["20 min","30 min","45 min","60 min"] },
+            { id: "breakActivities", type: "multi", label: "Wat wil je tijdens een pauze kunnen doen?",
+              options: ["Eten","Drinken","Telefoon","Even lopen/bewegen","Naar buiten","Helemaal niks","Maakt mij niet uit"] }
+        ]
+    },
+    {
+        title: "4. Hoeveel wil je op een dag doen?",
+        questions: [
+            { id: "maxHours", type: "single", label: "Hoeveel uur wil je maximaal op één dag leren/werken?",
+              options: ["1 uur","2 uur","3 uur","4 uur","5 uur","6+ uur","AI mag dit bepalen"] },
+            { id: "dayStyle", type: "single", label: "Wat vind je fijner?",
+              options: ["Veel op één dag, andere dagen vrij","Elke dag een beetje","Een combinatie"] },
+            { id: "tasksPerDay", type: "single", label: "Hoeveel taken vind je prettig op één dag?",
+              options: ["1–2 grote taken","3–4 taken","Veel korte taken","Maakt mij niet uit"] }
+        ]
+    },
+    {
+        title: "5. Moeilijkheid en energie",
+        questions: [
+            { id: "hardTaskTiming", type: "single", label: "Hoe wil je moeilijke taken plannen?",
+              options: ["Als eerste, als ik fris ben","Verspreid over de dag","Juist later op de dag","AI mag dit bepalen"] },
+            { id: "taskOrderPref", type: "single", label: "Wat heb je liever?",
+              options: ["Moeilijk afwisselen met makkelijk","Eerst alle moeilijke taken","Eerst alle makkelijke taken","Maakt mij niet uit"] },
+            { id: "variationPref", type: "single", label: "Hoeveel afwisseling wil je?",
+              options: ["Veel afwisseling","Een beetje afwisseling","Liever lang met hetzelfde bezig"] },
+            { id: "energyLevel", type: "scale", label: "Hoeveel energie heb je meestal op een normale dag? (1 = weinig, 5 = veel)" },
+            { id: "lowEnergyMoments", type: "yesno_text", label: "Zijn er momenten waarop je meestal minder energie hebt?", placeholder: "Wanneer?" }
+        ]
+    },
+    {
+        title: "6. Taken en prioriteiten",
+        questions: [
+            { id: "aiConsider", type: "multi", label: "Wat moet de AI vooral meenemen bij het maken van een planning?",
+              options: ["Deadline","Moeilijkheid","Tijd die het kost","Belangrijkheid","Energie die het kost","Alles hierboven"] },
+            { id: "multipleDeadlines", type: "single", label: "Als je meerdere deadlines hebt, wat wil je dan?",
+              options: ["Eerst de dichtstbijzijnde deadline","Eerst de moeilijkste taak","Eerst de belangrijkste taak","AI bepaalt de beste combinatie"] },
+            { id: "splitTasks", type: "single_other", label: "Wil je dat grote taken automatisch worden opgesplitst?",
+              options: ["Ja","Nee","Alleen als langer dan ___ uur"] },
+            { id: "repetition", type: "single", label: "Wil je dat de AI herhaling inplant voor eerdere stof?",
+              options: ["Ja","Nee","Alleen voor belangrijke taken"] }
+        ]
+    },
+    {
+        title: "7. Vaste afspraken",
+        questions: [
+            { id: "fixedActivities", type: "yesno_text", label: "Heb je vaste activiteiten (school, sport, werk, reistijd)?", placeholder: "Wat + dag + tijd" },
+            { id: "breakAroundActivities", type: "yesno_text", label: "Wil je vóór of na bepaalde activiteiten altijd een pauze?", placeholder: "Wanneer?" },
+            { id: "freeDays", type: "yesno_text", label: "Zijn er dagen waarop je helemaal niet wilt werken/leren?", placeholder: "Welke dagen?" }
+        ]
+    },
+    {
+        title: "8. Hoe moet de planning eruitzien?",
+        questions: [
+            { id: "planningStrictness", type: "single", label: "Hoe strak moet je planning zijn?",
+              options: ["Heel strak","Redelijk flexibel","Alleen wat ik die dag moet doen","AI mag dit bepalen"] },
+            { id: "timeFormat", type: "single", label: "Wil je exacte tijden of liever tijdsblokken?",
+              options: ["Exacte tijden","Tijdvakken","Alleen volgorde van taken"] },
+            { id: "bufferSpace", type: "single", label: "Moet de planning ruimte overlaten voor onverwachte dingen?",
+              options: ["Ja, veel ruimte","Een beetje","Nee, zoveel mogelijk inplannen"] },
+            { id: "behindSchedule", type: "multi", label: "Wat als je achterloopt op je planning?",
+              options: ["Planning automatisch verschuiven","Minder belangrijke taken verplaatsen","Naar andere dag verplaatsen","Pauzes inkorten","AI kiest zelf","Mij eerst laten kiezen"] },
+            { id: "aheadSchedule", type: "multi", label: "Wat als je juist sneller klaar bent?",
+              options: ["Volgende taak alvast starten","Extra pauze","Eerder stoppen","Extra taak doen","AI kiest zelf"] }
+        ]
+    },
+    {
+        title: "9. Persoonlijke voorkeuren",
+        questions: [
+            { id: "motivation", type: "multi_other", label: "Wat helpt jou om gemotiveerd te blijven?",
+              options: ["Kleine taken","Taken afstrepen","Duidelijke deadlines","Afwisseling","Pauzes","Een haalbare planning"] },
+            { id: "annoyances", type: "multi_other", label: "Wat vind je het vervelendst aan een planning?",
+              options: ["Te veel taken","Te weinig pauzes","Te strakke tijden","Te veel verschillende taken","Te lange taken","Geen ruimte voor uitloop"] },
+            { id: "realism", type: "single", label: "Hoe realistisch moet de AI plannen?",
+              options: ["Heel voorzichtig","Realistisch","Best ambitieus","Zo veel mogelijk doen"] },
+            { id: "preferencesVsEfficiency", type: "single", label: "Wil je dat de AI rekening houdt met je voorkeuren, ook als de planning dan langer duurt?",
+              options: ["Ja","Nee, efficiëntie is belangrijker","Een combinatie"] }
+        ]
+    },
+    {
+        title: "10. Nog vijf belangrijke vragen",
+        questions: [
+            { id: "minGapBetweenTasks", type: "single", label: "Hoeveel vrije tijd wil je minimaal tussen twee grote taken?",
+              options: ["Geen minimum","5 min","10 min","15 min","AI bepaalt"] },
+            { id: "spreadTasks", type: "single", label: "Wil je dat de AI taken bewust over verschillende dagen verspreidt?",
+              options: ["Ja","Nee","Alleen bij grote/belangrijke taken"] },
+            { id: "dailyBuffer", type: "single", label: "Hoeveel ruimte moet er dagelijks overblijven voor onverwachte dingen?",
+              options: ["0%","Ongeveer 10%","Ongeveer 20%","Ongeveer 30%","AI bepaalt"] },
+            { id: "priority", type: "single", label: "Wat is voor jou belangrijker?",
+              options: ["Zo snel mogelijk klaar","Zo rustig mogelijk werken","Zo goed mogelijk onthouden/leren","Een goede balans"] },
+            { id: "extraNotes", type: "textarea", label: "Is er nog iets waar de AI absoluut rekening mee moet houden?",
+              placeholder: "Bijv.: ik wil niet 's avonds laat leren, na sport heb ik weinig energie, ik wil minimaal één vrije avond..." }
+        ]
+    }
+];
+
+let surveyStepIndex = 0;
+let surveyAnswers = {};
+
+function surveyOptionSelected(qId, value) {
+    const q = findSurveyQuestion(qId);
+    if (!q) return false;
+    if (q.type === "multi" || q.type === "multi_other") {
+        return Array.isArray(surveyAnswers[qId]) && surveyAnswers[qId].includes(value);
+    }
+    return surveyAnswers[qId] === value;
+}
+
+function findSurveyQuestion(qId) {
+    for (const section of SURVEY) {
+        for (const q of section.questions) if (q.id === qId) return q;
+    }
+    return null;
+}
+
+function renderSurveyQuestion(q) {
+    const wrap = document.createElement("div");
+    wrap.className = "survey-q";
+    wrap.dataset.qid = q.id;
+
+    const label = document.createElement("label");
+    label.className = "survey-q-label";
+    label.textContent = q.label;
+    wrap.appendChild(label);
+
+    if (q.type === "single" || q.type === "single_other" || q.type === "multi" || q.type === "multi_other") {
+        const isMulti = q.type.startsWith("multi");
+        const opts = document.createElement("div");
+        opts.className = "survey-options";
+
+        q.options.forEach(opt => {
+            const btn = document.createElement("button");
+            btn.type = "button";
+            btn.className = "survey-option" + (surveyOptionSelected(q.id, opt) ? " selected" : "");
+            btn.textContent = opt;
+            btn.addEventListener("click", () => {
+                if (isMulti) {
+                    if (!Array.isArray(surveyAnswers[q.id])) surveyAnswers[q.id] = [];
+                    const idx = surveyAnswers[q.id].indexOf(opt);
+                    if (idx >= 0) { surveyAnswers[q.id].splice(idx, 1); btn.classList.remove("selected"); }
+                    else { surveyAnswers[q.id].push(opt); btn.classList.add("selected"); }
+                } else {
+                    surveyAnswers[q.id] = opt;
+                    opts.querySelectorAll(".survey-option").forEach(b => b.classList.remove("selected"));
+                    btn.classList.add("selected");
+                    if (q.type === "single_other") refreshOtherField();
+                }
+            });
+            opts.appendChild(btn);
+        });
+
+        if (q.type === "single_other" || q.type === "multi_other") {
+            const otherBtn = document.createElement("button");
+            otherBtn.type = "button";
+            const otherKey = "__other_" + q.id;
+            const otherSelected = q.type === "single_other" ? surveyAnswers[q.id] === otherKey : (Array.isArray(surveyAnswers[q.id]) && surveyAnswers[q.id].includes(otherKey));
+            otherBtn.className = "survey-option" + (otherSelected ? " selected" : "");
+            otherBtn.textContent = "Anders";
+            otherBtn.addEventListener("click", () => {
+                if (isMulti) {
+                    if (!Array.isArray(surveyAnswers[q.id])) surveyAnswers[q.id] = [];
+                    const idx = surveyAnswers[q.id].indexOf(otherKey);
+                    if (idx >= 0) { surveyAnswers[q.id].splice(idx, 1); otherBtn.classList.remove("selected"); }
+                    else { surveyAnswers[q.id].push(otherKey); otherBtn.classList.add("selected"); }
+                } else {
+                    surveyAnswers[q.id] = otherKey;
+                    opts.querySelectorAll(".survey-option").forEach(b => b.classList.remove("selected"));
+                    otherBtn.classList.add("selected");
+                }
+                refreshOtherField();
+            });
+            opts.appendChild(otherBtn);
+
+            function refreshOtherField() {
+                const enabled = q.type === "single_other" ? surveyAnswers[q.id] === otherKey : (Array.isArray(surveyAnswers[q.id]) && surveyAnswers[q.id].includes(otherKey));
+                textInput.disabled = !enabled;
+            }
+
+            const textInput = document.createElement("input");
+            textInput.type = "text";
+            textInput.className = "survey-inline-text";
+            textInput.placeholder = "Vul hier je eigen antwoord in...";
+            textInput.value = surveyAnswers[q.id + "_otherText"] || "";
+            textInput.disabled = !otherSelected;
+            textInput.addEventListener("input", () => { surveyAnswers[q.id + "_otherText"] = textInput.value; });
+            wrap.appendChild(opts);
+            wrap.appendChild(textInput);
+            return wrap;
+        }
+
+        wrap.appendChild(opts);
+        return wrap;
+    }
+
+    if (q.type === "time") {
+        const row = document.createElement("div");
+        row.className = "survey-time-row";
+        const input = document.createElement("input");
+        input.type = "time";
+        input.value = surveyAnswers[q.id] || "";
+        input.addEventListener("input", () => { surveyAnswers[q.id] = input.value; });
+        row.appendChild(input);
+        wrap.appendChild(row);
+        return wrap;
+    }
+
+    if (q.type === "yesno_text") {
+        const opts = document.createElement("div");
+        opts.className = "survey-options";
+        ["Nee", "Ja"].forEach(opt => {
+            const btn = document.createElement("button");
+            btn.type = "button";
+            btn.className = "survey-option" + (surveyAnswers[q.id + "_yn"] === opt ? " selected" : "");
+            btn.textContent = opt;
+            btn.addEventListener("click", () => {
+                surveyAnswers[q.id + "_yn"] = opt;
+                opts.querySelectorAll(".survey-option").forEach(b => b.classList.remove("selected"));
+                btn.classList.add("selected");
+                textInput.disabled = opt !== "Ja";
+            });
+            opts.appendChild(btn);
+        });
+        const textInput = document.createElement("input");
+        textInput.type = "text";
+        textInput.className = "survey-inline-text";
+        textInput.placeholder = q.placeholder || "";
+        textInput.value = surveyAnswers[q.id] || "";
+        textInput.disabled = surveyAnswers[q.id + "_yn"] !== "Ja";
+        textInput.addEventListener("input", () => { surveyAnswers[q.id] = textInput.value; });
+        wrap.appendChild(opts);
+        wrap.appendChild(textInput);
+        return wrap;
+    }
+
+    if (q.type === "scale") {
+        const row = document.createElement("div");
+        row.className = "survey-scale";
+        for (let i = 1; i <= 5; i++) {
+            const star = document.createElement("button");
+            star.type = "button";
+            star.className = "survey-star" + (surveyAnswers[q.id] === i ? " selected" : "");
+            star.textContent = i;
+            star.addEventListener("click", () => {
+                surveyAnswers[q.id] = i;
+                row.querySelectorAll(".survey-star").forEach(s => s.classList.remove("selected"));
+                star.classList.add("selected");
+            });
+            row.appendChild(star);
+        }
+        wrap.appendChild(row);
+        return wrap;
+    }
+
+    if (q.type === "textarea") {
+        const ta = document.createElement("textarea");
+        ta.className = "survey-textarea";
+        ta.placeholder = q.placeholder || "";
+        ta.value = surveyAnswers[q.id] || "";
+        ta.addEventListener("input", () => { surveyAnswers[q.id] = ta.value; });
+        wrap.appendChild(ta);
+        return wrap;
+    }
+
+    return wrap;
+}
+
+function renderSurveyStep() {
+    const section = SURVEY[surveyStepIndex];
+    const body = document.getElementById("surveyBody");
+    body.innerHTML = "";
+
+    const title = document.createElement("h3");
+    title.className = "survey-section-title";
+    title.textContent = section.title;
+    body.appendChild(title);
+
+    section.questions.forEach(q => body.appendChild(renderSurveyQuestion(q)));
+
+    document.getElementById("surveyProgressFill").style.width = Math.round(((surveyStepIndex + 1) / SURVEY.length) * 100) + "%";
+    document.getElementById("surveyProgressLabel").textContent = `Stap ${surveyStepIndex + 1} van ${SURVEY.length}`;
+
+    document.getElementById("surveyBackBtn").disabled = surveyStepIndex === 0;
+    document.getElementById("surveyNextBtn").textContent = surveyStepIndex === SURVEY.length - 1 ? "Klaar — maak mijn planning 🌸" : "Volgende →";
+
+    body.scrollTop = 0;
+}
+
+document.getElementById("surveyBackBtn").addEventListener("click", () => {
+    if (surveyStepIndex > 0) { surveyStepIndex--; renderSurveyStep(); }
+});
+
+document.getElementById("surveyNextBtn").addEventListener("click", () => {
+    if (surveyStepIndex < SURVEY.length - 1) {
+        surveyStepIndex++;
+        renderSurveyStep();
+    } else {
+        finishSurvey();
+    }
+});
+
+function finishSurvey() {
+    savePrefsToStorage(surveyAnswers);
+    document.getElementById("surveyOverlay").classList.remove("open");
+    showToast("Bedankt! Ik hou hier voortaan rekening mee 🌷");
+    startChat();
+}
+
+function openSurvey() {
+    surveyStepIndex = 0;
+    surveyAnswers = loadPrefs() || {};
+    renderSurveyStep();
+    document.getElementById("surveyOverlay").classList.add("open");
+}
+
+document.getElementById("editPrefsBtn").addEventListener("click", openSurvey);
+
+
+/* =====================================================
+   PLANNING GENEREREN OP BASIS VAN ECHTE TAKEN + VOORKEUREN
+===================================================== */
+
+function resolvedAnswer(prefs, id) {
+    if (!prefs) return null;
+    const val = prefs[id];
+    if (val === "__other_" + id) return prefs[id + "_otherText"] || null;
+    if (Array.isArray(val)) {
+        return val.map(v => v === "__other_" + id ? (prefs[id + "_otherText"] || "") : v).filter(Boolean);
+    }
+    return val || null;
+}
+
+function extractMinutes(str) {
+    if (!str) return null;
+    const match = String(str).match(/(\d+)\s*(min|uur)/);
+    if (!match) return null;
+    const n = parseInt(match[1], 10);
+    return match[2] === "uur" ? n * 60 : n;
+}
+
+function buildPlanForDay(date) {
+    const prefs = loadPrefs();
+    const tasks = loadTasks().filter(t => t.date === toDateKey(date)).sort((a, b) => a.time.localeCompare(b.time));
+    const items = tasks.map(t => ({ time: t.time, name: t.name, icon: CATEGORY_ICON[t.category] || "⭐" }));
+    const label = DAY_NAMES[(date.getDay() + 6) % 7] + " " + date.getDate() + " " + MONTHS[date.getMonth()];
+
+    if (items.length === 0) {
+        return { items: [], label, prefs, warnings: [] };
+    }
+
+    const shortBreakDuration = extractMinutes(resolvedAnswer(prefs, "shortBreakDuration")) || 10;
+    const shortBreakFreq = resolvedAnswer(prefs, "shortBreakFreq");
+    const noBreaks = shortBreakFreq === "Zo weinig mogelijk pauzes";
+
+    const withPauses = [];
+    items.forEach((it, i) => {
+        withPauses.push(it);
+        if (i < items.length - 1 && !noBreaks) {
+            withPauses.push({ time: "", name: `Korte pauze (${shortBreakDuration} min)`, icon: "☕", isPause: true });
+        }
+    });
+
+    // waarschuwingen op basis van voorkeuren
+    const warnings = [];
+    const startTime = prefs && prefs.startTime;
+    const endTime = prefs && prefs.endTime;
+    if (startTime && items[0].time && items[0].time < startTime) {
+        warnings.push(`De eerste taak (${items[0].time}) begint vroeger dan je voorkeurstijd van ${startTime}.`);
+    }
+    if (endTime) {
+        const lastTimedItem = [...items].reverse().find(it => it.time);
+        if (lastTimedItem && lastTimedItem.time > endTime) {
+            warnings.push(`Er staat nog een taak gepland na je voorkeurstijd van ${endTime}.`);
+        }
+    }
+    const tasksPerDay = resolvedAnswer(prefs, "tasksPerDay");
+    if (tasksPerDay === "1–2 grote taken" && items.length > 3) {
+        warnings.push("Je gaf aan liever 1–2 grote taken per dag te doen — dit zijn er meer. Wil je hulp bij prioriteren?");
+    }
+
+    return { items: withPauses, label, prefs, warnings };
+}
+
+function buildPlanForWeek() {
+    const prefs = loadPrefs();
+    const week = getWeekDates();
+    let allItems = [];
+    const freeDaysAnswer = resolvedAnswer(prefs, "freeDays");
+    week.forEach(d => {
+        const dayName = DAY_NAMES[(d.getDay() + 6) % 7];
+        const dayTasks = loadTasks().filter(t => t.date === toDateKey(d)).sort((a, b) => a.time.localeCompare(b.time));
+        dayTasks.forEach(t => allItems.push({
+            time: dayName.slice(0, 2) + " " + t.time,
+            name: t.name,
+            icon: CATEGORY_ICON[t.category] || "⭐"
+        }));
+    });
+    return { items: allItems, label: "Weekoverzicht", prefs, warnings: [], freeDaysAnswer };
+}
+
+function buildPersonalTip(prefs) {
+    if (!prefs) {
+        return "Wissel zware en lichte taken af en neem korte pauzes — dat helpt je om gefocust en fris te blijven!";
+    }
+    const sentences = [];
+
+    const hardTiming = resolvedAnswer(prefs, "hardTaskTiming");
+    if (hardTiming === "Als eerste, als ik fris ben") sentences.push("Ik zet de moeilijkste taken bovenaan, zodat je ze doet terwijl je nog fris bent.");
+    else if (hardTiming === "Juist later op de dag") sentences.push("De pittigere taken plan ik liever wat later op de dag, zoals je hebt aangegeven.");
+    else if (hardTiming === "Verspreid over de dag") sentences.push("Ik verspreid de moeilijkere taken over de dag, zodat het behapbaar blijft.");
+
+    const motivation = resolvedAnswer(prefs, "motivation");
+    if (Array.isArray(motivation) && motivation.length) {
+        sentences.push(`Vergeet niet: ${motivation[0].toLowerCase()} helpt jou om gemotiveerd te blijven!`);
+    }
+
+    const realism = resolvedAnswer(prefs, "realism");
+    if (realism === "Heel voorzichtig") sentences.push("Ik plan liever wat voorzichtiger, zodat je niet overvraagd wordt.");
+    else if (realism === "Best ambitieus" || realism === "Zo veel mogelijk doen") sentences.push("Ik plan wat ambitieuzer in, zoals je hebt aangegeven.");
+
+    if (sentences.length === 0) {
+        sentences.push("Wissel zware en lichte taken af en neem je pauzes — dat helpt je om gefocust en fris te blijven!");
+    }
+    return sentences.join(" ");
+}
+
+function renderPlanCard(plan, scope) {
+    const card = document.createElement("div");
+    card.className = "plan-card";
+
+    if (plan.items.length === 0) {
+        card.innerHTML = `
+            <div class="plan-card-title">Nog geen taken gevonden voor ${plan.label} 🌱</div>
+            <div style="font-size:13px;color:#8a685e;">Voeg eerst een paar taken toe in je <a href="Planner.html" style="color:#df6989;font-weight:bold;">planner</a>, dan maak ik er een fijne planning van!</div>
+        `;
+        chatMessages.appendChild(card);
+        scrollToBottom();
+        return;
+    }
+
+    card.innerHTML = `
+        <div class="plan-card-title">Planning voor ${plan.label}</div>
+        ${plan.items.map(it => `
+            <div class="plan-row ${it.isPause ? "is-pause" : ""}">
+                <span class="p-time">${it.time}</span>
+                <span class="p-icon">${it.icon}</span>
+                <span class="p-name">${escapeHtml(it.name)}</span>
+            </div>
+        `).join("")}
+        <div class="plan-tip">
+            <strong>Lilium's tip 💡</strong>
+            ${buildPersonalTip(plan.prefs)}
+        </div>
+        ${(plan.warnings && plan.warnings.length) ? `<div class="plan-warning">${plan.warnings.map(w => escapeHtml(w)).join("<br>")}</div>` : ""}
+    `;
+    chatMessages.appendChild(card);
+
+    const actions = document.createElement("div");
+    actions.className = "plan-actions";
+    actions.innerHTML = `
+        <button class="plan-action-btn good">✔ Planning is goed!</button>
+        <button class="plan-action-btn edit">✎ Planning aanpassen</button>
+        <button class="plan-action-btn tasks">✎ Pas takenlijst aan</button>
+    `;
+    chatMessages.appendChild(actions);
+    scrollToBottom();
+
+    const [goodBtn, editBtn, tasksBtn] = actions.querySelectorAll("button");
+
+    goodBtn.addEventListener("click", () => {
+        savePlan(plan, scope);
+        goodBtn.disabled = true; editBtn.disabled = true; tasksBtn.disabled = true;
+        addBotBubble("Fijn dat de planning goed is! Ik heb 'm opgeslagen bij je oude planningen. Veel succes vandaag! 🌷");
+    });
+
+    editBtn.addEventListener("click", () => {
+        const input = document.getElementById("chatInput");
+        input.value = "De planning is nog niet helemaal goed, omdat ";
+        input.focus();
+        input.setSelectionRange(input.value.length, input.value.length);
+    });
+
+    tasksBtn.addEventListener("click", () => {
+        window.location.href = "Planner.html";
+    });
+}
+
+function savePlan(plan, scope) {
+    aiPlans.unshift({
+        id: "plan" + Date.now(),
+        title: scope === "week" ? "Weekplanning" : "Planning voor " + plan.label,
+        scope: scope,
+        timestamp: Date.now(),
+        items: plan.items
+    });
+    savePlans(aiPlans);
+    renderOldPlans();
 }
 
 
@@ -415,117 +1057,6 @@ function escapeHtml(str) {
 
 
 /* =====================================================
-   PLANNING GENEREREN OP BASIS VAN ECHTE TAKEN
-===================================================== */
-
-function buildPlanForDay(date) {
-    const tasks = loadTasks().filter(t => t.date === toDateKey(date)).sort((a, b) => a.time.localeCompare(b.time));
-    const items = tasks.map(t => ({ time: t.time, name: t.name, icon: CATEGORY_ICON[t.category] || "⭐" }));
-
-    if (items.length === 0) {
-        return { items: [], label: DAY_NAMES[(date.getDay() + 6) % 7] + " " + date.getDate() + " " + MONTHS[date.getMonth()] };
-    }
-
-    // korte pauzes tussen taken invoegen
-    const withPauses = [];
-    items.forEach((it, i) => {
-        withPauses.push(it);
-        if (i < items.length - 1) {
-            withPauses.push({ time: "", name: "Korte pauze", icon: "☕", isPause: true });
-        }
-    });
-
-    return { items: withPauses, label: DAY_NAMES[(date.getDay() + 6) % 7] + " " + date.getDate() + " " + MONTHS[date.getMonth()] };
-}
-
-function buildPlanForWeek() {
-    const week = getWeekDates();
-    let allItems = [];
-    week.forEach(d => {
-        const dayTasks = loadTasks().filter(t => t.date === toDateKey(d)).sort((a, b) => a.time.localeCompare(b.time));
-        dayTasks.forEach(t => allItems.push({
-            time: DAY_NAMES[(d.getDay() + 6) % 7].slice(0, 2) + " " + t.time,
-            name: t.name,
-            icon: CATEGORY_ICON[t.category] || "⭐"
-        }));
-    });
-    return { items: allItems, label: "Weekoverzicht" };
-}
-
-function renderPlanCard(plan, scope) {
-    const card = document.createElement("div");
-    card.className = "plan-card";
-
-    if (plan.items.length === 0) {
-        card.innerHTML = `
-            <div class="plan-card-title">Nog geen taken gevonden voor ${plan.label} 🌱</div>
-            <div style="font-size:13px;color:#8a685e;">Voeg eerst een paar taken toe in je <a href="Planner.html" style="color:#df6989;font-weight:bold;">planner</a>, dan maak ik er een fijne planning van!</div>
-        `;
-        chatMessages.appendChild(card);
-        scrollToBottom();
-        return;
-    }
-
-    card.innerHTML = `
-        <div class="plan-card-title">Planning voor ${plan.label}</div>
-        ${plan.items.map(it => `
-            <div class="plan-row">
-                <span class="p-time">${it.time}</span>
-                <span class="p-icon">${it.icon}</span>
-                <span class="p-name">${escapeHtml(it.name)}</span>
-            </div>
-        `).join("")}
-        <div class="plan-tip">
-            <strong>Lilium's tip 💡</strong>
-            Wissel zware en lichte taken af en neem korte pauzes — dat helpt je om gefocust en fris te blijven!
-        </div>
-    `;
-    chatMessages.appendChild(card);
-
-    const actions = document.createElement("div");
-    actions.className = "plan-actions";
-    actions.innerHTML = `
-        <button class="plan-action-btn good">✔ Planning is goed!</button>
-        <button class="plan-action-btn edit">✎ Planning aanpassen</button>
-        <button class="plan-action-btn tasks">✎ Pas takenlijst aan</button>
-    `;
-    chatMessages.appendChild(actions);
-    scrollToBottom();
-
-    const [goodBtn, editBtn, tasksBtn] = actions.querySelectorAll("button");
-
-    goodBtn.addEventListener("click", () => {
-        savePlan(plan, scope);
-        goodBtn.disabled = true; editBtn.disabled = true; tasksBtn.disabled = true;
-        addBotBubble("Fijn dat de planning goed is! Ik heb 'm opgeslagen bij je oude planningen. Veel succes vandaag! 🌷");
-    });
-
-    editBtn.addEventListener("click", () => {
-        const input = document.getElementById("chatInput");
-        input.value = "De planning is nog niet helemaal goed, omdat ";
-        input.focus();
-        input.setSelectionRange(input.value.length, input.value.length);
-    });
-
-    tasksBtn.addEventListener("click", () => {
-        window.location.href = "Planner.html";
-    });
-}
-
-function savePlan(plan, scope) {
-    aiPlans.unshift({
-        id: "plan" + Date.now(),
-        title: scope === "week" ? "Weekplanning" : "Planning voor " + plan.label,
-        scope: scope,
-        timestamp: Date.now(),
-        items: plan.items
-    });
-    savePlans(aiPlans);
-    renderOldPlans();
-}
-
-
-/* =====================================================
    OUDE PLANNINGEN SIDEBAR
 ===================================================== */
 
@@ -556,7 +1087,7 @@ function viewOldPlan(id) {
     card.innerHTML = `
         <div class="plan-card-title">${escapeHtml(plan.title)}</div>
         ${plan.items.map(it => `
-            <div class="plan-row">
+            <div class="plan-row ${it.isPause ? "is-pause" : ""}">
                 <span class="p-time">${it.time}</span>
                 <span class="p-icon">${it.icon}</span>
                 <span class="p-name">${escapeHtml(it.name)}</span>
@@ -584,8 +1115,8 @@ function handleUserMessage(text) {
     setTimeout(() => {
         if (lower.includes("planning") || lower.includes("plan") || lower.includes("huiswerk") || lower.includes("prioriteren")) {
             addBotBubble(scope === "week"
-                ? "Hier is je planning voor deze week! 🌸"
-                : "Hier is je planning voor " + (scope === "day" ? "vandaag" : "deze periode") + "! 🌸");
+                ? "Hier is je planning voor deze week, afgestemd op je voorkeuren! 🌸"
+                : "Hier is je planning voor " + (scope === "day" ? "vandaag" : "deze periode") + ", afgestemd op je voorkeuren! 🌸");
             const plan = scope === "week" ? buildPlanForWeek() : buildPlanForDay(new Date());
             renderPlanCard(plan, scope);
         } else if (lower.includes("motiv")) {
@@ -706,11 +1237,19 @@ document.addEventListener("click", function () {
 
 /* =====================================================
    START
+   Bij het allereerste bezoek (nog geen "lilium_ai_prefs" in
+   localStorage) tonen we eerst de vragenlijst. Pas als die is
+   afgerond start de chat.
 ===================================================== */
 
 saveCoinsDisplay();
 renderOldPlans();
-startChat();
+
+if (!loadPrefs()) {
+    openSurvey();
+} else {
+    startChat();
+}
 
 </script>
 
