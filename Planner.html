@@ -150,18 +150,15 @@ nav {
     color: #a9781f;
 }
 
-.coin-icon {
-    width: 26px;
-    height: 26px;
+.coin-counter img.coin {
+    width: 24px;
+    height: 24px;
+
+    object-fit: contain;
 
     border-radius: 50%;
 
-    background: radial-gradient(circle at 35% 30%, #ffe9ab, #e8ab2c 70%);
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 14px;
+    flex-shrink: 0;
 }
 
 .profile {
@@ -251,7 +248,12 @@ nav {
 }
 
 .planner-title-flower {
-    font-size: 34px;
+    width: 40px;
+    height: 40px;
+
+    object-fit: contain;
+
+    flex-shrink: 0;
 }
 
 .planner-title h1 {
@@ -544,7 +546,12 @@ nav {
 }
 
 .focus-icon {
-    font-size: 20px;
+    width: 32px;
+    height: 32px;
+
+    object-fit: contain;
+
+    flex-shrink: 0;
 }
 
 .focus-item strong {
@@ -583,7 +590,12 @@ nav {
 }
 
 .timeline-flower {
-    font-size: 30px;
+    width: 34px;
+    height: 34px;
+
+    object-fit: contain;
+
+    flex-shrink: 0;
 }
 
 .timeline {
@@ -1029,9 +1041,9 @@ footer {
 
         <div class="planner-title">
             <img 
-            src="Screenshot 2026-09-14 17.05.13.png"
-            class="planner-title-flower"
-            alt="Mijn planner"
+                src="Screenshot 2026-09-14 17.05.13.png"
+                class="planner-title-flower"
+                alt="Mijn planner"
             />
             <div>
                 <h1>Mijn planner</h1>
@@ -1064,29 +1076,29 @@ footer {
 
             <!-- FOCUS -->
             <div class="focus-card">
-                <h3> Focus voor deze week</h3>
+                <h3>🌸 Focus voor deze week</h3>
                 <div class="focus-items">
                     <div class="focus-item">
                         <img
-                        src="Screenshot 2026-09-14 17.05.36.png"
-                        class="focus-icon"
-                        alt="Plan slim"
+                            src="Screenshot 2026-09-14 17.05.36.png"
+                            class="focus-icon"
+                            alt="Plan slim"
                         />
                         <div><strong>Plan slim</strong>Max. 2 grote taken per dag</div>
                     </div>
                     <div class="focus-item">
                         <img
-                        src="Screenshot 2026-09-14 17.05.46.png"
-                        class="focus-icon"
-                        alt="Blijf in balans"
+                            src="Screenshot 2026-09-14 17.05.46.png"
+                            class="focus-icon"
+                            alt="Blijf in balans"
                         />
                         <div><strong>Blijf in balans</strong>Pauzeren helpt je focussen</div>
                     </div>
                     <div class="focus-item">
                         <img
-                        src="Screenshot 2026-09-14 17.06.14.png"
-                        class="focus-icon"
-                        alt="Kleine stappen"
+                            src="Screenshot 2026-09-14 17.06.14.png"
+                            class="focus-icon"
+                            alt="Kleine stappen"
                         />
                         <div><strong>Kleine stappen</strong>Elke stap is een overwinning</div>
                     </div>
@@ -1101,10 +1113,11 @@ footer {
             <div class="timeline-header">
                 <h2 id="timelineTitle">Vandaag</h2>
                 <img 
-                src="roze-bloem-voorjaarsseizoen_24877-83916.avif"
-                class="timeline-flower"
-                alt="Bloem"
-            />
+                    src="roze-bloem-voorjaarsseizoen_24877-83916.avif"
+                    class="timeline-flower"
+                    alt="Bloem"
+                />
+            </div>
 
             <div class="timeline" id="timeline"></div>
 
