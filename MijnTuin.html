@@ -121,48 +121,47 @@ nav {
 }
 .help-btn.open .help-popover { display: block; }
 
+/* Tuinveld: gebruikt jouw eigen achtergrondafbeelding (pad + gras + bloemperken al ingetekend).
+   aspect-ratio houdt de verhouding van de afbeelding (1536 x 1024) aan, zodat de % posities
+   van de plekken altijd precies op de juiste plek vallen, ongeacht de breedte van het scherm. */
 .garden-field {
     position: relative; border-radius: 34px; overflow: hidden;
-    background:
-        radial-gradient(circle at 15% 20%, rgba(255,255,255,0.15), transparent 35%),
-        radial-gradient(circle at 85% 70%, rgba(255,255,255,0.1), transparent 40%),
-        linear-gradient(180deg, #a9cf7d 0%, #9bc46c 40%, #8fb95f 100%);
-    min-height: 1500px;
+    background-image: url("ChatGPT Image 14 sep 2026, 21_27_12.png");
+    background-size: cover;
+    background-position: center;
+    aspect-ratio: 1536 / 1024;
+    width: 100%;
     box-shadow: 0 15px 40px rgba(90,50,35,0.12);
 }
 
-.garden-field svg.path-svg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
-
-.garden-decor { position: absolute; font-size: 22px; opacity: 0.85; pointer-events: none; }
-
 .plot {
-    position: absolute; width: 78px; height: 78px; transform: translate(-50%, -50%);
-    display: flex; align-items: center; justify-content: center;
+    position: absolute; width: 9.2%; padding-top: 9.2%; height: 0; transform: translate(-50%, -50%);
 }
+.plot-inner { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; }
 
 .plot-empty {
-    width: 58px; height: 58px; border-radius: 50%;
-    background: rgba(90,60,35,0.28);
-    border: 2.5px dashed rgba(255,255,255,0.75);
+    width: 78%; height: 78%; border-radius: 50%;
+    background: rgba(255,255,255,0.0);
     display: flex; align-items: center; justify-content: center;
-    color: white; font-size: 26px; font-weight: bold;
-    transition: 0.2s;
+    color: white; font-size: 1.6vw; font-weight: bold;
+    transition: 0.2s; cursor: pointer;
 }
-.plot-empty:hover { transform: scale(1.1); background: rgba(90,60,35,0.4); }
+.plot-empty:hover { transform: scale(1.15); }
 
-.plot-flower { position: relative; display: flex; flex-direction: column; align-items: center; cursor: pointer; }
+.plot-flower { position: relative; display: flex; flex-direction: column; align-items: center; cursor: pointer; width: 100%; }
 .plot-flower img {
-    width: 74px; height: 74px; object-fit: contain; filter: drop-shadow(0 6px 8px rgba(0,0,0,0.18));
+    width: 92%; height: auto; object-fit: contain; filter: drop-shadow(0 6px 8px rgba(0,0,0,0.18));
     transition: 0.2s;
 }
-.plot-flower:hover img { transform: scale(1.08) translateY(-2px); }
+.plot-flower:hover img { transform: scale(1.12) translateY(-2px); }
 .plot-flower.dead img { filter: grayscale(1) brightness(0.85) drop-shadow(0 6px 8px rgba(0,0,0,0.18)); }
-.plot-flower .plot-heart { position: absolute; top: -2px; right: 6px; font-size: 12px; }
+.plot-flower .plot-heart { position: absolute; top: -6px; right: 2px; font-size: 12px; }
 
 .plot-label {
-    margin-top: 2px; background: rgba(255,255,255,0.92); padding: 3px 10px; border-radius: 12px;
-    font-size: 11.5px; font-weight: bold; color: #5b3024; white-space: nowrap;
-    box-shadow: 0 3px 8px rgba(90,50,35,0.1);
+    position: absolute; top: 100%; left: 50%; transform: translateX(-50%); margin-top: 2px;
+    background: rgba(255,255,255,0.92); padding: 2px 8px; border-radius: 12px;
+    font-size: 10.5px; font-weight: bold; color: #5b3024; white-space: nowrap;
+    box-shadow: 0 3px 8px rgba(90,50,35,0.1); pointer-events: none;
 }
 
 .bottom-hint {
@@ -250,6 +249,8 @@ footer { background: #fffaf5; text-align: center; padding: 28px; color: #a17b71;
 @media (max-width: 550px) {
     .profile { display: none; }
     .inventory-grid { grid-template-columns: 1fr 1fr; }
+    .plot { width: 12%; padding-top: 12%; }
+    .plot-empty { font-size: 3.2vw; }
 }
 
 </style>
@@ -326,7 +327,7 @@ footer { background: #fffaf5; text-align: center; padding: 28px; color: #a17b71;
                 <div>
                     <h3>Tuin status</h3>
                     <div class="status-numbers">
-                        <span>Bloemen: <strong id="flowerCount">0 / 32</strong></span>
+                        <span>Bloemen: <strong id="flowerCount">0 / 38</strong></span>
                         <span>Geluk: <strong id="happyPercent">—</strong></span>
                     </div>
                 </div>
@@ -355,8 +356,7 @@ footer { background: #fffaf5; text-align: center; padding: 28px; color: #a17b71;
         </div>
 
         <div class="garden-field" id="gardenField">
-            <svg class="path-svg" id="pathSvg" viewBox="0 0 1000 1000" preserveAspectRatio="none"></svg>
-            <!-- plots worden hier via JS toegevoegd -->
+            <!-- plots worden hier via JS toegevoegd, boven op de eigen achtergrondafbeelding -->
         </div>
 
         <div class="bottom-hint">
@@ -429,10 +429,10 @@ function loadInventory() {
 function saveInventory(inv) { localStorage.setItem("lilium_inventory", JSON.stringify(inv)); }
 
 function loadGarden() {
-    try { return JSON.parse(localStorage.getItem("lilium_garden_v2")) || {}; }
+    try { return JSON.parse(localStorage.getItem("lilium_garden_v3")) || {}; }
     catch (e) { return {}; }
 }
-function saveGarden(g) { localStorage.setItem("lilium_garden_v2", JSON.stringify(g)); }
+function saveGarden(g) { localStorage.setItem("lilium_garden_v3", JSON.stringify(g)); }
 
 let coins = loadCoins();
 let inventory = loadInventory();
@@ -458,67 +458,26 @@ function isDead(plant) {
 
 
 /* =====================================================
-   PLOTS GENEREREN (hartvormig pad + rijen eronder)
+   PLOTS — exact overgenomen van de posities van de
+   plusjes in jouw aangeleverde tuinafbeelding (in % van
+   breedte/hoogte, programmatisch uit de pixels gehaald),
+   zodat ze precies om het pad heen vallen en niet erop.
 ===================================================== */
 
-const plots = [];
+const PLOT_POSITIONS = [
+    [51.5, 8.2], [42.7, 8.2], [32.7, 10.7], [61.3, 10.8], [71.8, 13.4], [22.8, 13.7],
+    [78.8, 20.7], [14.2, 21.3],
+    [37.1, 26.0], [48.6, 26.7], [65.2, 28.1], [88.8, 30.2], [9.1, 31.4], [26.2, 31.7],
+    [73.5, 36.5], [58.8, 37.2], [35.7, 39.2], [92.8, 42.1], [8.8, 43.5],
+    [47.0, 44.5], [24.6, 44.8], [78.6, 46.1], [67.3, 46.3],
+    [97.9, 51.8], [31.9, 52.4], [91.6, 55.8], [53.7, 56.1], [41.2, 57.5], [9.8, 57.7], [65.4, 57.7],
+    [84.8, 65.2], [17.5, 67.1], [38.6, 68.4], [52.4, 69.9],
+    [77.2, 75.6], [22.7, 78.1],
+    [68.1, 83.1], [31.5, 84.7]
+];
 
-// hart-parametrische curve, genormaliseerd naar 0-100 (voor % positionering)
-function heartPoint(t, scale) {
-    const x = 16 * Math.pow(Math.sin(t), 3);
-    const y = 13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t);
-    return { x: 50 + (x / 17) * scale, y: 24 + (-y / 17) * scale * 0.85 };
-}
-
-// pad-punten (voor de SVG-lijn)
-const pathPoints = [];
-for (let i = 0; i <= 120; i++) {
-    const t = (i / 120) * Math.PI * 2;
-    pathPoints.push(heartPoint(t, 27));
-}
-
-// plots rondom het hart (ring net buiten het pad)
-let plotId = 0;
-const NUM_RING_PLOTS = 22;
-for (let i = 0; i < NUM_RING_PLOTS; i++) {
-    const t = (i / NUM_RING_PLOTS) * Math.PI * 2;
-    const p = heartPoint(t, 34);
-    plots.push({ id: "p" + (plotId++), xPercent: p.x, yPercent: p.y });
-}
-
-// een paar plots wat verder naar buiten, verspreid, voor variatie
-const scatterAngles = [0.3, 1.1, 2.4, 3.3, 4.2, 5.1, 0.8, 2.9];
-scatterAngles.forEach((t) => {
-    const p = heartPoint(t, 42);
-    plots.push({ id: "p" + (plotId++), xPercent: p.x, yPercent: p.y });
-});
-
-// extra rijen eronder (voor het scrollen)
-const EXTRA_ROWS = 3;
-const COLS = 7;
-for (let row = 0; row < EXTRA_ROWS; row++) {
-    for (let col = 0; col < COLS; col++) {
-        const x = 8 + col * (84 / (COLS - 1));
-        const y = 66 + row * 11;
-        plots.push({ id: "p" + (plotId++), xPercent: x, yPercent: y });
-    }
-}
-
+const plots = PLOT_POSITIONS.map((p, i) => ({ id: "p" + i, xPercent: p[0], yPercent: p[1] }));
 const TOTAL_PLOTS = plots.length;
-
-
-/* =====================================================
-   RENDER: PAD (SVG)
-===================================================== */
-
-function renderPath() {
-    const svg = document.getElementById("pathSvg");
-    const d = pathPoints.map((p, i) => `${i === 0 ? "M" : "L"} ${p.x * 10} ${p.y * 10}`).join(" ") + " Z";
-    svg.innerHTML = `
-        <path d="${d}" fill="none" stroke="#e9d7bd" stroke-width="26" stroke-linecap="round" opacity="0.9"/>
-        <path d="${d}" fill="none" stroke="#f4e6cf" stroke-width="18" stroke-linecap="round" stroke-dasharray="4 14" opacity="0.9"/>
-    `;
-}
 
 
 /* =====================================================
@@ -555,7 +514,6 @@ function renderInventory() {
 function renderGarden() {
     const field = document.getElementById("gardenField");
 
-    // oude plots verwijderen (svg laten staan)
     field.querySelectorAll(".plot").forEach(el => el.remove());
     field.querySelectorAll(".flower-popover").forEach(el => el.remove());
 
@@ -569,9 +527,11 @@ function renderGarden() {
         el.style.top = plot.yPercent + "%";
 
         const plant = garden[plot.id];
+        const inner = document.createElement("div");
+        inner.className = "plot-inner";
 
         if (!plant) {
-            el.innerHTML = `<div class="plot-empty" data-plot="${plot.id}">+</div>`;
+            inner.innerHTML = `<div class="plot-empty" data-plot="${plot.id}">+</div>`;
         } else {
             const f = flowerById(plant.flowerId);
             const water = currentLevel(plant.waterLevel, plant.waterTs);
@@ -581,7 +541,7 @@ function renderGarden() {
             plantedCount++;
             happinessSum += Math.round((water + sun) / 2);
 
-            el.innerHTML = `
+            inner.innerHTML = `
                 <div class="plot-flower ${dead ? "dead" : ""}" data-plot="${plot.id}">
                     ${!dead ? '<span class="plot-heart">💗</span>' : ""}
                     <img src="${f ? f.img : ""}" alt="${f ? f.name : ""}">
@@ -590,6 +550,7 @@ function renderGarden() {
             `;
         }
 
+        el.appendChild(inner);
         field.appendChild(el);
     });
 
@@ -601,8 +562,6 @@ function renderGarden() {
 /* =====================================================
    PLOT KLIKKEN
 ===================================================== */
-
-let activePopoverPlot = null;
 
 document.getElementById("gardenField").addEventListener("click", (e) => {
     const emptyEl = e.target.closest(".plot-empty");
@@ -684,7 +643,6 @@ function openFlowerPopover(flowerEl) {
     const plant = garden[plotId];
     if (!plant) return;
 
-    // bestaande popover weg
     document.querySelectorAll(".flower-popover").forEach(el => el.remove());
 
     const f = flowerById(plant.flowerId);
@@ -719,7 +677,6 @@ function openFlowerPopover(flowerEl) {
         }
     `;
 
-    // positioneren t.o.v. de plot-flower binnen garden-field
     const field = document.getElementById("gardenField");
     const fieldRect = field.getBoundingClientRect();
     const elRect = flowerEl.getBoundingClientRect();
@@ -838,11 +795,9 @@ document.addEventListener("click", function () {
 ===================================================== */
 
 saveCoins(coins);
-renderPath();
 renderInventory();
 renderGarden();
 
-// meters langzaam laten bijwerken (elke minuut) zodat verval zichtbaar blijft zonder herladen
 setInterval(renderGarden, 60000);
 
 </script>
