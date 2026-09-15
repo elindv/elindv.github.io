@@ -42,9 +42,13 @@ nav {
 .profile-picture {
     width: 40px; height: 40px; border-radius: 50%; background: #f5b0c3;
     position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center;
+    background-image: url('ChatGPT Image 15 sep 2026, 16_32_14.png');
+    background-size: cover;
+    background-position: center;
 }
-.profile-picture::before { content: ""; position: absolute; width: 11px; height: 11px; border-radius: 50%; background: #fff7f8; top: 8px; left: 50%; transform: translateX(-50%); }
-.profile-picture::after { content: ""; position: absolute; width: 25px; height: 14px; border-radius: 15px 15px 0 0; background: #fff7f8; bottom: 6px; left: 50%; transform: translateX(-50%); }
+.profile-picture::before, .profile-picture::after {
+    display: none;
+}
 .profile-arrow { font-size: 15px; color: #6b4038; position: relative; top: 1px; }
 
 .profile-dropdown {
@@ -163,10 +167,10 @@ footer { background: #fffaf5; text-align: center; padding: 28px; color: #a17b71;
 <div class="profile-picture"></div>
 <span class="profile-arrow">˅</span>
 <div class="profile-dropdown" id="profileDropdown">
-<a href="Profiel.html">👤 Mijn profiel</a>
-<a href="#">⚙️ Instellingen</a>
+<a href="Profiel.html"> Mijn profiel</a>
+<a href="#"> Instellingen</a>
 <div class="divider"></div>
-<a href="#">🚪 Uitloggen</a>
+<a href="#"> Uitloggen</a>
 </div>
 </div>
 </div>

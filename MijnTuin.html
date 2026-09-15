@@ -31,9 +31,24 @@ nav {
 .coin-counter { display: flex; align-items: center; gap: 9px; background: #fff4dc; padding: 6px 17px 6px 7px; border-radius: 30px; font-size: 16px; font-weight: bold; color: #a9781f; }
 .coin-counter img.coin { width: 24px; height: 24px; object-fit: contain; border-radius: 50%; flex-shrink: 0; }
 .profile { position: relative; display: flex; align-items: center; gap: 8px; cursor: pointer; }
-.profile-picture { width: 40px; height: 40px; border-radius: 50%; background: #f5b0c3; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; }
-.profile-picture::before { content: ""; position: absolute; width: 11px; height: 11px; border-radius: 50%; background: #fff7f8; top: 8px; left: 50%; transform: translateX(-50%); }
-.profile-picture::after { content: ""; position: absolute; width: 25px; height: 14px; border-radius: 15px 15px 0 0; background: #fff7f8; bottom: 6px; left: 50%; transform: translateX(-50%); }
+
+/* Profielfoto aangepast naar echte afbeelding */
+.profile-picture { 
+    width: 40px; 
+    height: 40px; 
+    border-radius: 50%; 
+    overflow: hidden; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    border: 2px solid #ffe0e8;
+}
+.profile-picture img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
 .profile-arrow { font-size: 15px; color: #6b4038; position: relative; top: 1px; }
 .profile-dropdown { display: none; flex-direction: column; position: absolute; top: calc(100% + 14px); right: 0; min-width: 190px; background: white; border-radius: 18px; padding: 10px; box-shadow: 0 14px 34px rgba(90,50,35,0.18); z-index: 50; }
 .profile-dropdown.open { display: flex; }
@@ -121,9 +136,6 @@ nav {
 }
 .help-btn.open .help-popover { display: block; }
 
-/* Tuinveld: gebruikt jouw eigen achtergrondafbeelding (pad + gras + bloemperken al ingetekend).
-   aspect-ratio houdt de verhouding van de afbeelding (1536 x 1024) aan, zodat de % posities
-   van de plekken altijd precies op de juiste plek vallen, ongeacht de breedte van het scherm. */
 .garden-field {
     position: relative; border-radius: 34px; overflow: hidden;
     background-image: url("ChatGPT Image 14 sep 2026, 21_27_12.png");
@@ -275,13 +287,15 @@ footer { background: #fffaf5; text-align: center; padding: 28px; color: #a17b71;
 <span id="coinCount">50</span>
 </div>
 <div class="profile" id="profileToggle">
-<div class="profile-picture"></div>
+<div class="profile-picture">
+    <img src="ChatGPT Image 15 sep 2026, 16_32_14.png" alt="Profielfoto">
+</div>
 <span class="profile-arrow">˅</span>
 <div class="profile-dropdown" id="profileDropdown">
-<a href="Profiel.html">👤 Mijn profiel</a>
-<a href="#">⚙️ Instellingen</a>
+<a href="Profiel.html"> Mijn profiel</a>
+<a href="#"> Instellingen</a>
 <div class="divider"></div>
-<a href="#">🚪 Uitloggen</a>
+<a href="#"> Uitloggen</a>
 </div>
 </div>
 </div>
@@ -356,7 +370,7 @@ footer { background: #fffaf5; text-align: center; padding: 28px; color: #a17b71;
         </div>
 
         <div class="garden-field" id="gardenField">
-            <!-- plots worden hier via JS toegevoegd, boven op de eigen achtergrondafbeelding -->
+            <!-- plots worden hier via JS toegevoegd -->
         </div>
 
         <div class="bottom-hint">
@@ -436,15 +450,15 @@ function saveGarden(g) { localStorage.setItem("lilium_garden_v3", JSON.stringify
 
 let coins = loadCoins();
 let inventory = loadInventory();
-let garden = loadGarden(); // { plotId: { flowerId, waterLevel, waterTs, sunLevel, sunTs } }
+let garden = loadGarden(); 
 
 
 /* =====================================================
    VERVAL INSTELLINGEN
 ===================================================== */
 
-const DECAY_HOURS = 48; // van 100% naar 1% in 48 uur zonder verzorging
-const DECAY_RATE = 99 / DECAY_HOURS; // % per uur
+const DECAY_HOURS = 48;
+const DECAY_RATE = 99 / DECAY_HOURS;
 
 function currentLevel(level, ts) {
     const hours = (Date.now() - ts) / (1000 * 60 * 60);
@@ -458,10 +472,7 @@ function isDead(plant) {
 
 
 /* =====================================================
-   PLOTS — exact overgenomen van de posities van de
-   plusjes in jouw aangeleverde tuinafbeelding (in % van
-   breedte/hoogte, programmatisch uit de pixels gehaald),
-   zodat ze precies om het pad heen vallen en niet erop.
+   PLOTS
 ===================================================== */
 
 const PLOT_POSITIONS = [
@@ -750,57 +761,45 @@ document.getElementById("inventoryToggle").addEventListener("click", () => {
 
 
 /* =====================================================
-   HELP POPOVER
+   HELP POPOVER & PROFIEL DROPDOWN
 ===================================================== */
 
 document.getElementById("helpBtn").addEventListener("click", function (e) {
-    this.classList.toggle("open");
     e.stopPropagation();
+    this.classList.toggle("open");
 });
+
+document.getElementById("profileToggle").addEventListener("click", function (e) {
+    e.stopPropagation();
+    document.getElementById("profileDropdown").classList.toggle("open");
+});
+
 document.addEventListener("click", () => {
     document.getElementById("helpBtn").classList.remove("open");
+    document.getElementById("profileDropdown").classList.remove("open");
 });
 
 
 /* =====================================================
-   TOAST
+   TOAST FUNCTIONALITY
 ===================================================== */
 
 function showToast(msg) {
     const toast = document.getElementById("toast");
     toast.textContent = msg;
     toast.classList.add("show");
-    clearTimeout(showToast._t);
-    showToast._t = setTimeout(() => toast.classList.remove("show"), 1600);
+    setTimeout(() => toast.classList.remove("show"), 2500);
 }
 
 
 /* =====================================================
-   PROFIELMENU
-===================================================== */
-
-const profileToggle = document.getElementById("profileToggle");
-const profileDropdown = document.getElementById("profileDropdown");
-profileToggle.addEventListener("click", function (e) {
-    profileDropdown.classList.toggle("open");
-    e.stopPropagation();
-});
-document.addEventListener("click", function () {
-    profileDropdown.classList.remove("open");
-});
-
-
-/* =====================================================
-   START
+   INITIALISATIE
 ===================================================== */
 
 saveCoins(coins);
 renderInventory();
 renderGarden();
 
-setInterval(renderGarden, 60000);
-
 </script>
-
 </body>
 </html>
