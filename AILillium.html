@@ -121,6 +121,17 @@ nav {
 .msg-time { font-size: 11px; color: #b8988f; margin-top: 4px; }
 .msg-row.user .msg-time { text-align: right; }
 
+.msg-attachments { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+.msg-row.user .msg-attachments { justify-content: flex-end; }
+.attach-chip { background: rgba(255,255,255,0.85); color: #a9781f; font-size: 11.5px; padding: 5px 10px; border-radius: 12px; display: inline-flex; align-items: center; gap: 5px; }
+.msg-row.user .attach-chip { background: rgba(255,255,255,0.25); color: #fff0f3; }
+
+.typing-dots { display: inline-flex; gap: 4px; padding: 4px 0; }
+.typing-dots span { width: 6px; height: 6px; border-radius: 50%; background: #df9aab; animation: blink 1.2s infinite ease-in-out; }
+.typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+.typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes blink { 0%, 80%, 100% { opacity: 0.25; } 40% { opacity: 1; } }
+
 .suggested-row { display: flex; flex-wrap: wrap; gap: 10px; margin: 2px 0 4px 50px; }
 .suggest-chip {
     background: white; border: 1.5px solid #f1ded9; color: #6a4a40; font-size: 13px; padding: 9px 15px;
@@ -167,7 +178,7 @@ nav {
 .plan-action-btn:disabled { opacity: 0.5; cursor: default; transform: none; }
 
 /* INPUT AREA */
-.chat-input-row { position: relative; display: flex; align-items: center; gap: 10px; margin-top: 14px; }
+.chat-input-row { position: relative; display: flex; align-items: flex-end; gap: 10px; margin-top: 14px; }
 
 .input-plus {
     width: 42px; height: 42px; border-radius: 50%; background: #ffe3e8; color: #df6687; font-size: 20px;
@@ -185,6 +196,17 @@ nav {
     display: flex; align-items: center; gap: 10px; background: none;
 }
 .attach-menu button:hover { background: #fff1ed; color: #df6989; }
+.attach-menu button.active { background: #ffe3e8; color: #c2557a; }
+
+.input-col { flex: 1; display: flex; flex-direction: column; gap: 8px; }
+
+.pending-attachments { display: flex; flex-wrap: wrap; gap: 6px; }
+.pending-chip {
+    background: #fff1ed; border: 1.5px solid #f1ded9; color: #6a4a40; font-size: 12px; padding: 6px 10px;
+    border-radius: 14px; display: inline-flex; align-items: center; gap: 6px;
+}
+.pending-chip button { background: none; color: #b98277; font-size: 13px; padding: 0; line-height: 1; }
+.pending-chip button:hover { color: #df6989; }
 
 .chat-input {
     flex: 1; padding: 13px 18px; border-radius: 20px; border: 2px solid #f1ded9; font-size: 14px; font-family: inherit;
@@ -198,6 +220,7 @@ nav {
     transition: 0.2s;
 }
 .send-btn:hover { transform: translateY(-2px); }
+.send-btn:disabled { opacity: 0.55; transform: none; cursor: default; }
 
 .toast {
     position: fixed; top: 100px; left: 50%; transform: translateX(-50%) translateY(-10px);
@@ -205,6 +228,23 @@ nav {
     opacity: 0; pointer-events: none; transition: 0.25s; z-index: 200;
 }
 .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+
+/* ============ BIBLIOTHEEK MODAL ============ */
+
+.modal-overlay { display: none; position: fixed; inset: 0; z-index: 100; background: rgba(91,48,36,0.35); align-items: center; justify-content: center; padding: 20px; }
+.modal-overlay.open { display: flex; }
+.modal { background: #fffcfa; border-radius: 26px; padding: 28px 30px; width: 100%; max-width: 440px; max-height: 80vh; overflow-y: auto; box-shadow: 0 20px 50px rgba(90,50,35,0.25); }
+.modal h2 { margin: 0 0 6px; font-family: Georgia, "Times New Roman", serif; font-size: 21px; color: #5b3024; }
+.modal p.modal-sub { margin: 0 0 18px; font-size: 13px; color: #8a685e; }
+.library-item { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 14px; border: 1.5px solid #f1ded9; margin-bottom: 8px; cursor: pointer; transition: 0.2s; }
+.library-item:hover { border-color: #e86e90; }
+.library-item .lib-icon { font-size: 18px; flex-shrink: 0; }
+.library-item .lib-name { flex: 1; font-size: 13px; color: #5b3024; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.modal-empty { text-align: center; padding: 26px 10px; color: #a1817a; font-size: 14px; }
+.modal-close-row { display: flex; justify-content: flex-end; margin-top: 14px; }
+.modal-cancel { padding: 11px 18px; background: none; color: #8a685e; font-size: 14px; border-radius: 12px; }
+.modal-cancel:hover { color: #df6989; }
 
 
 /* ============ INTAKE-VRAGENLIJST (eerste bezoek) ============ */
@@ -367,10 +407,14 @@ nav {
             <div class="attach-menu" id="attachMenu">
                 <button data-action="files">📎 Foto's en bestanden toevoegen</button>
                 <button data-action="library">📚 Uit bibliotheek halen</button>
-                <button data-action="web">🌐 Zoeken op het web</button>
+                <button data-action="web" id="webToggleBtn">🌐 Zoeken op het web</button>
             </div>
+            <input type="file" id="fileInput" style="display:none" multiple accept="image/*,.pdf,.txt,.md,.csv">
 
-            <textarea class="chat-input" id="chatInput" rows="1" placeholder="Stel Lilium een vraag..."></textarea>
+            <div class="input-col">
+                <div class="pending-attachments" id="pendingAttachments"></div>
+                <textarea class="chat-input" id="chatInput" rows="1" placeholder="Stel Lilium een vraag..."></textarea>
+            </div>
 
             <button class="send-btn" id="sendBtn">➤</button>
 
@@ -381,6 +425,19 @@ nav {
 </div>
 
 <div class="toast" id="toast"></div>
+
+
+<!-- BIBLIOTHEEK MODAL -->
+<div class="modal-overlay" id="libraryModalOverlay">
+    <div class="modal">
+        <h2>Uit bibliotheek halen</h2>
+        <p class="modal-sub">Kies eerder toegevoegde leerstof om aan je bericht toe te voegen.</p>
+        <div id="libraryModalBody"></div>
+        <div class="modal-close-row">
+            <button class="modal-cancel" onclick="closeLibraryModal()">Sluiten</button>
+        </div>
+    </div>
+</div>
 
 
 <!-- INTAKE-VRAGENLIJST -->
@@ -432,8 +489,20 @@ function loadPrefs() {
 }
 function savePrefsToStorage(prefs) { localStorage.setItem("lilium_ai_prefs", JSON.stringify(prefs)); }
 
+function loadLibrary() {
+    try { return JSON.parse(localStorage.getItem("lilium_library")) || []; }
+    catch (e) { return []; }
+}
+function saveLibrary(lib) {
+    try { localStorage.setItem("lilium_library", JSON.stringify(lib)); }
+    catch (e) { showToast("Bibliotheek zit vol — verwijder oude bestanden om ruimte te maken."); }
+}
+
 let aiPlans = loadPlans();
+let library = loadLibrary();
 let currentScope = "day";
+let pendingAttachments = []; // { name, mediaType, kind: 'image'|'document'|'text', data (base64 or text) }
+let webSearchForced = false;
 
 const CATEGORY_ICON = {
     wiskunde: "📐", taal: "💬", lezen: "📖", natuur: "🌿", mens: "🏛️", pauze: "☕", overig: "⭐"
@@ -455,12 +524,25 @@ function getWeekDates() {
     return week;
 }
 
+function formatDuration(minutes) {
+    if (!minutes) return "";
+    if (minutes < 60) return minutes + " min";
+    if (minutes % 60 === 0) return (minutes / 60) + " uur";
+    return (minutes / 60).toString().replace(".", ",") + " uur";
+}
+
+/* Uitleg over de website, zodat Lilium hier vragen over kan beantwoorden */
+const WEBSITE_INFO = `Lilium is een studieplanner-app met de volgende onderdelen:
+- Planner: hier voegt de gebruiker taken/huiswerk toe met naam, beschrijving, dag, tijd, vak/categorie en geschatte duur.
+- AI Assistant Lilium (dit onderdeel): een chatassistent die vragen beantwoordt en op verzoek een planning maakt op basis van de taken uit de Planner en de voorkeuren uit de intake-vragenlijst.
+- Shop: hier koopt de gebruiker virtuele bloemen met verdiende muntjes (coins). Muntjes worden verdiend door taken af te vinken in de Planner.
+- Mijn Tuin: een tuin waarin gekochte bloemen geplant en verzorgd kunnen worden (water en zon geven). Bloemen verwelkeren als ze te lang verwaarloosd worden.
+- Profiel: persoonlijke instellingen van de gebruiker.
+Het doel van Lilium is om leren en huiswerk maken structuur, motivatie en een beloningssysteem te geven.`;
+
 
 /* =====================================================================
    INTAKE-VRAGENLIJST
-   Wordt getoond zodra iemand voor het eerst de AI Assistant opent
-   (dus zolang er nog geen "lilium_ai_prefs" is opgeslagen).
-   De antwoorden worden gebruikt om de planning te personaliseren.
 ===================================================================== */
 
 const SURVEY = [
@@ -811,7 +893,7 @@ document.getElementById("editPrefsBtn").addEventListener("click", openSurvey);
 
 
 /* =====================================================
-   PLANNING GENEREREN OP BASIS VAN ECHTE TAKEN + VOORKEUREN
+   VOORKEUREN OMZETTEN NAAR LEESBARE TEKST (voor de AI)
 ===================================================== */
 
 function resolvedAnswer(prefs, id) {
@@ -824,172 +906,152 @@ function resolvedAnswer(prefs, id) {
     return val || null;
 }
 
-function extractMinutes(str) {
-    if (!str) return null;
-    const match = String(str).match(/(\d+)\s*(min|uur)/);
-    if (!match) return null;
-    const n = parseInt(match[1], 10);
-    return match[2] === "uur" ? n * 60 : n;
-}
-
-function buildPlanForDay(date) {
-    const prefs = loadPrefs();
-    const tasks = loadTasks().filter(t => t.date === toDateKey(date)).sort((a, b) => a.time.localeCompare(b.time));
-    const items = tasks.map(t => ({ time: t.time, name: t.name, icon: CATEGORY_ICON[t.category] || "⭐" }));
-    const label = DAY_NAMES[(date.getDay() + 6) % 7] + " " + date.getDate() + " " + MONTHS[date.getMonth()];
-
-    if (items.length === 0) {
-        return { items: [], label, prefs, warnings: [] };
-    }
-
-    const shortBreakDuration = extractMinutes(resolvedAnswer(prefs, "shortBreakDuration")) || 10;
-    const shortBreakFreq = resolvedAnswer(prefs, "shortBreakFreq");
-    const noBreaks = shortBreakFreq === "Zo weinig mogelijk pauzes";
-
-    const withPauses = [];
-    items.forEach((it, i) => {
-        withPauses.push(it);
-        if (i < items.length - 1 && !noBreaks) {
-            withPauses.push({ time: "", name: `Korte pauze (${shortBreakDuration} min)`, icon: "☕", isPause: true });
-        }
+function prefsToText(prefs) {
+    if (!prefs) return "De gebruiker heeft de intake-vragenlijst nog niet ingevuld. Vraag desgewenst of ze dit via '🔧 Mijn voorkeuren aanpassen' willen doen, maar help ook prima zonder.";
+    const lines = [];
+    SURVEY.forEach(section => {
+        section.questions.forEach(q => {
+            const val = resolvedAnswer(prefs, q.id);
+            const yn = prefs[q.id + "_yn"];
+            if (yn) {
+                lines.push(`- ${q.label} ${yn}${val ? " — " + val : ""}`);
+            } else if (val && (!Array.isArray(val) || val.length)) {
+                lines.push(`- ${q.label} ${Array.isArray(val) ? val.join(", ") : val}`);
+            }
+        });
     });
-
-    // waarschuwingen op basis van voorkeuren
-    const warnings = [];
-    const startTime = prefs && prefs.startTime;
-    const endTime = prefs && prefs.endTime;
-    if (startTime && items[0].time && items[0].time < startTime) {
-        warnings.push(`De eerste taak (${items[0].time}) begint vroeger dan je voorkeurstijd van ${startTime}.`);
-    }
-    if (endTime) {
-        const lastTimedItem = [...items].reverse().find(it => it.time);
-        if (lastTimedItem && lastTimedItem.time > endTime) {
-            warnings.push(`Er staat nog een taak gepland na je voorkeurstijd van ${endTime}.`);
-        }
-    }
-    const tasksPerDay = resolvedAnswer(prefs, "tasksPerDay");
-    if (tasksPerDay === "1–2 grote taken" && items.length > 3) {
-        warnings.push("Je gaf aan liever 1–2 grote taken per dag te doen — dit zijn er meer. Wil je hulp bij prioriteren?");
-    }
-
-    return { items: withPauses, label, prefs, warnings };
+    return lines.join("\n");
 }
 
-function buildPlanForWeek() {
-    const prefs = loadPrefs();
-    const week = getWeekDates();
-    let allItems = [];
-    const freeDaysAnswer = resolvedAnswer(prefs, "freeDays");
-    week.forEach(d => {
-        const dayName = DAY_NAMES[(d.getDay() + 6) % 7];
-        const dayTasks = loadTasks().filter(t => t.date === toDateKey(d)).sort((a, b) => a.time.localeCompare(b.time));
-        dayTasks.forEach(t => allItems.push({
-            time: dayName.slice(0, 2) + " " + t.time,
-            name: t.name,
-            icon: CATEGORY_ICON[t.category] || "⭐"
-        }));
-    });
-    return { items: allItems, label: "Weekoverzicht", prefs, warnings: [], freeDaysAnswer };
-}
 
-function buildPersonalTip(prefs) {
-    if (!prefs) {
-        return "Wissel zware en lichte taken af en neem korte pauzes — dat helpt je om gefocust en fris te blijven!";
-    }
-    const sentences = [];
+/* =====================================================
+   BIBLIOTHEEK (bestanden die de gebruiker heeft toegevoegd)
+===================================================== */
 
-    const hardTiming = resolvedAnswer(prefs, "hardTaskTiming");
-    if (hardTiming === "Als eerste, als ik fris ben") sentences.push("Ik zet de moeilijkste taken bovenaan, zodat je ze doet terwijl je nog fris bent.");
-    else if (hardTiming === "Juist later op de dag") sentences.push("De pittigere taken plan ik liever wat later op de dag, zoals je hebt aangegeven.");
-    else if (hardTiming === "Verspreid over de dag") sentences.push("Ik verspreid de moeilijkere taken over de dag, zodat het behapbaar blijft.");
-
-    const motivation = resolvedAnswer(prefs, "motivation");
-    if (Array.isArray(motivation) && motivation.length) {
-        sentences.push(`Vergeet niet: ${motivation[0].toLowerCase()} helpt jou om gemotiveerd te blijven!`);
-    }
-
-    const realism = resolvedAnswer(prefs, "realism");
-    if (realism === "Heel voorzichtig") sentences.push("Ik plan liever wat voorzichtiger, zodat je niet overvraagd wordt.");
-    else if (realism === "Best ambitieus" || realism === "Zo veel mogelijk doen") sentences.push("Ik plan wat ambitieuzer in, zoals je hebt aangegeven.");
-
-    if (sentences.length === 0) {
-        sentences.push("Wissel zware en lichte taken af en neem je pauzes — dat helpt je om gefocust en fris te blijven!");
-    }
-    return sentences.join(" ");
-}
-
-function renderPlanCard(plan, scope) {
-    const card = document.createElement("div");
-    card.className = "plan-card";
-
-    if (plan.items.length === 0) {
-        card.innerHTML = `
-            <div class="plan-card-title">Nog geen taken gevonden voor ${plan.label} 🌱</div>
-            <div style="font-size:13px;color:#8a685e;">Voeg eerst een paar taken toe in je <a href="Planner.html" style="color:#df6989;font-weight:bold;">planner</a>, dan maak ik er een fijne planning van!</div>
-        `;
-        chatMessages.appendChild(card);
-        scrollToBottom();
+function renderLibraryModal() {
+    const body = document.getElementById("libraryModalBody");
+    if (library.length === 0) {
+        body.innerHTML = `<div class="modal-empty">Je bibliotheek is nog leeg. Voeg eerst bestanden toe via 📎.</div>`;
         return;
     }
-
-    card.innerHTML = `
-        <div class="plan-card-title">Planning voor ${plan.label}</div>
-        ${plan.items.map(it => `
-            <div class="plan-row ${it.isPause ? "is-pause" : ""}">
-                <span class="p-time">${it.time}</span>
-                <span class="p-icon">${it.icon}</span>
-                <span class="p-name">${escapeHtml(it.name)}</span>
-            </div>
-        `).join("")}
-        <div class="plan-tip">
-            <strong>Lilium's tip 💡</strong>
-            ${buildPersonalTip(plan.prefs)}
+    body.innerHTML = library.map(item => `
+        <div class="library-item" onclick="attachFromLibrary('${item.id}')">
+            <span class="lib-icon">${item.kind === "image" ? "🖼️" : "📄"}</span>
+            <span class="lib-name">${escapeHtml(item.name)}</span>
         </div>
-        ${(plan.warnings && plan.warnings.length) ? `<div class="plan-warning">${plan.warnings.map(w => escapeHtml(w)).join("<br>")}</div>` : ""}
-    `;
-    chatMessages.appendChild(card);
+    `).join("");
+}
 
-    const actions = document.createElement("div");
-    actions.className = "plan-actions";
-    actions.innerHTML = `
-        <button class="plan-action-btn good">✔ Planning is goed!</button>
-        <button class="plan-action-btn edit">✎ Planning aanpassen</button>
-        <button class="plan-action-btn tasks">✎ Pas takenlijst aan</button>
-    `;
-    chatMessages.appendChild(actions);
-    scrollToBottom();
+function openLibraryModal() {
+    renderLibraryModal();
+    document.getElementById("libraryModalOverlay").classList.add("open");
+}
+function closeLibraryModal() {
+    document.getElementById("libraryModalOverlay").classList.remove("open");
+}
+document.getElementById("libraryModalOverlay").addEventListener("click", (e) => {
+    if (e.target.id === "libraryModalOverlay") closeLibraryModal();
+});
 
-    const [goodBtn, editBtn, tasksBtn] = actions.querySelectorAll("button");
+function attachFromLibrary(id) {
+    const item = library.find(i => i.id === id);
+    if (!item) return;
+    pendingAttachments.push({ ...item });
+    renderPendingAttachments();
+    closeLibraryModal();
+    showToast(`${item.name} toegevoegd aan je bericht 📎`);
+}
 
-    goodBtn.addEventListener("click", () => {
-        savePlan(plan, scope);
-        goodBtn.disabled = true; editBtn.disabled = true; tasksBtn.disabled = true;
-        addBotBubble("Fijn dat de planning goed is! Ik heb 'm opgeslagen bij je oude planningen. Veel succes vandaag! 🌷");
+
+/* =====================================================
+   BESTANDEN TOEVOEGEN (echte upload)
+===================================================== */
+
+function fileToBase64(file) {
+    return new Promise((resolve, reject) => {
+        const r = new FileReader();
+        r.onload = () => resolve(r.result.split(",")[1]);
+        r.onerror = () => reject(new Error("Lezen mislukt"));
+        r.readAsDataURL(file);
     });
-
-    editBtn.addEventListener("click", () => {
-        const input = document.getElementById("chatInput");
-        input.value = "De planning is nog niet helemaal goed, omdat ";
-        input.focus();
-        input.setSelectionRange(input.value.length, input.value.length);
-    });
-
-    tasksBtn.addEventListener("click", () => {
-        window.location.href = "Planner.html";
+}
+function fileToText(file) {
+    return new Promise((resolve, reject) => {
+        const r = new FileReader();
+        r.onload = () => resolve(r.result);
+        r.onerror = () => reject(new Error("Lezen mislukt"));
+        r.readAsText(file);
     });
 }
 
-function savePlan(plan, scope) {
-    aiPlans.unshift({
-        id: "plan" + Date.now(),
-        title: scope === "week" ? "Weekplanning" : "Planning voor " + plan.label,
-        scope: scope,
-        timestamp: Date.now(),
-        items: plan.items
-    });
-    savePlans(aiPlans);
-    renderOldPlans();
+document.getElementById("fileInput").addEventListener("change", async (e) => {
+    const files = Array.from(e.target.files || []);
+    for (const file of files) {
+        try {
+            let item;
+            if (file.type.startsWith("image/")) {
+                const data = await fileToBase64(file);
+                item = { id: "lib" + Date.now() + Math.random().toString(36).slice(2, 7), name: file.name, kind: "image", mediaType: file.type, data };
+            } else if (file.type === "application/pdf") {
+                const data = await fileToBase64(file);
+                item = { id: "lib" + Date.now() + Math.random().toString(36).slice(2, 7), name: file.name, kind: "document", mediaType: "application/pdf", data };
+            } else {
+                const text = await fileToText(file);
+                item = { id: "lib" + Date.now() + Math.random().toString(36).slice(2, 7), name: file.name, kind: "text", data: text.slice(0, 20000) };
+            }
+            library.unshift(item);
+            pendingAttachments.push({ ...item });
+        } catch (err) {
+            showToast("Kon " + file.name + " niet lezen.");
+        }
+    }
+    saveLibrary(library);
+    renderPendingAttachments();
+    e.target.value = "";
+});
+
+function renderPendingAttachments() {
+    const wrap = document.getElementById("pendingAttachments");
+    wrap.innerHTML = pendingAttachments.map((a, i) => `
+        <div class="pending-chip">
+            <span>${a.kind === "image" ? "🖼️" : "📄"} ${escapeHtml(a.name)}</span>
+            <button type="button" onclick="removePendingAttachment(${i})">×</button>
+        </div>
+    `).join("");
 }
+function removePendingAttachment(i) {
+    pendingAttachments.splice(i, 1);
+    renderPendingAttachments();
+}
+
+
+/* =====================================================
+   + MENU (bijlagen)
+===================================================== */
+
+const plusBtn = document.getElementById("plusBtn");
+const attachMenu = document.getElementById("attachMenu");
+plusBtn.addEventListener("click", (e) => {
+    attachMenu.classList.toggle("open");
+    e.stopPropagation();
+});
+document.addEventListener("click", () => attachMenu.classList.remove("open"));
+
+attachMenu.addEventListener("click", (e) => {
+    const btn = e.target.closest("button");
+    if (!btn) return;
+    const action = btn.dataset.action;
+    if (action === "files") {
+        document.getElementById("fileInput").click();
+    } else if (action === "library") {
+        openLibraryModal();
+    } else if (action === "web") {
+        webSearchForced = !webSearchForced;
+        btn.classList.toggle("active", webSearchForced);
+        showToast(webSearchForced ? "Lilium zoekt bij je volgende bericht op het web 🌐" : "Zoeken op het web uitgeschakeld.");
+    }
+    if (action !== "web") attachMenu.classList.remove("open");
+});
 
 
 /* =====================================================
@@ -997,13 +1059,14 @@ function savePlan(plan, scope) {
 ===================================================== */
 
 const chatMessages = document.getElementById("chatMessages");
+let apiHistory = []; // { role: 'user'|'assistant', content: string | array }
 
 function nowLabel() {
     const d = new Date();
     return String(d.getHours()).padStart(2, "0") + ":" + String(d.getMinutes()).padStart(2, "0");
 }
 
-function addBotBubble(html, withSuggestions) {
+function addBotBubble(html) {
     const row = document.createElement("div");
     row.className = "msg-row bot";
     row.innerHTML = `
@@ -1015,15 +1078,34 @@ function addBotBubble(html, withSuggestions) {
     `;
     chatMessages.appendChild(row);
     scrollToBottom();
+    return row;
 }
 
-function addUserBubble(text) {
+function addTypingBubble() {
+    const row = document.createElement("div");
+    row.className = "msg-row bot";
+    row.innerHTML = `
+        <div class="msg-avatar">🌸</div>
+        <div>
+            <div class="msg-bubble"><div class="typing-dots"><span></span><span></span><span></span></div></div>
+        </div>
+    `;
+    chatMessages.appendChild(row);
+    scrollToBottom();
+    return row;
+}
+
+function addUserBubble(text, attachments) {
     const row = document.createElement("div");
     row.className = "msg-row user";
+    const attHtml = (attachments && attachments.length)
+        ? `<div class="msg-attachments">${attachments.map(a => `<span class="attach-chip">${a.kind === "image" ? "🖼️" : "📄"} ${escapeHtml(a.name)}</span>`).join("")}</div>`
+        : "";
     row.innerHTML = `
         <div></div>
         <div>
             <div class="msg-bubble">${escapeHtml(text)}</div>
+            ${attHtml}
             <div class="msg-time">${nowLabel()} ✓</div>
         </div>
     `;
@@ -1039,7 +1121,7 @@ function addSuggestions() {
         "Maak een planning voor deze week",
         "Help me mijn taken prioriteren",
         "Ik heb veel huiswerk, help!",
-        "Maak tijd voor ontspanning",
+        "Wat kan ik allemaal op deze website?",
         "Hoe blijf ik gemotiveerd?"
     ];
     row.innerHTML = suggestions.map(s => `<button class="suggest-chip">${s}</button>`).join("");
@@ -1053,6 +1135,9 @@ function escapeHtml(str) {
     const div = document.createElement("div");
     div.textContent = str;
     return div.innerHTML;
+}
+function textToHtml(str) {
+    return escapeHtml(str || "").replace(/\n/g, "<br>");
 }
 
 
@@ -1088,8 +1173,8 @@ function viewOldPlan(id) {
         <div class="plan-card-title">${escapeHtml(plan.title)}</div>
         ${plan.items.map(it => `
             <div class="plan-row ${it.isPause ? "is-pause" : ""}">
-                <span class="p-time">${it.time}</span>
-                <span class="p-icon">${it.icon}</span>
+                <span class="p-time">${it.time || ""}</span>
+                <span class="p-icon">${it.icon || "⭐"}</span>
                 <span class="p-name">${escapeHtml(it.name)}</span>
             </div>
         `).join("")}
@@ -1098,40 +1183,213 @@ function viewOldPlan(id) {
     scrollToBottom();
 }
 
+function savePlan(plan, scope) {
+    aiPlans.unshift({
+        id: "plan" + Date.now(),
+        title: scope === "week" ? "Weekplanning" : "Planning voor " + (plan.label || "vandaag"),
+        scope: scope,
+        timestamp: Date.now(),
+        items: plan.items
+    });
+    savePlans(aiPlans);
+    renderOldPlans();
+}
+
+function renderAIPlanCard(plan, scope) {
+    const card = document.createElement("div");
+    card.className = "plan-card";
+
+    if (!plan.items || plan.items.length === 0) {
+        card.innerHTML = `
+            <div class="plan-card-title">Nog geen planning kunnen maken 🌱</div>
+            <div style="font-size:13px;color:#8a685e;">Voeg eerst een paar taken toe in je <a href="Planner.html" style="color:#df6989;font-weight:bold;">planner</a>, dan maak ik er een fijne planning van!</div>
+        `;
+        chatMessages.appendChild(card);
+        scrollToBottom();
+        return;
+    }
+
+    card.innerHTML = `
+        <div class="plan-card-title">${escapeHtml(plan.label || "Jouw planning")}</div>
+        ${plan.items.map(it => `
+            <div class="plan-row ${it.isPause ? "is-pause" : ""}">
+                <span class="p-time">${escapeHtml(it.time || "")}</span>
+                <span class="p-icon">${it.icon || "⭐"}</span>
+                <span class="p-name">${escapeHtml(it.name)}</span>
+                ${it.duration ? `<span class="p-dur">${formatDuration(it.duration)}</span>` : ""}
+            </div>
+        `).join("")}
+        ${plan.tip ? `<div class="plan-tip"><strong>Lilium's tip 💡</strong>${escapeHtml(plan.tip)}</div>` : ""}
+        ${(plan.warnings && plan.warnings.length) ? `<div class="plan-warning">${plan.warnings.map(w => escapeHtml(w)).join("<br>")}</div>` : ""}
+    `;
+    chatMessages.appendChild(card);
+
+    const actions = document.createElement("div");
+    actions.className = "plan-actions";
+    actions.innerHTML = `
+        <button class="plan-action-btn good">✔ Planning is goed!</button>
+        <button class="plan-action-btn edit">✎ Planning aanpassen</button>
+        <button class="plan-action-btn tasks">✎ Pas takenlijst aan</button>
+    `;
+    chatMessages.appendChild(actions);
+    scrollToBottom();
+
+    const [goodBtn, editBtn, tasksBtn] = actions.querySelectorAll("button");
+
+    goodBtn.addEventListener("click", () => {
+        savePlan(plan, scope);
+        goodBtn.disabled = true; editBtn.disabled = true; tasksBtn.disabled = true;
+        addBotBubble("Fijn dat de planning goed is! Ik heb 'm opgeslagen bij je oude planningen. Veel succes! 🌷");
+    });
+
+    editBtn.addEventListener("click", () => {
+        const input = document.getElementById("chatInput");
+        input.value = "De planning is nog niet helemaal goed, omdat ";
+        input.focus();
+        input.setSelectionRange(input.value.length, input.value.length);
+    });
+
+    tasksBtn.addEventListener("click", () => {
+        window.location.href = "Planner.html";
+    });
+}
+
 
 /* =====================================================
-   BERICHT VERSTUREN / AI ANTWOORD
+   ECHTE AI — bericht sturen naar Claude via de API
 ===================================================== */
 
-function handleUserMessage(text) {
-    if (!text.trim()) return;
-    addUserBubble(text);
+function buildSystemPrompt(scope) {
+    const prefs = loadPrefs();
+    const week = getWeekDates();
+    const today = new Date();
 
-    const lower = text.toLowerCase();
-    let scope = currentScope;
-    if (lower.includes("week")) scope = "week";
-    else if (lower.includes("vandaag") || lower.includes("dag")) scope = "day";
+    let tasksSection;
+    if (scope === "week") {
+        const items = [];
+        week.forEach(d => {
+            const dayName = DAY_NAMES[(d.getDay() + 6) % 7];
+            loadTasks().filter(t => t.date === toDateKey(d)).forEach(t => {
+                items.push(`${dayName} ${t.time} — ${t.name} (${t.category}, ${formatDuration(t.duration)})${t.description ? ": " + t.description : ""}`);
+            });
+        });
+        tasksSection = items.length ? items.join("\n") : "Er staan nog geen taken in de Planner deze week.";
+    } else {
+        const key = toDateKey(today);
+        const items = loadTasks().filter(t => t.date === key).map(t =>
+            `${t.time} — ${t.name} (${t.category}, ${formatDuration(t.duration)})${t.description ? ": " + t.description : ""}`
+        );
+        tasksSection = items.length ? items.join("\n") : "Er staan nog geen taken in de Planner voor vandaag.";
+    }
 
-    setTimeout(() => {
-        if (lower.includes("planning") || lower.includes("plan") || lower.includes("huiswerk") || lower.includes("prioriteren")) {
-            addBotBubble(scope === "week"
-                ? "Hier is je planning voor deze week, afgestemd op je voorkeuren! 🌸"
-                : "Hier is je planning voor " + (scope === "day" ? "vandaag" : "deze periode") + ", afgestemd op je voorkeuren! 🌸");
-            const plan = scope === "week" ? buildPlanForWeek() : buildPlanForDay(new Date());
-            renderPlanCard(plan, scope);
-        } else if (lower.includes("motiv")) {
-            addBotBubble("Kleine stappen tellen ook! Probeer met de makkelijkste taak te beginnen — dat geeft je meteen wat energie voor de rest. Je kan dit! 💗");
-        } else if (lower.includes("ontspan") || lower.includes("pauze")) {
-            addBotBubble("Zelfzorg is belangrijk! Ik zorg dat er in je planning altijd ruimte is voor pauzes. Wil je dat ik een planning maak met extra ontspanmomenten?");
-        } else {
-            addBotBubble("Goed dat je dat vertelt! Wil je dat ik hier een planning voor maak? Zeg gewoon 'maak een planning voor vandaag' of 'voor deze week' 🌷");
-        }
-    }, 500);
+    return `Je bent Lilium 🌸, de vriendelijke Nederlandstalige AI-studieassistent in de Lilium-app. Je bent een echte, behulpzame AI: je beantwoordt niet alleen vragen over plannen, maar ELKE vraag die de gebruiker stelt, net als een normale AI-assistent. Wees warm, bemoedigend en beknopt, en gebruik af en toe een 🌸 of 💗.
+
+OVER DE WEBSITE (gebruik dit als iemand vraagt wat de website doet of kan):
+${WEBSITE_INFO}
+
+HUIDIGE DATUM: ${DAY_NAMES[(today.getDay()+6)%7]} ${today.getDate()} ${MONTHS[today.getMonth()]} ${today.getFullYear()}. Gekozen weergave: ${scope === "week" ? "deze week" : "vandaag"}.
+
+TAKEN UIT DE PLANNER (${scope === "week" ? "deze week" : "vandaag"}):
+${tasksSection}
+
+VOORKEUREN VAN DE GEBRUIKER (uit de intake-vragenlijst — hou hier altijd oprecht rekening mee):
+${prefsToText(prefs)}
+
+WANNEER IEMAND EEN PLANNING VRAAGT:
+Maak een concrete, realistische planning met de bovenstaande taken als basis. Houd rekening met: de voorkeuren hierboven (start/eindtijd, pauzelengte/-frequentie, max. taakduur, max. uren per dag, volgorde van moeilijke taken, hoeveelheid afwisseling, buffer/ruimte), de geschatte duur van elke taak, en — als de gebruiker in zijn bericht specifieke vakken, hoeveelheid leerstof of andere details noemt — neem die ook mee. Splits een taak eventueel op in kleinere blokken met pauzes ertussen als dat past bij de voorkeuren. Als iets niet past (bijv. buiten de gewenste tijden, te veel taken op één dag), meld dat als waarschuwing i.p.v. het te negeren.
+
+ANTWOORDFORMAAT — je antwoordt ALTIJD met puur JSON, niets anders (geen markdown-codeblok, geen uitleg erbuiten):
+{"reply": "korte, vriendelijke chatreactie in gewone tekst (verplicht)", "schedule": [{"time": "09:00 of 'Ma 09:00' bij weekplanning, leeg bij geen vaste tijd", "name": "taaknaam", "icon": "één passende emoji", "duration": geschatte duur in minuten (optioneel), "isPause": true als het een pauze is}], "tip": "korte persoonlijke tip gebaseerd op de voorkeuren (optioneel)", "warnings": ["eventuele waarschuwingen"] }
+Laat "schedule", "tip" en "warnings" volledig weg (geen lege array/string) als de vraag geen planning betreft — dan bestaat je antwoord alleen uit {"reply": "..."}.
+
+Als de gebruiker bestanden/afbeeldingen heeft bijgevoegd, gebruik de inhoud daarvan actief in je antwoord (bijv. als leerstof voor een planning of om een vraag te beantwoorden). Als de gebruiker vraagt om op het web te zoeken, of dit heeft aangevinkt, gebruik dan de websearch-tool en verwerk de gevonden informatie in "reply".`;
 }
+
+function buildUserContentBlocks(text, attachments) {
+    const blocks = [];
+    if (text && text.trim()) blocks.push({ type: "text", text: text.trim() });
+    attachments.forEach(a => {
+        if (a.kind === "image") {
+            blocks.push({ type: "image", source: { type: "base64", media_type: a.mediaType, data: a.data } });
+        } else if (a.kind === "document") {
+            blocks.push({ type: "document", source: { type: "base64", media_type: a.mediaType, data: a.data } });
+        } else if (a.kind === "text") {
+            blocks.push({ type: "text", text: `[Bijlage: ${a.name}]\n${a.data}` });
+        }
+    });
+    if (blocks.length === 0) blocks.push({ type: "text", text: "" });
+    return blocks;
+}
+
+function parseAIResponse(rawText) {
+    let clean = rawText.trim().replace(/^```json/i, "").replace(/^```/, "").replace(/```$/, "").trim();
+    try {
+        return JSON.parse(clean);
+    } catch (e) {
+        return { reply: rawText };
+    }
+}
+
+async function callLilium(userText) {
+    const attachments = pendingAttachments.slice();
+    addUserBubble(userText, attachments);
+
+    const userBlocks = buildUserContentBlocks(userText, attachments);
+    apiHistory.push({ role: "user", content: userBlocks });
+
+    pendingAttachments = [];
+    renderPendingAttachments();
+    const useWebSearch = webSearchForced || /\bweb\b|zoek op het web|internet/i.test(userText);
+    webSearchForced = false;
+    document.querySelectorAll('#webToggleBtn').forEach(b => b.classList.remove("active"));
+
+    const typingRow = addTypingBubble();
+    document.getElementById("sendBtn").disabled = true;
+
+    try {
+        const response = await fetch("https://api.anthropic.com/v1/messages", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                model: "claude-sonnet-4-6",
+                max_tokens: 1500,
+                system: buildSystemPrompt(currentScope),
+                messages: apiHistory,
+                tools: useWebSearch ? [{ type: "web_search_20250305", name: "web_search" }] : undefined
+            })
+        });
+
+        const data = await response.json();
+        if (data.error) throw new Error(data.error.message || "API-fout");
+
+        const textParts = (data.content || []).filter(b => b.type === "text").map(b => b.text).join("\n");
+        apiHistory.push({ role: "assistant", content: textParts || "" });
+
+        const parsed = parseAIResponse(textParts || "{}");
+        typingRow.remove();
+        addBotBubble(textToHtml(parsed.reply || "Hier is mijn antwoord! 🌸"));
+
+        if (parsed.schedule && parsed.schedule.length) {
+            renderAIPlanCard({ items: parsed.schedule, label: currentScope === "week" ? "Weekoverzicht" : "Planning voor vandaag", tip: parsed.tip, warnings: parsed.warnings }, currentScope);
+        }
+    } catch (err) {
+        typingRow.remove();
+        addBotBubble("Oeps, er ging iets mis bij het ophalen van een antwoord. Probeer het zo nog eens 🌱<br><span style='font-size:11px;color:#a1817a;'>" + escapeHtml(String(err.message || err)) + "</span>");
+    } finally {
+        document.getElementById("sendBtn").disabled = false;
+    }
+}
+
+
+/* =====================================================
+   BERICHT VERSTUREN
+===================================================== */
 
 document.getElementById("sendBtn").addEventListener("click", () => {
     const input = document.getElementById("chatInput");
-    handleUserMessage(input.value);
+    const text = input.value.trim();
+    if (!text && pendingAttachments.length === 0) return;
+    callLilium(text || "(zie bijlage)");
     input.value = "";
     input.style.height = "auto";
 });
@@ -1150,7 +1408,7 @@ chatInput.addEventListener("input", function () {
 
 chatMessages.addEventListener("click", (e) => {
     const chip = e.target.closest(".suggest-chip");
-    if (chip) handleUserMessage(chip.textContent);
+    if (chip) callLilium(chip.textContent);
 });
 
 
@@ -1168,31 +1426,6 @@ document.getElementById("scopePicker").addEventListener("click", (e) => {
 
 
 /* =====================================================
-   + MENU (bijlagen)
-===================================================== */
-
-const plusBtn = document.getElementById("plusBtn");
-const attachMenu = document.getElementById("attachMenu");
-plusBtn.addEventListener("click", (e) => {
-    attachMenu.classList.toggle("open");
-    e.stopPropagation();
-});
-document.addEventListener("click", () => attachMenu.classList.remove("open"));
-
-attachMenu.addEventListener("click", (e) => {
-    const btn = e.target.closest("button");
-    if (!btn) return;
-    const labels = {
-        files: "Foto's en bestanden toevoegen — kies leerstof om aan Lilium toe te voegen.",
-        library: "Uit bibliotheek halen — kies eerder toegevoegde leerstof.",
-        web: "Zoeken op het web — Lilium zoekt informatie voor je op."
-    };
-    showToast(labels[btn.dataset.action] || "Binnenkort beschikbaar!");
-    attachMenu.classList.remove("open");
-});
-
-
-/* =====================================================
    NIEUWE CHAT
 ===================================================== */
 
@@ -1202,7 +1435,10 @@ document.getElementById("newChatBtn").addEventListener("click", () => {
 
 function startChat() {
     chatMessages.innerHTML = "";
-    addBotBubble("Hoi! Ik ben Lilium 🌸<br>Ik help je graag met het maken van de perfecte studieplanning. Vertel me welke dag of week je wilt plannen, of stel me een vraag!<br>Wat wil je vandaag plannen?");
+    apiHistory = [];
+    pendingAttachments = [];
+    renderPendingAttachments();
+    addBotBubble("Hoi! Ik ben Lilium 🌸<br>Ik help je met plannen, met vragen over huiswerk of over deze website — vraag me eigenlijk gewoon alles! Vertel me welke dag of week je wilt plannen, of stel me een vraag.");
     addSuggestions();
 }
 
@@ -1237,9 +1473,6 @@ document.addEventListener("click", function () {
 
 /* =====================================================
    START
-   Bij het allereerste bezoek (nog geen "lilium_ai_prefs" in
-   localStorage) tonen we eerst de vragenlijst. Pas als die is
-   afgerond start de chat.
 ===================================================== */
 
 saveCoinsDisplay();
