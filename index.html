@@ -958,6 +958,175 @@ footer {
     font-size: 13px;
 }
 
+footer .footer-trigger {
+    cursor: pointer;
+    border-bottom: 1px dotted #d3a89a;
+    transition: color 0.2s;
+}
+
+footer .footer-trigger:hover {
+    color: #df6989;
+}
+
+
+/* =====================================================
+   OVER MIJ MODAL
+===================================================== */
+
+.aboutme-overlay {
+    display: none;
+
+    position: fixed;
+    inset: 0;
+
+    background: rgba(91,48,36,0.35);
+
+    z-index: 100;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 24px;
+}
+
+.aboutme-overlay.open {
+    display: flex;
+}
+
+.aboutme-modal {
+    position: relative;
+
+    width: 100%;
+    max-width: 480px;
+    max-height: 85vh;
+
+    overflow-y: auto;
+
+    background: #fffcfa;
+
+    border-radius: 28px;
+
+    padding: 34px 32px 30px;
+
+    box-shadow: 0 25px 60px rgba(90,50,35,0.28);
+}
+
+.aboutme-close {
+    position: absolute;
+
+    top: 18px;
+    right: 20px;
+
+    width: 34px;
+    height: 34px;
+
+    border-radius: 50%;
+
+    background: #fff1ed;
+
+    color: #b5574d;
+
+    font-size: 18px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    transition: 0.2s;
+}
+
+.aboutme-close:hover {
+    background: #ffe0e8;
+}
+
+.aboutme-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    margin-bottom: 22px;
+}
+
+.aboutme-flower {
+    font-size: 30px;
+}
+
+.aboutme-header h2 {
+    margin: 0;
+
+    font-family: Georgia, "Times New Roman", serif;
+
+    font-size: 26px;
+
+    color: #5b3024;
+}
+
+.aboutme-section {
+    margin-bottom: 18px;
+}
+
+.aboutme-section:last-child {
+    margin-bottom: 0;
+}
+
+.aboutme-section h3 {
+    margin: 0 0 8px;
+
+    font-size: 13px;
+
+    letter-spacing: 0.5px;
+
+    text-transform: uppercase;
+
+    color: #df6989;
+}
+
+.aboutme-row {
+    display: flex;
+
+    justify-content: space-between;
+
+    gap: 12px;
+
+    padding: 7px 0;
+
+    font-size: 15px;
+
+    color: #5b3024;
+
+    border-bottom: 1px solid #f4e4de;
+}
+
+.aboutme-row:last-child {
+    border-bottom: none;
+}
+
+.aboutme-row .label-text {
+    color: #8a6a60;
+}
+
+.aboutme-row .value-text {
+    font-weight: 600;
+    text-align: right;
+}
+
+.aboutme-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.aboutme-tag {
+    background: #fff1ed;
+    color: #b5574d;
+
+    padding: 6px 13px;
+
+    border-radius: 16px;
+
+    font-size: 13px;
+}
+
 
 /* =====================================================
    RESPONSIVE
@@ -1635,9 +1804,92 @@ footer {
 
 <footer>
 
-    © 2026 Lilium · Plan rustig. Groei op jouw manier. 🌸
+    © 2026 Lilium · Plan rustig. Groei op jouw manier.
+    <span class="footer-trigger" id="aboutMeTrigger">🌸</span>
 
 </footer>
+
+
+<!-- =====================================================
+     OVER MIJ MODAL
+===================================================== -->
+
+<div class="aboutme-overlay" id="aboutMeOverlay">
+
+    <div class="aboutme-modal">
+
+        <div class="aboutme-close" id="aboutMeClose">✕</div>
+
+        <div class="aboutme-header">
+            <span class="aboutme-flower">🌸</span>
+            <h2>Over mij</h2>
+        </div>
+
+        <div class="aboutme-section">
+            <h3>Persoonlijk</h3>
+            <div class="aboutme-row">
+                <span class="label-text">Naam</span>
+                <span class="value-text">Elin Josefien de Vries</span>
+            </div>
+            <div class="aboutme-row">
+                <span class="label-text">Geboorteplaats</span>
+                <span class="value-text">Leiden</span>
+            </div>
+        </div>
+
+        <div class="aboutme-section">
+            <h3>Familie</h3>
+            <div class="aboutme-row">
+                <span class="label-text">Zusje</span>
+                <span class="value-text">Floor (17)</span>
+            </div>
+            <div class="aboutme-row">
+                <span class="label-text">Zusje</span>
+                <span class="value-text">Mirthe (14)</span>
+            </div>
+            <div class="aboutme-row">
+                <span class="label-text">Ouders</span>
+                <span class="value-text">Vader (53) & moeder (52)</span>
+            </div>
+        </div>
+
+        <div class="aboutme-section">
+            <h3>Huisdieren</h3>
+            <div class="aboutme-tags">
+                <span class="aboutme-tag">🐰 Binky</span>
+                <span class="aboutme-tag">🐰 Snoopy</span>
+                <span class="aboutme-tag">🐱 Sientje (Appel)</span>
+            </div>
+        </div>
+
+        <div class="aboutme-section">
+            <h3>Hobby's</h3>
+            <div class="aboutme-tags">
+                <span class="aboutme-tag">🎾 Tennis</span>
+                <span class="aboutme-tag">🏃 Hardlopen</span>
+            </div>
+        </div>
+
+        <div class="aboutme-section">
+            <h3>Favoriete artiesten</h3>
+            <div class="aboutme-tags">
+                <span class="aboutme-tag">Rihanna</span>
+                <span class="aboutme-tag">ASAP Rocky</span>
+                <span class="aboutme-tag">Declan McKenna</span>
+            </div>
+        </div>
+
+        <div class="aboutme-section">
+            <h3>Droom</h3>
+            <div class="aboutme-row">
+                <span class="label-text">Later worden</span>
+                <span class="value-text">Oncologisch chirurg</span>
+            </div>
+        </div>
+
+    </div>
+
+</div>
 
 
 </div>
@@ -1659,6 +1911,31 @@ profileToggle.addEventListener("click", function (e) {
 });
 document.addEventListener("click", function () {
     profileDropdown.classList.remove("open");
+});
+
+/* Over mij modal open/dicht */
+const aboutMeTrigger = document.getElementById("aboutMeTrigger");
+const aboutMeOverlay = document.getElementById("aboutMeOverlay");
+const aboutMeClose = document.getElementById("aboutMeClose");
+
+aboutMeTrigger.addEventListener("click", function () {
+    aboutMeOverlay.classList.add("open");
+});
+
+aboutMeClose.addEventListener("click", function () {
+    aboutMeOverlay.classList.remove("open");
+});
+
+aboutMeOverlay.addEventListener("click", function (e) {
+    if (e.target === aboutMeOverlay) {
+        aboutMeOverlay.classList.remove("open");
+    }
+});
+
+document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape") {
+        aboutMeOverlay.classList.remove("open");
+    }
 });
 </script>
 
