@@ -252,13 +252,17 @@ nav {
 ===================================================== */
 
 .sidebar {
-    background: rgba(255,255,255,0.9);
+    position: relative;
+
+    background: #ffffff;
 
     border-radius: 26px;
 
     padding: 26px 22px;
 
     box-shadow: 0 6px 25px rgba(90,50,35,0.06);
+
+    isolation: isolate;
 }
 
 .sidebar-user {
@@ -292,32 +296,39 @@ nav {
 }
 
 .sidebar-nav {
+    position: static;
+
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 14px;
 
-    margin-bottom: 20px;
+    margin: 0 0 16px;
+    padding: 0;
 }
 
 .sidebar-nav button {
+    position: static;
+
     display: block;
 
     width: 100%;
     text-align: left;
 
-    padding: 12px 14px;
+    padding: 14px 16px;
 
     border-radius: 13px;
 
     font-size: 15px;
-    line-height: 1.3;
+    line-height: 1.4;
+    min-height: 46px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 
     color: #5b3024;
+    background: transparent;
 
-    transition: 0.15s;
+    transition: background-color 0.15s;
 }
 
 .sidebar-nav button:hover {
@@ -333,7 +344,7 @@ nav {
 .sidebar-divider {
     height: 1px;
     background: #f1ded9;
-    margin: 6px 0 12px;
+    margin: 4px 0;
 }
 
 .sidebar-quote {
@@ -683,13 +694,41 @@ nav {
    INFORMATICA
 ===================================================== */
 
-.informatica-card .card-title {
-    justify-content: space-between;
+.info-topic {
+    border-bottom: 1px solid #f4e4de;
 }
 
-.informatica-toggle {
-    width: 34px;
-    height: 34px;
+.info-topic:last-child {
+    border-bottom: none;
+}
+
+.info-topic-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+
+    width: 100%;
+
+    padding: 13px 2px;
+
+    text-align: left;
+
+    font-size: 14px;
+    font-weight: bold;
+
+    color: #5b3024;
+}
+
+.info-topic-header:hover {
+    color: #df6989;
+}
+
+.info-chevron {
+    width: 26px;
+    height: 26px;
+
+    flex-shrink: 0;
 
     border-radius: 50%;
 
@@ -700,17 +739,19 @@ nav {
     align-items: center;
     justify-content: center;
 
-    font-size: 15px;
+    font-size: 13px;
 
     transition: transform 0.25s;
 }
 
-.informatica-toggle.open {
+.info-topic-header.open .info-chevron {
     transform: rotate(180deg);
 }
 
-.informatica-body {
+.info-topic-body {
     display: none;
+
+    padding: 0 2px 16px;
 
     font-size: 14px;
 
@@ -719,24 +760,12 @@ nav {
     color: #5b3024;
 }
 
-.informatica-body.open {
+.info-topic-body.open {
     display: block;
 }
 
-.informatica-body h4 {
-    margin: 20px 0 8px;
-
-    font-size: 15px;
-
-    color: #df6989;
-}
-
-.informatica-body h4:first-child {
-    margin-top: 4px;
-}
-
-.informatica-body p {
-    margin: 0 0 8px;
+.info-topic-body p {
+    margin: 0;
 
     color: #5b3024;
 }
@@ -880,11 +909,9 @@ nav {
             <button type="button" data-target="notificaties-card">Notificaties</button>
             <button type="button" data-target="privacy-card">Privacy</button>
             <button type="button" data-target="informatica-card">Informatica</button>
-        </nav>
 
-        <div class="sidebar-divider"></div>
+            <div class="sidebar-divider"></div>
 
-        <nav class="sidebar-nav">
             <button type="button" id="helpButton">Hulp</button>
             <button type="button" id="logoutButton">Uitloggen</button>
         </nav>
@@ -1101,85 +1128,131 @@ nav {
             <div class="card informatica-card" id="informatica-card">
 
                 <h3 class="card-title">
-                    <span style="display:flex; align-items:center; gap:10px;">
-                        <span class="icon-circle"><img src="Codex-afbeelding 23 sep 2026, 17_14_45.png" alt=""></span>
-                        Informatica
-                    </span>
-                    <button type="button" class="informatica-toggle" id="informaticaToggle">⌃</button>
+                    <span class="icon-circle"><img src="Codex-afbeelding 23 sep 2026, 17_14_45.png" alt=""></span>
+                    Informatica
                 </h3>
 
-                <div class="informatica-body" id="informaticaBody">
+                <div class="informatica-body">
 
-                    <h4>Invoer – verwerking – uitvoer</h4>
-                    <p>
-                        Elk computerprogramma werkt eigenlijk volgens hetzelfde stappenplan:
-                        invoer, verwerking en uitvoer. Bij Lilium zie je dat overal terug.
-                        Als ik bijvoorbeeld een taak intyp en op "opslaan" druk, is dat de
-                        <strong>invoer</strong>. De app rekent dan uit wanneer de taak in mijn
-                        planning past en hoeveel muntjes ik ervoor kan verdienen — dat is de
-                        <strong>verwerking</strong>. Daarna zie ik de taak netjes in mijn
-                        dagplanning verschijnen, en dat is de <strong>uitvoer</strong>.
-                    </p>
+                    <div class="info-topic">
+                        <button type="button" class="info-topic-header" data-target="topic-ivu">
+                            Invoer – verwerking – uitvoer
+                            <span class="info-chevron">⌄</span>
+                        </button>
+                        <div class="info-topic-body" id="topic-ivu">
+                            <p>
+                                Elk computerprogramma werkt eigenlijk volgens hetzelfde
+                                stappenplan: invoer, verwerking en uitvoer. Bij Lilium zie je
+                                dat overal terug. Als ik bijvoorbeeld een taak intyp en op
+                                "opslaan" druk, is dat de <strong>invoer</strong>. De app
+                                rekent dan uit wanneer de taak in mijn planning past en hoeveel
+                                muntjes ik ervoor kan verdienen — dat is de
+                                <strong>verwerking</strong>. Daarna zie ik de taak netjes in
+                                mijn dagplanning verschijnen, en dat is de
+                                <strong>uitvoer</strong>.
+                            </p>
+                        </div>
+                    </div>
 
-                    <h4>Binair stelsel</h4>
-                    <p>
-                        Computers "denken" niet in de cijfers 0 t/m 9 zoals wij, maar alleen
-                        in <strong>0 en 1</strong>. Dat heet het binaire stelsel of het
-                        tweetallig stelsel. Elk 0'tje of 1'tje noem je een <strong>bit</strong>,
-                        en 8 bits samen vormen een <strong>byte</strong>. Het getal 5 wordt in
-                        binair bijvoorbeeld <code>0101</code>. Dit systeem gebruiken computers
-                        omdat een schakelaar in een chip maar twee standen kent: aan (1) of
-                        uit (0).
-                    </p>
+                    <div class="info-topic">
+                        <button type="button" class="info-topic-header" data-target="topic-binair">
+                            Binair stelsel
+                            <span class="info-chevron">⌄</span>
+                        </button>
+                        <div class="info-topic-body" id="topic-binair">
+                            <p>
+                                Computers "denken" niet in de cijfers 0 t/m 9 zoals wij, maar
+                                alleen in <strong>0 en 1</strong>. Dat heet het binaire
+                                stelsel of het tweetallig stelsel. Elk 0'tje of 1'tje noem je
+                                een <strong>bit</strong>, en 8 bits samen vormen een
+                                <strong>byte</strong>. Het getal 5 wordt in binair
+                                bijvoorbeeld <code>0101</code>. Dit systeem gebruiken
+                                computers omdat een schakelaar in een chip maar twee standen
+                                kent: aan (1) of uit (0).
+                            </p>
+                        </div>
+                    </div>
 
-                    <h4>Kleurmodellen</h4>
-                    <p>
-                        Op een scherm worden kleuren gemaakt met <strong>RGB</strong> (rood,
-                        groen, blauw): licht dat je mengt. Op papier, zoals bij een printer,
-                        wordt juist inkt gemengd met <strong>CMYK</strong> (cyaan, magenta,
-                        geel en zwart). Daarom kan een kleur op je scherm er soms net iets
-                        anders uitzien zodra je hem uitprint.
-                    </p>
+                    <div class="info-topic">
+                        <button type="button" class="info-topic-header" data-target="topic-kleur">
+                            Kleurmodellen
+                            <span class="info-chevron">⌄</span>
+                        </button>
+                        <div class="info-topic-body" id="topic-kleur">
+                            <p>
+                                Op een scherm worden kleuren gemaakt met <strong>RGB</strong>
+                                (rood, groen, blauw): licht dat je mengt. Op papier, zoals bij
+                                een printer, wordt juist inkt gemengd met
+                                <strong>CMYK</strong> (cyaan, magenta, geel en zwart). Daarom
+                                kan een kleur op je scherm er soms net iets anders uitzien
+                                zodra je hem uitprint.
+                            </p>
+                        </div>
+                    </div>
 
-                    <h4>Compressie: Bitmap/vector</h4>
-                    <p>
-                        Afbeeldingen kun je op twee manieren opslaan. Een <strong>bitmap</strong>
-                        (zoals een .jpg of .png) bestaat uit een heleboel losse pixels, en wordt
-                        wazig als je hem groter maakt. Een <strong>vectorafbeelding</strong>
-                        (zoals een .svg), zoals het bloempje in het logo van Lilium, bestaat uit
-                        wiskundige lijnen en vormen, en blijft daardoor altijd scherp, hoe groot
-                        je hem ook maakt. Om bestanden kleiner te maken gebruik je
-                        <strong>compressie</strong>: bij "lossy" compressie (zoals .jpg) gaat er
-                        een klein beetje kwaliteit verloren, bij "lossless" compressie (zoals
-                        .png) blijft alles precies hetzelfde.
-                    </p>
+                    <div class="info-topic">
+                        <button type="button" class="info-topic-header" data-target="topic-compressie">
+                            Compressie: Bitmap/vector
+                            <span class="info-chevron">⌄</span>
+                        </button>
+                        <div class="info-topic-body" id="topic-compressie">
+                            <p>
+                                Afbeeldingen kun je op twee manieren opslaan. Een
+                                <strong>bitmap</strong> (zoals een .jpg of .png) bestaat uit
+                                een heleboel losse pixels, en wordt wazig als je hem groter
+                                maakt. Een <strong>vectorafbeelding</strong> (zoals een .svg),
+                                zoals het bloempje in het logo van Lilium, bestaat uit
+                                wiskundige lijnen en vormen, en blijft daardoor altijd scherp,
+                                hoe groot je hem ook maakt. Om bestanden kleiner te maken
+                                gebruik je <strong>compressie</strong>: bij "lossy" compressie
+                                (zoals .jpg) gaat er een klein beetje kwaliteit verloren, bij
+                                "lossless" compressie (zoals .png) blijft alles precies
+                                hetzelfde.
+                            </p>
+                        </div>
+                    </div>
 
-                    <h4>AI</h4>
-                    <p>
-                        <strong>Waar gebruik ik zelf AI voor?</strong><br>
-                        Ik gebruik AI vooral om dingen sneller helder te krijgen: bijvoorbeeld
-                        om een moeilijke tekst voor school samen te laten vatten, om ideeën te
-                        krijgen als ik ergens over vastloop, of om even te checken of iets wat
-                        ik geschreven heb logisch klinkt. Ik leer er zeker iets van, omdat ik
-                        het antwoord altijd zelf nog even doorlees en probeer te begrijpen in
-                        plaats van het klakkeloos over te nemen. Zo helpt AI me juist om sneller
-                        tot de kern te komen, in plaats van dat het denkwerk overneemt.
-                    </p>
-                    <p>
-                        <strong>Mijn telefoon en AI</strong><br>
-                        Ik heb een iPhone 11, en daar zit AI eigenlijk overal een beetje in
-                        verstopt zonder dat je het doorhebt. Face ID gebruikt bijvoorbeeld AI
-                        om mijn gezicht te herkennen, Siri luistert en probeert te snappen wat
-                        ik bedoel, de camera gebruikt "Smart HDR" om automatisch foto's mooier
-                        te maken, en zelfs de voorspellende tekst op mijn toetsenbord is een
-                        soort mini-AI die probeert te raden wat ik wil typen.
-                    </p>
-                    <p>
-                        Voor veel mensen is AI nog best nieuw en soms een beetje spannend. Ik
-                        vind het juist wel gaaf: het zit al veel dichterbij in ons dagelijks
-                        leven dan de meeste mensen denken, gewoon verstopt in dingen die je toch
-                        al elke dag gebruikt.
-                    </p>
+                    <div class="info-topic">
+                        <button type="button" class="info-topic-header" data-target="topic-ai">
+                            AI
+                            <span class="info-chevron">⌄</span>
+                        </button>
+                        <div class="info-topic-body" id="topic-ai">
+                            <p>
+                                Ik gebruik AI vooral om dingen sneller helder te krijgen:
+                                bijvoorbeeld om een moeilijke tekst voor school samen te laten
+                                vatten, om ideeën te krijgen als ik ergens over vastloop, of om
+                                even te checken of iets wat ik geschreven heb logisch klinkt.
+                                Ik leer er zeker iets van, omdat ik het antwoord altijd zelf
+                                nog even doorlees en probeer te begrijpen in plaats van het
+                                klakkeloos over te nemen. Zo helpt AI me juist om sneller tot
+                                de kern te komen, in plaats van dat het denkwerk overneemt.
+                                Voor veel mensen is AI nog best nieuw en soms een beetje
+                                spannend. Ik vind het juist wel gaaf: het zit al veel
+                                dichterbij in ons dagelijks leven dan de meeste mensen denken.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="info-topic">
+                        <button type="button" class="info-topic-header" data-target="topic-telefoon">
+                            Mijn telefoon en AI
+                            <span class="info-chevron">⌄</span>
+                        </button>
+                        <div class="info-topic-body" id="topic-telefoon">
+                            <p>
+                                Ik heb een iPhone 11, en daar zit AI eigenlijk overal een
+                                beetje in verstopt zonder dat je het doorhebt. Face ID
+                                gebruikt bijvoorbeeld AI om mijn gezicht te herkennen, Siri
+                                luistert en probeert te snappen wat ik bedoel, de camera
+                                gebruikt "Smart HDR" om automatisch foto's mooier te maken, en
+                                zelfs de voorspellende tekst op mijn toetsenbord is een soort
+                                mini-AI die probeert te raden wat ik wil typen — allemaal
+                                dingen die gewoon verstopt zitten in iets wat ik toch al elke
+                                dag gebruik.
+                            </p>
+                        </div>
+                    </div>
 
                 </div>
 
@@ -1335,12 +1408,13 @@ document.getElementById("deleteAccountButton").addEventListener("click", functio
     }
 });
 
-/* ============ Informatica uitklappen ============ */
-const informaticaToggle = document.getElementById("informaticaToggle");
-const informaticaBody = document.getElementById("informaticaBody");
-informaticaToggle.addEventListener("click", function () {
-    informaticaToggle.classList.toggle("open");
-    informaticaBody.classList.toggle("open");
+/* ============ Informatica onderwerpen uitklappen ============ */
+document.querySelectorAll(".info-topic-header").forEach(function (header) {
+    const body = document.getElementById(header.dataset.target);
+    header.addEventListener("click", function () {
+        header.classList.toggle("open");
+        body.classList.toggle("open");
+    });
 });
 
 </script>
